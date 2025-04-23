@@ -1,0 +1,108 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { getPopular, HomeNewsData } from '@/lib/sanity';
+import imageUrlBuilder from '@sanity/image-url';
+import { client } from '@/lib/client';
+
+
+const builder = imageUrlBuilder(client);
+
+const Popular: React.FC = () => {
+  const [popularData, setPopularData] = useState<HomeNewsData | null>(null);
+
+ 
+  useEffect(() => {
+    const fetchPopularData = async () => {
+      const data = await getPopular();
+      setPopularData(data);
+    };
+    
+    fetchPopularData();
+  }, []);
+
+  if (!popularData) {
+    return <div>Loading...</div>; 
+  }
+
+  
+  const urlFor = (source: any) => {
+    if (source) {
+      return builder.image(source).auto('format').url(); 
+    }
+    return ''; 
+  };
+
+  return (
+    <div className="">
+      <div className="flex items-center justify-between bg-light py-3 px-4 mb-3 bgh3">
+        <h3 className="text-2xl font-medium">{popularData.mainTitle}</h3>
+        <a className="text-secondary font-medium" href={popularData.viewAllLink}>
+          {popularData.viewAllLinkText || "View All"}
+        </a>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div>
+          <div className="flex gap-6">
+            {popularData.stories.slice(0, 2).map((story) => (
+              <div key={story._key} className="overflow-hidden mb-4">
+                <img
+                  src={urlFor(story.backgroundImage)} 
+                  alt={story.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4 bg-white">
+                 
+                  {story.link ? (
+                    <a
+                      href={story.link}
+                      className="text-xl font-bold leading-snug mb-2"
+                      style={{ zIndex: 20 }}
+                    >
+                      {story.title}
+                    </a>
+                  ) : (
+                    <h4 className="text-xl font-bold leading-snug mb-2">
+                    {story.title}
+                  </h4>
+                  )}
+                  <p className="text-gray-600 text-sm">                   
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap gap-4">
+            {popularData.stories.slice(2, 6).map((story) => (
+              <div key={story._key} className="flex items-center mb-3 bg-white w-90">
+                <img
+                  src={urlFor(story.backgroundImage)} 
+                  alt={story.title}
+                  className="w-20 h-16 object-cover"
+                />                
+                  {story.link ? (
+                    <a
+                      href={story.link}
+                      className="text-sm font-medium py-3 px-4"
+                      style={{ zIndex: 20 }}
+                    >
+                      {story.title}
+                    </a>
+                  ) : (
+                    <p className="text-sm font-medium py-3 px-4">
+                  {story.title}
+                  </p>
+                  )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Popular;

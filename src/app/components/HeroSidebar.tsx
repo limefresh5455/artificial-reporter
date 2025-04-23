@@ -1,0 +1,43 @@
+'use client';
+
+import React, { useEffect, useState } from "react";
+import { getImageBlocks, ImageBlock } from "@/lib/sanity";
+
+const HeroSidebar: React.FC = () => {
+  const [items, setItems] = useState<ImageBlock[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getImageBlocks();
+      setItems(data);
+    }
+
+    fetchData();
+  }, []);
+
+  return (
+    <div className="flex flex-col space-y-3.5">
+      {items.map((item) => (
+        <div key={item._id} className="relative h-31 overflow-hidden">
+          <img
+            src={`https://cdn.sanity.io/images/3pnjrasi/production/${item.image.asset._ref
+              .replace("image-", "")
+              .replace(/-(jpg|png|webp|jpeg)$/, ".$1")}`}
+            alt={item.alt || item.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <a
+              href=""
+              className="overlay text-white font-semibold text-lg"
+            >
+              <span className="z-2 relative">{item.title}</span>
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default HeroSidebar;
