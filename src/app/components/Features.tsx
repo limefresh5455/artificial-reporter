@@ -23,6 +23,7 @@ const CardSlider: React.FC = () => {
       try {
         const data = await getFeatures();
         setFeatures(data);
+        console.log(data)
       } catch (error) {
         console.error('Error fetching features data:', error);
       }
@@ -66,14 +67,16 @@ const CardSlider: React.FC = () => {
             1024: { slidesPerView: 3 },
           }}
         >
-          {features.stories.map((story: any) => (
-            <SwiperSlide key={story._key}>
+          {features.relatedArticles.map((story: any) => (
+            <SwiperSlide key={story._id}>
               <div className="flex bg-white h-full">
+                {story.image && 
                 <img
-                  src={getImageUrl(story.backgroundImage.asset)}
+                  src={getImageUrl(story.image.asset)}
                   alt={story.title}
                   className="w-[80px] object-cover"
                 />
+}
                 <div className="p-4 text-[#42526E] text-sm font-medium">
                   {story.title}
                 </div>

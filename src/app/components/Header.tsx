@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import TrendingSlider from "./TrendingSlider";
 import { getNavigationData, NavigationData, MenuItem } from "@/lib/sanity";
+import Link from 'next/link';
+import { ROUTES } from '../routes';
 
 const Header: React.FC = () => {
   const [navigation, setNavigation] = useState<NavigationData | null>(null);
@@ -35,9 +37,9 @@ const Header: React.FC = () => {
           <span className="text-gray-400 mx-2">|</span>
           <a href="#" className="text-gray-600 hover:underline m-0">AI</a>
           <span className="text-gray-400 mx-2">|</span>
-          <a href="#" className="text-gray-600 hover:underline m-0">Login</a>
+          <Link href={ROUTES.LOGIN} className="text-gray-600 hover:underline m-0">Login</Link>
           <span className="text-gray-400 mx-2">|</span>
-          <a href="#" className="text-gray-600 hover:underline m-0">Register</a>
+          <Link href={ROUTES.REGISTER} className="text-gray-600 hover:underline m-0">Register</Link>
         </div>
       </div>
 

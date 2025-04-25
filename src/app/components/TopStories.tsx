@@ -42,7 +42,7 @@ const CardSlider: React.FC = () => {
 
   if (loading) return <div className="text-center py-8">Loading top stories...</div>;
   if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
-  if (!data || !data.stories || data.stories.length === 0) {
+  if (!data || !data.relatedArticles || data.relatedArticles.length === 0) {
     return <div className="text-center py-8">No top stories available.</div>;
   }
 
@@ -85,13 +85,13 @@ const CardSlider: React.FC = () => {
             1024: { slidesPerView: 4 },
           }}
         >
-          {data.stories.map((story) => (
-            <SwiperSlide key={story._key}>
+          {data.relatedArticles.map((story) => (
+            <SwiperSlide key={story._id}>
               <div className="relative w-full h-64 rounded overflow-hidden">
-                {story.backgroundImage && (
+                {story.image && (
                   <>
                     <img
-                      src={urlFor(story.backgroundImage)}
+                      src={urlFor(story.image)}
                       alt={story.title}
                       className="absolute inset-0 w-full h-full object-cover"
                     />
