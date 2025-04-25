@@ -226,6 +226,7 @@ body {
     font-size: 40px;
     font-weight: 700;
 }
+
 .register_inner .step.active {
     display: block;
 }
@@ -380,4 +381,126 @@ body {
 .register_inner .step .checkbox p {
     font-size: 13px;
     margin: 0;
+}
+
+
+/* About page */
+
+
+.about .about_img img {
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    object-fit: cover;
+}
+
+
+
+.about .about_cont .section_heading {
+    margin-bottom: 22px;
+}
+
+.about.right .about_cont {
+    padding-left: 0;
+    padding-right: 50px;
+}
+
+
+
+
+
+
+
+
+/* Contact css */
+.contact {
+    margin: 50px 0;
+    position: relative;
+}
+
+.contact .container {
+    padding: 40px;
+    background: #ffffff
+}
+
+.contact input,
+.contact textarea {
+    border: 0;
+    border-bottom: 1px solid #00000033;
+    border-radius: 0;
+    padding: 5px 10px;
+    font-size: 16px;
+    font-weight: 500;
+    background: transparent;
+    margin-bottom: 40px;
+}
+
+.contact input::placeholder,
+.contact textarea::placeholder {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.contact input:focus,
+.contact textarea:focus {
+    border: 0;
+    border-bottom: 1px solid #00000033;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+
+
+.contact .links ul {
+    padding: 0;
+    margin: 0;
+
+}
+
+.contact .links ul li {
+    line-height: 35px;
+    list-style: none;
+}
+
+.contact .links ul li a {
+    font-size: 16px;
+    line-height: 20px;
+    transition: all 0.2s linear;
+    color: #2c2c2c;
+}
+
+.contact .links ul li a:hover {
+    color: #af0e14;
+}
+
+.contact .links a {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.contact .links i {
+    font-size: 15px;
+    margin-right: 14px;
+    width: 15px;
+}
+
+.contact .links a .icon-contact, .contact .links a i {
+    width: 44px;
+    font-size: 21px;
+    margin-right: 14px;
+    position: relative;
+    bottom: 0;
+    padding: 14px;
+    background: #134c90;
+    border-radius: 7px;
+}
+
+
+
+.news_inner .container {
+    padding: 40px;
+    padding-bottom: 40px;
+    background: #fff;
 }

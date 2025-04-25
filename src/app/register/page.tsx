@@ -303,7 +303,7 @@ export default function Register() {
                   >
                     Continue
                   </button>
-                  <p className="mt-4 text-sm text-gray-600 ">
+                  <p className="mt-4 text-sm text-gray-600 mb-4">
                     Stay up to date on all the news, insights and changes in the world of Artificial
                     Intelligence with The Artificial Reporter daily newsletter.
                   </p>

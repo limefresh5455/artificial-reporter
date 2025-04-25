@@ -58,10 +58,10 @@ const Latest: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div>
           <div className="flex gap-6">
-            {latestData.stories.slice(0, 2).map((story) => (
-              <div key={story._key} className="overflow-hidden mb-4">
+            {latestData.relatedArticles.slice(0, 2).map((story) => (
+              <div key={story._id} className="overflow-hidden mb-4">
                 <img
-                  src={urlFor(story.backgroundImage)}
+                  src={urlFor(story.image)}
                   alt={story.title}
                   className="w-full h-48 object-cover"
                 />
@@ -69,10 +69,10 @@ const Latest: React.FC = () => {
                   <div className="mb-2 text-base">
                     <a href="#" className="link-a">Technology</a>
                     <span className="px-1">/</span>
-                    <span>{formatDate(story.publishedAt || story._createdAt)}</span>
+                    <span>{formatDate(story._createdAt || story._createdAt)}</span>
                   </div>
                  
-                  {story.link ? (
+                  {story.title ? (
                     <a
                       href={story.link}
                       className="text-2xl font-bold leading-snug mb-2"
@@ -87,10 +87,10 @@ const Latest: React.FC = () => {
                   )}
 
                   <div className="text-gray-600 text-base mt-2">
-                    {story.description && (
+                    {story.overview && (
                       <p>
-                        {getPlainText(story.description).slice(0, 100)}
-                        {getPlainText(story.description).length > 100 && '...'}
+                        {story.overview.slice(0, 100)}
+                        {story.overview.length > 100 && '...'}
                       </p>
                     )}
                   </div>
@@ -100,17 +100,17 @@ const Latest: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap gap-4">
-            {latestData.stories.slice(2, 6).map((story) => (
+            {latestData.relatedArticles.slice(2, 6).map((story) => (
               <div key={story._key} className="flex items-center mb-3 bg-white w-90">
                 <img
-                  src={urlFor(story.backgroundImage)}
+                  src={urlFor(story.image)}
                   alt={story.title}
                   className="w-20 h-16 object-cover"
                 />
                 <div className="py-3 px-4">
                   <p className="text-sm font-medium">{story.title}</p>
                   <span className="text-sm text-gray-500">
-                    {formatDate(story.publishedAt || story._createdAt)}
+                    {formatDate(story._createdAt || story._createdAt)}
                   </span>
                 </div>
               </div>
