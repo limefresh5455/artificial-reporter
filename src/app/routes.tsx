@@ -1,7 +1,9 @@
 // routes.js
 export const ROUTES = {
     HOME: '/',
-    LOGIN: '/login',
-    REGISTER: '/register',
-  };
-  
+    LOGIN: '/auth/login',
+    REGISTER: '/auth/register',
+    ABOUT: '/pages/about',
+    CONTACT: '/pages/contact',
+    NEWS: '/news/',
+};

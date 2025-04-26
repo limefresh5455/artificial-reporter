@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ROUTES } from "../routes";
+import { ROUTES } from "../../routes";
 
 export default function Login() {
   return (

@@ -98,7 +98,7 @@ export interface TopStory {
     eventType: string;
     sponsored: string;
     tags: string;
-    link:string;
+    link: string;
     image: {
         _type: 'image';
         asset: {
@@ -228,7 +228,7 @@ export async function getNewsData(): Promise<{ topStories: HomeNewsData, feature
         viewAllLink,
         viewAllLinkText
       }`;
-      
+
 
     const response = await client.fetch(query);
 
@@ -282,8 +282,9 @@ export interface TopStoriesData {
     eventType: string;
     sponsored: boolean;
     tags: string[];
-  }
-  
+    image: any[];
+}
+
 
 // About
 export async function getPageData(slug: string): Promise<PageData> {
@@ -308,10 +309,10 @@ export async function getPageData(slug: string): Promise<PageData> {
 }
 
 
-export async function getTopStoriesData(page = 1, pageSize = 4): Promise<any[]> {
+export async function getTopStoriesData(page = 1, pageSize = 4, params = ''): Promise<any[]> {
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
-  
+    console.log(params)
     const query = `*[_type == "newsArticle"] | order(_createdAt desc) [${start}...${end}] {  
         _id,
         _createdAt,
@@ -322,9 +323,11 @@ export async function getTopStoriesData(page = 1, pageSize = 4): Promise<any[]> 
         overview,
         eventType,
         sponsored,
-        tags
+        image,
+        tags,
+        slug
       }`;
-      
+
 
     return client.fetch(query);
 }
@@ -332,5 +335,56 @@ export async function getTopStoriesData(page = 1, pageSize = 4): Promise<any[]> 
 export async function getTotalTopStoriesCount(): Promise<number> {
     const query = `count(*[_type == "newsArticle"])`;
     return client.fetch(query);
-  }
-  
+}
+
+
+
+export async function getStoryData(params = ''): Promise<any[]> {
+    console.log(params)
+    const query = `*[_type == "newsArticle" && _id == "${decodeURI(params)}"]  {  
+        _id,
+        _createdAt,
+        _updatedAt,
+        _rev,
+        _type,
+        title,
+        overview,
+        eventType,
+        sponsored,
+        image,
+        tags
+      }`;
+
+
+    return client.fetch(query);
+}
+export async function getRelatedStories(tags: string[], excludeTitle: string): Promise<any[]> {
+    if (!tags || tags.length === 0) {
+        return [];
+    }
+
+    const query = `
+      *[
+        _type == "newsArticle" &&
+        _id != $excludeTitle &&
+        count(tags[@ in $tags]) > 0
+      ][0...5] {
+        _id,
+        title,
+        overview,
+        image,
+        _createdAt
+      }
+    `;
+
+    const params = {
+        tags,
+        excludeTitle: decodeURI(excludeTitle),
+    };
+
+
+    return client.fetch(query, params);
+}
+
+
+
