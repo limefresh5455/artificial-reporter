@@ -1,14 +1,48 @@
 'use client';
 
 import React, { useEffect, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, CircleUserRound } from "lucide-react";
 import TrendingSlider from "./TrendingSlider";
 import { getNavigationData, NavigationData, MenuItem } from "@/lib/sanity";
 import Link from 'next/link';
 import { ROUTES } from '../routes';
+import { userMetaSelect, signOut } from '@/lib/supabase/action';
+import { createClient } from '@/lib/supabase/client';
+import { User } from '@supabase/supabase-js';
+
+interface UserMeta {
+    first_name: string;
+    last_name: string;
+    company_name: string;
+    phone: string;
+    job_title: string;
+    seniority: string;
+    job_function: string;
+    industry: string;
+    country: string;
+    state: string;
+}
 
 const Header: React.FC = () => {
     const [navigation, setNavigation] = useState<NavigationData | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const supabase = createClient();
+    const [authUser, setAuthUser] = useState<User | null>(null);
+    const [userMeta, setUserMeta] = useState<UserMeta | null>(null);
+
+    useEffect(() => {
+        const checkUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                setAuthUser(user);  // <-- You forgot to setAuthUser(user)
+                const userMetaResponse = await userMetaSelect(user.id);
+                if (userMetaResponse.data) {
+                    setUserMeta(userMetaResponse.data);
+                }
+            }
+        };
+        checkUser();
+    }, [supabase]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -17,6 +51,10 @@ const Header: React.FC = () => {
         };
         fetchData();
     }, []);
+
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+    };
 
     return (
         <header className="w-full bg-white border-b border-gray-200">
@@ -37,9 +75,46 @@ const Header: React.FC = () => {
                     <span className="text-gray-400 mx-2">|</span>
                     <a href="#" className="text-gray-600 hover:underline m-0">AI</a>
                     <span className="text-gray-400 mx-2">|</span>
-                    <Link href={ROUTES.LOGIN} className="text-gray-600 hover:underline m-0">Login</Link>
-                    <span className="text-gray-400 mx-2">|</span>
-                    <Link href={ROUTES.REGISTER} className="text-gray-600 hover:underline m-0">Register</Link>
+
+                    {authUser == null ? (
+                        <>
+                            <Link href={ROUTES.LOGIN} className="text-gray-600 hover:underline m-0">Login</Link>
+                            <span className="text-gray-400 mx-2">|</span>
+                            <Link href={ROUTES.REGISTER} className="text-gray-600 hover:underline m-0">Register</Link>
+                        </>
+                    ) : (
+                        <div className="flex relative  text-left">
+                            <button
+                                type="button"
+                                className="      font-semibold text-gray-900 shadow-xs  hover:bg-gray-50"
+                                id="menu-button"
+                                aria-expanded={isOpen}
+                                aria-haspopup="true"
+                                onClick={toggleDropdown}
+                            >
+                                <CircleUserRound className="text-gray-700" />
+                            </button>
+
+                            {isOpen && (
+                                <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
+                                    <div className="py-1" role="none">
+                                        
+                                        <form method="POST"  role="none">
+                                            <button type="submit" className="block w-full px-4 py-2 text-left text-sm text-gray-700" role="menuitem" id="menu-item-3"
+                                            onClick={async (e) => {
+                                                e.preventDefault();
+                                                await signOut();
+                                                setAuthUser(null); // clear local user
+                                              }}
+                                            >
+                                                Sign out
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
 

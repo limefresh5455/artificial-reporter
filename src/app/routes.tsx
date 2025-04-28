@@ -6,4 +6,5 @@ export const ROUTES = {
     ABOUT: '/pages/about',
     CONTACT: '/pages/contact',
     NEWS: '/news/',
+    
 };

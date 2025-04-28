@@ -1,162 +1,43 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { signInWithEmail, userMetaInsert, userMetaSelect, updateUserPassword } from '@/lib/supabase/action';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
+import { ROUTES } from "@/app/routes";
+import { BadgeCheck, Eye, EyeClosed } from 'lucide-react';
+import { User } from '@supabase/supabase-js';
 
 type DropdownKey = "jobTitle" | "seniority" | "jobFunction" | "industry" | "country" | "state";
 
 interface FormData {
-  email: string;
-  firstName: string;
-  lastName: string;
-  companyName: string;
-  phone: string;
-  jobTitle: string;
-  seniority: string;
-  jobFunction: string;
-  industry: string;
-  country: string;
-  state: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    companyName: string;
+    phone: string;
+    jobTitle: string;
+    seniority: string;
+    jobFunction: string;
+    industry: string;
+    country: string;
+    state: string;
 }
-
+interface UserMeta {
+    first_name: string;
+    last_name: string;
+    company_name: string;
+    phone: string;
+    job_title: string;
+    seniority: string;
+    job_function: string;
+    industry: string;
+    country: string;
+    state: string;
+}
 export default function Register() {
-  const [currentStep, setCurrentStep] = useState<1 | 2>(1);
-  const [formData, setFormData] = useState<FormData>({
-    email: "",
-    firstName: "",
-    lastName: "",
-    companyName: "",
-    phone: "",
-    jobTitle: "",
-    seniority: "",
-    jobFunction: "",
-    industry: "",
-    country: "",
-    state: "",
-  });
-  const [dropdownOpen, setDropdownOpen] = useState<Record<DropdownKey, boolean>>({
-    jobTitle: false,
-    seniority: false,
-    jobFunction: false,
-    industry: false,
-    country: false,
-    state: false,
-  });
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const toggleDropdown = (key: DropdownKey) => {
-    setDropdownOpen((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
-
-  const getStateOptions = (country: string): string[] => {
-    const stateMap: Record<string, string[]> = {
-      "United States": ["California", "New York", "Texas", "Florida", "Washington", "Massachusetts"],
-      Canada: ["Ontario", "Quebec", "British Columbia"],
-      "United Kingdom": ["England", "Scotland", "Wales"],
-      Australia: ["New South Wales", "Victoria", "Queensland"],
-      India: ["Madhya Pradesh", "Maharashtra", "Karnataka", "Delhi", "Punjab", "Rajasthan"],
-      Singapore: ["Singapore"],
-    };
-    return stateMap[country] || [];
-  };
-
-  const dropdownData: Record<DropdownKey, { label: string; options: string[]; dataValues?: string[] }> = {
-    jobTitle: {
-      label: "Job Title",
-      options: ["CEO", "CTO", "Vice President", "Manager", "Engineer", "Analyst"],
-      dataValues: ["ceo", "cto", "vp", "manager", "engineer", "analyst"],
-    },
-    seniority: {
-      label: "Seniority",
-      options: ["Intern", "Entry Level", "Mid-Level", "Senior", "Executive"],
-      dataValues: ["intern", "entry", "mid", "senior", "exec"],
-    },
-    jobFunction: {
-      label: "Job Function",
-      options: ["Marketing", "Sales", "Engineering", "Product", "Human Resources", "Finance"],
-      dataValues: ["marketing", "sales", "engineering", "product", "hr", "finance"],
-    },
-    industry: {
-      label: "Industry",
-      options: ["Technology", "Finance", "Healthcare", "Education", "Retail", "Energy"],
-      dataValues: ["tech", "finance", "health", "edu", "retail", "energy"],
-    },
-    country: {
-      label: "Location Country",
-      options: ["United States", "Canada", "United Kingdom", "Australia", "India", "Singapore"],
-      dataValues: ["us", "ca", "uk", "au", "in", "sg"],
-    },
-    state: {
-      label: "Location State",
-      options: getStateOptions(formData.country),
-    },
-  };
-
-  const validateEmail = (email: string): boolean => {
-    return !/@(gmail|yahoo|aol)\.com$/i.test(email) && /\S+@\S+\.\S+/.test(email);
-  };
-
-  const validateStep2 = (): boolean => {
-    const newErrors: Partial<Record<keyof FormData, string>> = {};
-    const requiredFields: (keyof FormData)[] = [
-      "firstName",
-      "lastName",
-      "companyName",
-      "phone",
-      "jobTitle",
-      "seniority",
-      "jobFunction",
-      "industry",
-      "country",
-      "state",
-    ];
-
-    requiredFields.forEach((field) => {
-      if (!formData[field]) {
-        newErrors[field] = `${
-          field === "companyName"
-            ? "Company Name"
-            : field === "phone"
-            ? "Phone"
-            : dropdownData[field as DropdownKey]?.label || field
-        } is required`;
-      }
-    });
-
-    if (formData.phone && !/^\+?\d{10,15}$/.test(formData.phone)) {
-      newErrors.phone = "Please enter a valid phone number";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleGoToStep2 = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateEmail(formData.email)) {
-      setErrors({ email: "Please enter a valid corporate email address" });
-      return;
-    }
-    setErrors({});
-    setCurrentStep(2);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateStep2()) {
-      return;
-    }
-
-    setIsSubmitting(true);
-    setErrors({});
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate network delay
-      console.log("Form submitted:", formData);
-      setFormData({
+    const [currentStep, setCurrentStep] = useState<1 | 2>(1);
+    const [formData, setFormData] = useState<FormData>({
         email: "",
         firstName: "",
         lastName: "",
@@ -168,272 +49,541 @@ export default function Register() {
         industry: "",
         country: "",
         state: "",
-      });
-      setCurrentStep(1);
-      alert("Registration successful!");
-    } catch (error) {
-      setErrors({ email: "An error occurred during submission" });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    });
+    const [dropdownOpen, setDropdownOpen] = useState<Record<DropdownKey, boolean>>({
+        jobTitle: false,
+        seniority: false,
+        jobFunction: false,
+        industry: false,
+        country: false,
+        state: false,
+    });
+    const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [authUser, setAuthUser] = useState<User | null>(null);
+    const [userMeta, setUserMeta] = useState<UserMeta | null>(null);
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-      const dropdowns = document.querySelectorAll(".custom-dropdown");
-      let shouldClose = true;
 
-      dropdowns.forEach((dropdown) => {
-        if (dropdown.contains(target)) {
-          shouldClose = false;
-        }
-      });
+    const router = useRouter();
+    const supabase = createClient();
 
-      if (shouldClose) {
-        setDropdownOpen({
-          jobTitle: false,
-          seniority: false,
-          jobFunction: false,
-          industry: false,
-          country: false,
-          state: false,
-        });
-      }
+    useEffect(() => {
+        const checkUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                router.push(ROUTES.REGISTER);
+            } else {
+                setAuthUser(user);
+                setCurrentStep(2);
+                setFormData({
+                    ...formData,
+                    email: user.email || '',
+                });
+
+                const userMetaResponse = await userMetaSelect(user.id);
+                if (userMetaResponse.data) {
+                    setUserMeta(userMetaResponse.data);
+                    setFormData((prev) => ({
+                        ...prev,
+                        firstName: userMetaResponse.data.first_name || '',
+                        lastName: userMetaResponse.data.last_name || '',
+                        companyName: userMetaResponse.data.company_name || '',
+                        phone: userMetaResponse.data.phone || '',
+                        jobTitle: userMetaResponse.data.job_title || '',
+                        seniority: userMetaResponse.data.seniority || '',
+                        jobFunction: userMetaResponse.data.job_function || '',
+                        industry: userMetaResponse.data.industry || '',
+                        country: userMetaResponse.data.country || '',
+                        state: userMetaResponse.data.state || '',
+                    }));
+                } else {
+                    setCurrentStep(2); // Show form if no metadata
+                }
+            }
+        };
+        checkUser();
+    }, [router, supabase]);
+
+    // useEffect(() => {
+    //     const checkUserMeta = async () => {
+    //         const userMeta = await userMetaSelect(authUser?.id || '');
+    //         if (!userMeta) {
+    //             router.push(ROUTES.REGISTER);
+    //         } else {
+    //             console.log(userMeta.data)
+    //             // setAuthUser(user);
+    //             // setCurrentStep(2);
+    //             setFormData(userMeta.data);
+    //         }
+    //     };
+    //     checkUserMeta();
+    // }, [router, supabase, authUser]);
+
+    const toggleDropdown = (key: DropdownKey) => {
+        setDropdownOpen((prev) => ({
+            ...prev,
+            [key]: !prev[key],
+        }));
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    const getStateOptions = (country: string): string[] => {
+        const stateMap: Record<string, string[]> = {
+            "United States": ["California", "New York", "Texas", "Florida", "Washington", "Massachusetts"],
+            Canada: ["Ontario", "Quebec", "British Columbia"],
+            "United Kingdom": ["England", "Scotland", "Wales"],
+            Australia: ["New South Wales", "Victoria", "Queensland"],
+            India: ["Madhya Pradesh", "Maharashtra", "Karnataka", "Delhi", "Punjab", "Rajasthan"],
+            Singapore: ["Singapore"],
+        };
+        return stateMap[country] || [];
+    };
 
-  const renderDropdown = (key: DropdownKey) => {
-    const { label, options, dataValues } = dropdownData[key];
-    const value = formData[key];
+    const dropdownData: Record<DropdownKey, { label: string; options: string[]; dataValues?: string[] }> = {
+        jobTitle: {
+            label: "Job Title",
+            options: ["CEO", "CTO", "Vice President", "Manager", "Engineer", "Analyst"],
+            dataValues: ["ceo", "cto", "vp", "manager", "engineer", "analyst"],
+        },
+        seniority: {
+            label: "Seniority",
+            options: ["Intern", "Entry Level", "Mid-Level", "Senior", "Executive"],
+            dataValues: ["intern", "entry", "mid", "senior", "exec"],
+        },
+        jobFunction: {
+            label: "Job Function",
+            options: ["Marketing", "Sales", "Engineering", "Product", "Human Resources", "Finance"],
+            dataValues: ["marketing", "sales", "engineering", "product", "hr", "finance"],
+        },
+        industry: {
+            label: "Industry",
+            options: ["Technology", "Finance", "Healthcare", "Education", "Retail", "Energy"],
+            dataValues: ["tech", "finance", "health", "edu", "retail", "energy"],
+        },
+        country: {
+            label: "Location Country",
+            options: ["United States", "Canada", "United Kingdom", "Australia", "India", "Singapore"],
+            dataValues: ["us", "ca", "uk", "au", "in", "sg"],
+        },
+        state: {
+            label: "Location State",
+            options: getStateOptions(formData.country),
+        },
+    };
 
-    return (
-      <div className="custom-dropdown mb-3 relative">
-        {/* <label htmlFor={key} className="block text-sm font-medium text-gray-700 mb-1">
-          {label}
-        </label> */}
-        <button
-          id={key}
-          type="button"
-          onClick={() => toggleDropdown(key)}
-          className="w-full p-2 border border-gray-300 rounded-md flex justify-between items-center bg-white text-gray-500 hover:bg-gray-50  disabled:bg-gray-100 disabled:cursor-not-allowed"
-          aria-expanded={dropdownOpen[key]}
-          aria-haspopup="listbox"
-          disabled={key === "state" && !formData.country}
-        >
-          <span className="truncate">{value || `${label}`}</span>
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-        {dropdownOpen[key] && options.length > 0 && (
-          <ul
-            className="absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1 max-h-48 overflow-auto shadow-lg"
-            role="listbox"
-          >
-            {options.map((option, index) => (
-              <li
-                key={option}
-                onClick={() => {
-                  setFormData((prev) => ({
-                    ...prev,
-                    [key]: option,
-                    ...(key === "country" ? { state: "" } : {}),
-                  }));
-                  toggleDropdown(key);
-                }}
-                className="p-2 hover:bg-blue-50 cursor-pointer text-gray-700"
-                role="option"
-                aria-selected={value === option}
-                data-value={dataValues ? dataValues[index] : option.toLowerCase()}
-              >
-                {option}
-              </li>
-            ))}
-          </ul>
-        )}
-        {errors[key] && <p className="text-red-500 text-sm mt-1">{errors[key]}</p>}
-      </div>
-    );
-  };
+    const validateEmail = (email: string): boolean => {
+        return !/@(gmail|yahoo|aol)\.com$/i.test(email) && /\S+@\S+\.\S+/.test(email);
+    };
 
-  return (
-    <section className="register py-5 bg-gray-100 min-h-screen flex items-center">
-      <div className="container mx-auto px-4">
-        <div className="row">
-          <div className="col-12">
-            <div className="register_inner  max-w-2xl mx-auto">
-              <h2 className="section_heading text-2xl font-bold text-center mb-6">Register</h2>
+    const validateStep2 = (): boolean => {
+        const newErrors: Partial<Record<keyof FormData, string>> = {};
+        const requiredFields: (keyof FormData)[] = [
+            "firstName",
+            "lastName",
+            "companyName",
+            "phone",
+            "jobTitle",
+            "seniority",
+            "jobFunction",
+            "industry",
+            "country",
+            "state",
+        ];
 
-              {currentStep === 1 && (
-                <form className="step" id="step1" onSubmit={handleGoToStep2}>
-                  <h1 className="logo text-3xl font-bold text-center mb-4">Logo</h1>
-                  <div className="mb-4">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                      Corporate Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
-                      required
-                      className="w-full p-2 border border-gray-300 rounded-md "
-                      aria-describedby="email-error"
-                    />
-                    {errors.email && (
-                      <p id="email-error" className="text-red-500 text-sm mt-1">
-                        {errors.email}
-                      </p>
-                    )}
-                  </div>
-                  <button
-                    type="submit"
-                    className=" bg-[#134c90] text-white px-4 py-2 rounded-md hover:bg-[#d21118] disabled:bg-blue-300"
-                    disabled={isSubmitting}
-                  >
-                    Continue
-                  </button>
-                  <p className="mt-4 text-sm text-gray-600 mb-4">
-                    Stay up to date on all the news, insights and changes in the world of Artificial
-                    Intelligence with The Artificial Reporter daily newsletter.
-                  </p>
-                  <p className="text-sm text-gray-600 ">Sign up Today!</p>
-                </form>
-              )}
+        requiredFields.forEach((field) => {
+            if (!formData[field]) {
+                newErrors[field] = `${field === "companyName"
+                    ? "Company Name"
+                    : field === "phone"
+                        ? "Phone"
+                        : dropdownData[field as DropdownKey]?.label || field
+                    } is required`;
+            }
+        });
 
-              {currentStep === 2 && (
-                <form className="step" id="step2" onSubmit={handleSubmit}>
-                  <h1 className="logo text-3xl font-bold text-center mb-4">Logo</h1>
-                  <h5 className="text-lg font-semibold text-center mb-4">
-                    Registration and Daily Newsletter Signup
-                  </h5>
-                  <div className="mb-0">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Corporate Email</label>
-                    <input
-                      type="email"
-                      id="emailDisplay"
-                      value={formData.email}
-                      disabled
-                      className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                    />
-                  </div>
+        if (formData.phone && !/^\+?\d{10,15}$/.test(formData.phone)) {
+            newErrors.phone = "Please enter a valid phone number";
+        }
 
-                  <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-0">
-                    <div>
-                      {/* <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label> */}
-                      <input
-                        type="text"
-                        placeholder="First Name"
-                        value={formData.firstName}
-                        onChange={(e) => setFormData((prev) => ({ ...prev, firstName: e.target.value }))}
-                        className="w-full p-2 border border-gray-300 rounded-md "
-                        required
-                      />
-                      {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
-                    </div>
-                    <div>
-                      {/* <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label> */}
-                      <input
-                        type="text"
-                        placeholder="Last Name"
-                        value={formData.lastName}
-                        onChange={(e) => setFormData((prev) => ({ ...prev, lastName: e.target.value }))}
-                        className="w-full p-2 border border-gray-300 rounded-md "
-                        required
-                      />
-                      {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
-                    </div>
-                  </div>
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
-                  <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-0">
-                    <div>
-                      {/* <label className="block text-sm font-medium text-gray-700 mb-1">Company Name</label> */}
-                      <input
-                        type="text"
-                        placeholder="Company Name"
-                        value={formData.companyName}
-                        onChange={(e) => setFormData((prev) => ({ ...prev, companyName: e.target.value }))}
-                        className="w-full p-2 border border-gray-300 rounded-md "
-                        required
-                      />
-                      {errors.companyName && <p className="text-red-500 text-sm mt-1">{errors.companyName}</p>}
-                    </div>
-                    <div>
-                      {/* <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label> */}
-                      <input
-                        type="tel"
-                        placeholder="Phone"
-                        value={formData.phone}
-                        onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
-                        className="w-full p-2 border border-gray-300 rounded-md "
-                        required
-                      />
-                      {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-                    </div>
-                  </div>
+    const handleSubmitEmail = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setErrors({});
 
-                  <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-0">
-                    <div>{renderDropdown("jobTitle")}</div>
-                    <div>{renderDropdown("seniority")}</div>
-                  </div>
+        const email = formData.email;
+        // if (!validateEmail(email)) {
+        //     setErrors({ email: "Please enter a valid corporate email address" });
+        //     setIsSubmitting(false);
+        //     return;
+        // }
 
-                  <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-0">
-                    <div>{renderDropdown("jobFunction")}</div>
-                    <div>{renderDropdown("industry")}</div>
-                  </div>
+        try {
+            const response = await signInWithEmail(email);
+            if (response.error) {
+                setErrors({ email: response.error.message });
+            } else {
+                console.log(response)
+                if(response.data.session){
+                    setAuthUser(response.data.user)
+                    setCurrentStep(2);
+                }else{
+                    router.push(ROUTES.LOGIN);
+                }
+                
+            }
+        } catch (error) {
+            setErrors({ email: "An error occurred during email submission" });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
-                  <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-0">
-                    <div>{renderDropdown("country")}</div>
-                    <div>{renderDropdown("state")}</div>
-                  </div>
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (!validateStep2()) {
+            return;
+        }
 
-                  <div className="checkboxes mb-4">
-                    <div className="flex items-center mb-2">
-                      <input
-                        type="checkbox"
-                        id="terms"
-                        required
-                        className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
-                      <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
-                        I agree to Terms of Use, Privacy Policy...
-                      </label>
-                    </div>
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id="partners"
-                        className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
-                      <label htmlFor="partners" className="ml-2 text-sm text-gray-600">
-                        I agree to allow partners to contact me...
-                      </label>
-                    </div>
-                  </div>
+        if (!authUser) {
+            setErrors({ email: "User not authenticated" });
+            return;
+        }
 
-                  <button
-                    type="submit"
-                    className=" bg-[#134c90] text-white px-4 py-2 rounded-md hover:bg-[#d21118] disabled:bg-blue-300"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Submitting..." : "Submit"}
-                  </button>
-                </form>
-              )}
+        setIsSubmitting(true);
+        setErrors({});
+
+        try {
+            const userMeta = [{
+                user_id: authUser.id,
+                first_name: formData.firstName,
+                last_name: formData.lastName,
+                company_name: formData.companyName,
+                phone: formData.phone,
+                job_title: formData.jobTitle,
+                seniority: formData.seniority,
+                job_function: formData.jobFunction,
+                country: formData.country,
+                state: formData.state,
+            }];
+
+            const response = await userMetaInsert(userMeta);
+            const responsepass = await updateUserPassword(password);
+            console.log(responsepass)
+            if (response.error) {
+                setErrors({ email: response.error.message });
+                return;
+            }
+
+            // Reset form
+            setFormData({
+                email: "",
+                firstName: "",
+                lastName: "",
+                companyName: "",
+                phone: "",
+                jobTitle: "",
+                seniority: "",
+                jobFunction: "",
+                industry: "",
+                country: "",
+                state: "",
+
+            });
+            setCurrentStep(1);
+            
+            router.push(ROUTES.HOME);
+        } catch (error) {
+            setErrors({ email: "An error occurred during submission" });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Node;
+            const dropdowns = document.querySelectorAll(".custom-dropdown");
+            let shouldClose = true;
+
+            dropdowns.forEach((dropdown) => {
+                if (dropdown.contains(target)) {
+                    shouldClose = false;
+                }
+            });
+
+            if (shouldClose) {
+                setDropdownOpen({
+                    jobTitle: false,
+                    seniority: false,
+                    jobFunction: false,
+                    industry: false,
+                    country: false,
+                    state: false,
+                });
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const renderDropdown = (key: DropdownKey) => {
+        const { label, options, dataValues } = dropdownData[key];
+        const value = formData[key];
+
+        return (
+            <div className="custom-dropdown mb-3 relative">
+                <button
+                    id={key}
+                    type="button"
+                    onClick={() => toggleDropdown(key)}
+                    className="w-full p-2 border border-gray-300 rounded-md flex justify-between items-center bg-white text-gray-500 hover:bg-gray-50 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    aria-expanded={dropdownOpen[key]}
+                    aria-haspopup="listbox"
+                    disabled={key === "state" && !formData.country}
+                >
+                    <span className="truncate">{value || `${label}`}</span>
+                    <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-Hours7 Signs of Emotional Intelligence in Leadership-7-7" />
+                    </svg>
+                </button>
+                {dropdownOpen[key] && options.length > 0 && (
+                    <ul
+                        className="absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1 max-h-48 overflow-auto shadow-lg"
+                        role="listbox"
+                    >
+                        {options.map((option, index) => (
+                            <li
+                                key={option}
+                                onClick={() => {
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        [key]: option,
+                                        ...(key === "country" ? { state: "" } : {}),
+                                    }));
+                                    toggleDropdown(key);
+                                }}
+                                className="p-2 hover:bg-blue-50 cursor-pointer text-gray-700"
+                                role="option"
+                                aria-selected={value === option}
+                                data-value={dataValues ? dataValues[index] : option.toLowerCase()}
+                            >
+                                {option}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+                {errors[key] && <p className="text-red-500 text-sm mt-1">{errors[key]}</p>}
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+        );
+    };
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        if (name === 'password') {
+            setPassword(value);
+        }
+    };
+
+    // Toggle password visibility
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+    return (
+        <section className="register py-5 bg-gray-100 min-h-screen flex items-center">
+            <div className="container mx-auto px-4">
+                <div className="row">
+                    <div className="col-12">
+                        <div className="register_inner max-w-2xl mx-auto">
+                            <h2 className="section_heading text-2xl font-bold text-center mb-6">Register</h2>
+
+                            {currentStep === 1 && (
+                                <form className="step" id="step1" onSubmit={handleSubmitEmail}>
+                                    <h1 className="logo text-3xl font-bold text-center mb-4">Logo</h1>
+                                    <div className="mb-4">
+                                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                                            Corporate Email
+                                        </label>
+                                        <input
+                                            type="email"
+                                            id="email"
+                                            value={formData.email}
+                                            onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
+                                            required
+                                            className="w-full p-2 border border-gray-300 rounded-md"
+                                            aria-describedby="email-error"
+                                        />
+                                        {errors.email && (
+                                            <p id="email-error" className="text-red-500 text-sm mt-1">
+                                                {errors.email}
+                                            </p>
+                                        )}
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        className="bg-[#134c90] text-white px-4 py-2 rounded-md hover:bg-[#d21118] disabled:bg-blue-300"
+                                        disabled={isSubmitting}
+                                    >
+                                        Continue
+                                    </button>
+                                    <p className="mt-4 text-sm text-gray-600 mb-4">
+                                        Stay up to date on all the news, insights and changes in the world of Artificial
+                                        Intelligence with The Artificial Reporter daily newsletter.
+                                    </p>
+                                    <p className="text-sm text-gray-600">Sign up Today!</p>
+                                </form>
+                            )}
+
+                            {currentStep === 2 && (
+                                <form className="step" id="step2" onSubmit={handleSubmit}>
+                                    <h1 className="logo text-3xl font-bold text-center mb-4">Logo</h1>
+                                    <h5 className="text-lg font-semibold text-center mb-4">
+                                        Registration and Daily Newsletter Signup
+                                    </h5>
+                                    <div className="mb-0 relative">
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Corporate Email</label>
+                                        <input
+                                            type="email"
+                                            id="emailDisplay"
+                                            value={formData.email}
+                                            disabled
+                                            className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
+                                        />
+                                        <span className="absolute top-1/2 right-4"><BadgeCheck size={20} color="green" /></span>
+                                    </div>
+
+                                    <div className="mb-0">
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Create a new password</label>
+                                        <div className="relative">
+                                            <input
+                                                type={showPassword ? 'text' : 'password'}
+                                                id="password"
+                                                name="password"
+                                                value={password}
+                                                onChange={handleInputChange}
+                                                className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={togglePasswordVisibility}
+                                                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500"
+                                            >
+                                                {showPassword ? <EyeClosed size={20} /> : <Eye size={20} />}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-0">
+                                        <div>
+                                            <input
+                                                type="text"
+                                                placeholder="First Name"
+                                                value={formData.firstName}
+                                                onChange={(e) => setFormData((prev) => ({ ...prev, firstName: e.target.value }))}
+                                                className="w-full p-2 border border-gray-300 rounded-md"
+                                                required
+                                            />
+                                            {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
+                                        </div>
+                                        <div>
+                                            <input
+                                                type="text"
+                                                placeholder="Last Name"
+                                                value={formData.lastName}
+                                                onChange={(e) => setFormData((prev) => ({ ...prev, lastName: e.target.value }))}
+                                                className="w-full p-2 border border-gray-300 rounded-md"
+                                                required
+                                            />
+                                            {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-0">
+                                        <div>
+                                            <input
+                                                type="text"
+                                                placeholder="Company Name"
+                                                value={formData.companyName}
+                                                onChange={(e) => setFormData((prev) => ({ ...prev, companyName: e.target.value }))}
+                                                className="w-full p-2 border border-gray-300 rounded-md"
+                                                required
+                                            />
+                                            {errors.companyName && <p className="text-red-500 text-sm mt-1">{errors.companyName}</p>}
+                                        </div>
+                                        <div>
+                                            <input
+                                                type="tel"
+                                                placeholder="Phone"
+                                                value={formData.phone}
+                                                onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
+                                                className="w-full p-2 border border-gray-300 rounded-md"
+                                                required
+                                            />
+                                            {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-0">
+                                        <div>{renderDropdown("jobTitle")}</div>
+                                        <div>{renderDropdown("seniority")}</div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-0">
+                                        <div>{renderDropdown("jobFunction")}</div>
+                                        <div>{renderDropdown("industry")}</div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-0">
+                                        <div>{renderDropdown("country")}</div>
+                                        <div>{renderDropdown("state")}</div>
+                                    </div>
+
+                                    <div className="checkboxes mb-4">
+                                        <div className="flex items-center mb-2">
+                                            <input
+                                                type="checkbox"
+                                                id="terms"
+                                                required
+                                                className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                            />
+                                            <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
+                                                I agree to Terms of Use, Privacy Policy...
+                                            </label>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <input
+                                                type="checkbox"
+                                                id="partners"
+                                                className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                            />
+                                            <label htmlFor="partners" className="ml-2 text-sm text-gray-600">
+                                                I agree to allow partners to contact me...
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        className="bg-[#134c90] text-white px-4 py-2 rounded-md hover:bg-[#d21118] disabled:bg-blue-300"
+                                        disabled={isSubmitting}
+                                    >
+                                        {isSubmitting ? "Submitting..." : "Submit"}
+                                    </button>
+                                </form>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
 }
