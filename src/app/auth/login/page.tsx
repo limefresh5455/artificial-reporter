@@ -6,16 +6,17 @@ import { login } from '@/lib/supabase/action';
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
     const supabase = createClient();
+    const { setUser } = useAuth();
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         setLoading(true);
         setError(null);
 
@@ -28,16 +29,15 @@ export default function Login() {
             return;
         }
 
-        // Explicitly refresh session to ensure client-side sync
         const { data: { user }, error: userError } = await supabase.auth.getUser();
+
         if (userError || !user) {
             setError('Failed to sync user session. Please try again.');
             setLoading(false);
             return;
         }
 
-        // Redirect to home after confirming session
-
+        setUser(user);
         router.replace(ROUTES.HOME);
         setLoading(false);
     };

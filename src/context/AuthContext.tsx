@@ -1,53 +1,34 @@
-// // context/AuthContext.js
-// import { createContext, useContext, useState, useEffect } from 'react';
-// import { createClient } from '@/lib/supabase/client';
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createClient } from "@/lib/supabase/client";
 
-// const AuthContext = createContext();
+interface AuthContextType {
+    user: any;
+    setUser: (user: any) => void;
+}
 
-// export function AuthProvider({ children }) {
-//   const [user, setUser] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const supabase = createClient();
+const AuthContext = createContext<AuthContextType>({
+    user: null,
+    setUser: () => { },
+});
 
-//   useEffect(() => {
-//     // Initial session check
-//     const getSession = async () => {
-//       try {
-//         const { data: { session }, error } = await supabase.auth.getSession();
-//         if (error) {
-//           console.error('Error fetching session:', error.message);
-//           setUser(null);
-//         } else {
-//           setUser(session?.user ?? null);
-//         }
-//       } catch (err) {
-//         console.error('Unexpected error fetching session:', err);
-//         setUser(null);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+    const [user, setUser] = useState<any>(null);
+    const supabase = createClient();
 
-//     getSession();
+    useEffect(() => {
+        console.log("User updated in context:", user);
+        async function fetchUser() {
+            const { data: { user } } = await supabase.auth.getUser();
+            setUser(user);
+        }
+        fetchUser();
+    }, []);
 
-//     // Listen for auth state changes
-//     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-//       console.log('Auth event:', event); // Debug auth events
-//       setUser(session?.user ?? null);
-//       setLoading(false);
-//     });
+    return (
+        <AuthContext.Provider value={{ user, setUser }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
 
-//     // Cleanup listener
-//     return () => {
-//       authListener?.subscription?.unsubscribe();
-//     };
-//   }, [supabase]); // Add supabase as dependency to avoid stale client
-
-//   return (
-//     <AuthContext.Provider value={{ user, loading }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// }
-
-// export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext);

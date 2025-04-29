@@ -8,10 +8,10 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { userMetaSelect } from '@/lib/supabase/action';
 import { createClient } from '@/lib/supabase/client';
-import React, {  useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { ROUTES } from "./routes";
-
+import { AuthProvider } from "@/context/AuthContext"
 
 
 
@@ -39,11 +39,11 @@ export default function RootLayout({
         const checkUser = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
-                
+
                 const userMetaResponse = await userMetaSelect(user.id);
                 if (userMetaResponse.data) {
                     router.push(ROUTES.HOME);
-                } 
+                }
             }
         };
         checkUser();
@@ -60,13 +60,15 @@ export default function RootLayout({
             <body
                 className={`${poppins.variable} antialiased`}
             >
-                <div className="min-h-screen flex flex-col font-poppins">
-                    <Header />
-                    <main className="flex-1 container mx-auto px-20 py-6 space-y-10">
-                        {children}
-                    </main>
-                    <Footer />
-                </div>
+                <AuthProvider>
+                    <div className="min-h-screen flex flex-col font-poppins">
+                        <Header />
+                        <main className="flex-1 container mx-auto px-20 py-6 space-y-10">
+                            {children}
+                        </main>
+                        <Footer />
+                    </div>
+                </AuthProvider>
             </body>
         </html>
     );

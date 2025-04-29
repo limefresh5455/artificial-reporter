@@ -6,44 +6,15 @@ import TrendingSlider from "./TrendingSlider";
 import { getNavigationData, NavigationData, MenuItem } from "@/lib/sanity";
 import Link from 'next/link';
 import { ROUTES } from '../routes';
-import { userMetaSelect, signOut } from '@/lib/supabase/action';
-import { createClient } from '@/lib/supabase/client';
-import { User } from '@supabase/supabase-js';
-
-interface UserMeta {
-    first_name: string;
-    last_name: string;
-    company_name: string;
-    phone: string;
-    job_title: string;
-    seniority: string;
-    job_function: string;
-    industry: string;
-    country: string;
-    state: string;
-}
+import { signOut } from '@/lib/supabase/action';
+import { useAuth } from "@/context/AuthContext";
 
 const Header: React.FC = () => {
     const [navigation, setNavigation] = useState<NavigationData | null>(null);
     const [isOpen, setIsOpen] = useState(false);
-    const supabase = createClient();
-    const [authUser, setAuthUser] = useState<User | null>(null);
-    const [userMeta, setUserMeta] = useState<UserMeta | null>(null);
+    const { user, setUser } = useAuth();
 
-    useEffect(() => {
-        const checkUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                setAuthUser(user);  // <-- You forgot to setAuthUser(user)
-                const userMetaResponse = await userMetaSelect(user.id);
-                if (userMetaResponse.data) {
-                    setUserMeta(userMetaResponse.data);
-                }
-            }
-        };
-        checkUser();
-    }, [supabase]);
-
+    console.log(isOpen)
     useEffect(() => {
         const fetchData = async () => {
             const navData = await getNavigationData();
@@ -54,6 +25,13 @@ const Header: React.FC = () => {
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
+    };
+
+    const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        await signOut();
+        setUser(null);
+        setIsOpen(false)
     };
 
     return (
@@ -76,17 +54,17 @@ const Header: React.FC = () => {
                     <a href="#" className="text-gray-600 hover:underline m-0">AI</a>
                     <span className="text-gray-400 mx-2">|</span>
 
-                    {authUser == null ? (
+                    {user == null ? (
                         <>
                             <Link href={ROUTES.LOGIN} className="text-gray-600 hover:underline m-0">Login</Link>
                             <span className="text-gray-400 mx-2">|</span>
                             <Link href={ROUTES.REGISTER} className="text-gray-600 hover:underline m-0">Register</Link>
                         </>
                     ) : (
-                        <div className="flex relative  text-left">
+                        <div className="flex relative text-left">
                             <button
                                 type="button"
-                                className="      font-semibold text-gray-900 shadow-xs  hover:bg-gray-50"
+                                className="font-semibold text-gray-900 shadow-xs hover:bg-gray-50"
                                 id="menu-button"
                                 aria-expanded={isOpen}
                                 aria-haspopup="true"
@@ -98,18 +76,14 @@ const Header: React.FC = () => {
                             {isOpen && (
                                 <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
                                     <div className="py-1" role="none">
-                                        
-                                        <form method="POST"  role="none">
-                                            <button type="submit" className="block w-full px-4 py-2 text-left text-sm text-gray-700" role="menuitem" id="menu-item-3"
-                                            onClick={async (e) => {
-                                                e.preventDefault();
-                                                await signOut();
-                                                setAuthUser(null); // clear local user
-                                              }}
-                                            >
-                                                Sign out
-                                            </button>
-                                        </form>
+                                        <button
+                                            type="submit"
+                                            className="block w-full px-4 py-2 text-left text-sm text-gray-700"
+                                            role="menuitem"
+                                            onClick={handleLogout}
+                                        >
+                                            Sign out
+                                        </button>
                                     </div>
                                 </div>
                             )}
@@ -135,7 +109,7 @@ const Header: React.FC = () => {
             {/* Navigation Menu */}
             <nav className="flex justify-center py-5 bg-white text-base font-medium text-black">
                 <div className="flex items-center divide-x divide-gray-300 text-base">
-                    {navigation?.menuItems.map((item: MenuItem) => (
+                    {navigation?.menuItems?.map((item: MenuItem) => (
                         item.dropdown && item.dropdown.length > 0 ? (
                             <div key={item._key} className="relative group px-4">
                                 <button className={`hover:text-[#12498b] ${item.highlight ? 'text-[#12498b] font-semibold' : ''}`}>

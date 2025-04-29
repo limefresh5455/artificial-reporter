@@ -23,6 +23,7 @@ interface FormData {
     country: string;
     state: string;
 }
+
 interface UserMeta {
     first_name: string;
     last_name: string;
@@ -35,6 +36,7 @@ interface UserMeta {
     country: string;
     state: string;
 }
+
 export default function Register() {
     const [currentStep, setCurrentStep] = useState<1 | 2>(1);
     const [formData, setFormData] = useState<FormData>({
@@ -58,68 +60,62 @@ export default function Register() {
         country: false,
         state: false,
     });
-    const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+    const [errors, setErrors] = useState<Partial<Record<keyof FormData | 'password', string>>>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [authUser, setAuthUser] = useState<User | null>(null);
     const [userMeta, setUserMeta] = useState<UserMeta | null>(null);
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
-
     const router = useRouter();
     const supabase = createClient();
 
     useEffect(() => {
-        const checkUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) {
-                router.push(ROUTES.REGISTER);
-            } else {
-                setAuthUser(user);
-                setCurrentStep(2);
-                setFormData({
-                    ...formData,
-                    email: user.email || '',
-                });
+        let mounted = true;
 
-                const userMetaResponse = await userMetaSelect(user.id);
-                if (userMetaResponse.data) {
-                    setUserMeta(userMetaResponse.data);
-                    setFormData((prev) => ({
-                        ...prev,
-                        firstName: userMetaResponse.data.first_name || '',
-                        lastName: userMetaResponse.data.last_name || '',
-                        companyName: userMetaResponse.data.company_name || '',
-                        phone: userMetaResponse.data.phone || '',
-                        jobTitle: userMetaResponse.data.job_title || '',
-                        seniority: userMetaResponse.data.seniority || '',
-                        jobFunction: userMetaResponse.data.job_function || '',
-                        industry: userMetaResponse.data.industry || '',
-                        country: userMetaResponse.data.country || '',
-                        state: userMetaResponse.data.state || '',
-                    }));
+        const checkUser = async () => {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!mounted) return;
+
+                if (!user) {
+                    router.push(ROUTES.REGISTER);
                 } else {
-                    setCurrentStep(2); // Show form if no metadata
+                    setAuthUser(user);
+                    setCurrentStep(2);
+                    setFormData(prev => ({
+                        ...prev,
+                        email: user.email || '',
+                    }));
+
+                    const userMetaResponse = await userMetaSelect(user.id);
+                    if (userMetaResponse.data && mounted) {
+                        setUserMeta(userMetaResponse.data);
+                        setFormData(prev => ({
+                            ...prev,
+                            firstName: userMetaResponse.data.first_name || '',
+                            lastName: userMetaResponse.data.last_name || '',
+                            companyName: userMetaResponse.data.company_name || '',
+                            phone: userMetaResponse.data.phone || '',
+                            jobTitle: userMetaResponse.data.job_title || '',
+                            seniority: userMetaResponse.data.seniority || '',
+                            jobFunction: userMetaResponse.data.job_function || '',
+                            industry: userMetaResponse.data.industry || '',
+                            country: userMetaResponse.data.country || '',
+                            state: userMetaResponse.data.state || '',
+                        }));
+                    }
                 }
+            } catch (error) {
+                console.error('Error checking user:', error);
             }
         };
-        checkUser();
-    }, [router, supabase]);
 
-    // useEffect(() => {
-    //     const checkUserMeta = async () => {
-    //         const userMeta = await userMetaSelect(authUser?.id || '');
-    //         if (!userMeta) {
-    //             router.push(ROUTES.REGISTER);
-    //         } else {
-    //             console.log(userMeta.data)
-    //             // setAuthUser(user);
-    //             // setCurrentStep(2);
-    //             setFormData(userMeta.data);
-    //         }
-    //     };
-    //     checkUserMeta();
-    // }, [router, supabase, authUser]);
+        checkUser();
+        return () => {
+            mounted = false;
+        };
+    }, [router, supabase]);
 
     const toggleDropdown = (key: DropdownKey) => {
         setDropdownOpen((prev) => ({
@@ -173,11 +169,11 @@ export default function Register() {
     };
 
     const validateEmail = (email: string): boolean => {
-        return !/@(gmail|yahoo|aol)\.com$/i.test(email) && /\S+@\S+\.\S+/.test(email);
+        return /\S+@\S+\.\S+/.test(email) && !/@(gmail|yahoo|aol|hotmail)\.com$/i.test(email);
     };
 
     const validateStep2 = (): boolean => {
-        const newErrors: Partial<Record<keyof FormData, string>> = {};
+        const newErrors: Partial<Record<keyof FormData | 'password', string>> = {};
         const requiredFields: (keyof FormData)[] = [
             "firstName",
             "lastName",
@@ -206,6 +202,10 @@ export default function Register() {
             newErrors.phone = "Please enter a valid phone number";
         }
 
+        if (!password || password.length < 8) {
+            newErrors.password = "Password must be at least 8 characters long";
+        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -222,19 +222,44 @@ export default function Register() {
         //     return;
         // }
 
+        // try {
+        //     const response = await signInWithEmail(email);
+        //     if (response.error) {
+        //         setErrors({ email: response.error.message });
+        //     } else {
+
+        //         setErrors({ email: "A confirmation email has been sent to your address. Please verify your email to continue." });
+        //         if (response.data.session) {
+        //             setAuthUser(response.data.user);
+        //             setCurrentStep(2);
+        //         } else if(response.data.user?.identities?[0].identity_data.email_verified){
+
+        //             router.push(ROUTES.LOGIN);
+        //         }
+        //     }
+        // } catch (error) {
+        //     setErrors({ email: "An error occurred during email submission" });
+        // } finally {
+        //     setIsSubmitting(false);
+        // }
         try {
             const response = await signInWithEmail(email);
             if (response.error) {
                 setErrors({ email: response.error.message });
+            } else if (
+                response.data.user &&
+                response.data.user.identities &&
+                response.data.user.identities.length > 0 &&
+                response.data.user.identities[0].identity_data &&
+                response.data.user.identities[0].identity_data.email_verified
+            ) {
+                router.push(ROUTES.LOGIN);
             } else {
-                console.log(response)
-                if(response.data.session){
-                    setAuthUser(response.data.user)
+                setErrors({ email: "A confirmation email has been sent to your address. Please verify your email to continue." });
+                if (response.data.session) {
+                    setAuthUser(response.data.user);
                     setCurrentStep(2);
-                }else{
-                    router.push(ROUTES.LOGIN);
-                }
-                
+                } 
             }
         } catch (error) {
             setErrors({ email: "An error occurred during email submission" });
@@ -267,15 +292,23 @@ export default function Register() {
                 job_title: formData.jobTitle,
                 seniority: formData.seniority,
                 job_function: formData.jobFunction,
+                industry: formData.industry,
                 country: formData.country,
                 state: formData.state,
             }];
 
-            const response = await userMetaInsert(userMeta);
-            const responsepass = await updateUserPassword(password);
-            console.log(responsepass)
-            if (response.error) {
-                setErrors({ email: response.error.message });
+            const [metaResponse, passResponse] = await Promise.all([
+                userMetaInsert(userMeta),
+                updateUserPassword(password),
+            ]);
+
+            if (metaResponse.error) {
+                setErrors({ email: metaResponse.error.message });
+                return;
+            }
+
+            if (passResponse.error) {
+                setErrors({ password: passResponse.error.message });
                 return;
             }
 
@@ -292,10 +325,9 @@ export default function Register() {
                 industry: "",
                 country: "",
                 state: "",
-
             });
+            setPassword('');
             setCurrentStep(1);
-            
             router.push(ROUTES.HOME);
         } catch (error) {
             setErrors({ email: "An error occurred during submission" });
@@ -354,7 +386,7 @@ export default function Register() {
                         stroke="currentColor"
                         viewBox="0 0 24 24"
                     >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-Hours7 Signs of Emotional Intelligence in Leadership-7-7" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
                 {dropdownOpen[key] && options.length > 0 && (
@@ -387,17 +419,20 @@ export default function Register() {
             </div>
         );
     };
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         if (name === 'password') {
             setPassword(value);
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
         }
     };
 
-    // Toggle password visibility
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
+
     return (
         <section className="register py-5 bg-gray-100 min-h-screen flex items-center">
             <div className="container mx-auto px-4">
@@ -416,8 +451,9 @@ export default function Register() {
                                         <input
                                             type="email"
                                             id="email"
+                                            name="email"
                                             value={formData.email}
-                                            onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
+                                            onChange={handleInputChange}
                                             required
                                             className="w-full p-2 border border-gray-300 rounded-md"
                                             aria-describedby="email-error"
@@ -449,7 +485,7 @@ export default function Register() {
                                     <h5 className="text-lg font-semibold text-center mb-4">
                                         Registration and Daily Newsletter Signup
                                     </h5>
-                                    <div className="mb-0 relative">
+                                    <div className="mb-4 relative">
                                         <label className="block text-sm font-medium text-gray-700 mb-1">Corporate Email</label>
                                         <input
                                             type="email"
@@ -461,7 +497,7 @@ export default function Register() {
                                         <span className="absolute top-1/2 right-4"><BadgeCheck size={20} color="green" /></span>
                                     </div>
 
-                                    <div className="mb-0">
+                                    <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700 mb-1">Create a new password</label>
                                         <div className="relative">
                                             <input
@@ -470,7 +506,8 @@ export default function Register() {
                                                 name="password"
                                                 value={password}
                                                 onChange={handleInputChange}
-                                                className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
+                                                className="w-full p-2 border border-gray-300 rounded-md"
+                                                required
                                             />
                                             <button
                                                 type="button"
@@ -480,15 +517,17 @@ export default function Register() {
                                                 {showPassword ? <EyeClosed size={20} /> : <Eye size={20} />}
                                             </button>
                                         </div>
+                                        {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
                                     </div>
 
-                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-0">
+                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-4">
                                         <div>
                                             <input
                                                 type="text"
+                                                name="firstName"
                                                 placeholder="First Name"
                                                 value={formData.firstName}
-                                                onChange={(e) => setFormData((prev) => ({ ...prev, firstName: e.target.value }))}
+                                                onChange={handleInputChange}
                                                 className="w-full p-2 border border-gray-300 rounded-md"
                                                 required
                                             />
@@ -497,9 +536,10 @@ export default function Register() {
                                         <div>
                                             <input
                                                 type="text"
+                                                name="lastName"
                                                 placeholder="Last Name"
                                                 value={formData.lastName}
-                                                onChange={(e) => setFormData((prev) => ({ ...prev, lastName: e.target.value }))}
+                                                onChange={handleInputChange}
                                                 className="w-full p-2 border border-gray-300 rounded-md"
                                                 required
                                             />
@@ -507,13 +547,14 @@ export default function Register() {
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-0">
+                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-4">
                                         <div>
                                             <input
                                                 type="text"
+                                                name="companyName"
                                                 placeholder="Company Name"
                                                 value={formData.companyName}
-                                                onChange={(e) => setFormData((prev) => ({ ...prev, companyName: e.target.value }))}
+                                                onChange={handleInputChange}
                                                 className="w-full p-2 border border-gray-300 rounded-md"
                                                 required
                                             />
@@ -522,9 +563,10 @@ export default function Register() {
                                         <div>
                                             <input
                                                 type="tel"
+                                                name="phone"
                                                 placeholder="Phone"
                                                 value={formData.phone}
-                                                onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
+                                                onChange={handleInputChange}
                                                 className="w-full p-2 border border-gray-300 rounded-md"
                                                 required
                                             />
@@ -532,17 +574,17 @@ export default function Register() {
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-0">
+                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-4">
                                         <div>{renderDropdown("jobTitle")}</div>
                                         <div>{renderDropdown("seniority")}</div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-0">
+                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-4">
                                         <div>{renderDropdown("jobFunction")}</div>
                                         <div>{renderDropdown("industry")}</div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-0">
+                                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-4">
                                         <div>{renderDropdown("country")}</div>
                                         <div>{renderDropdown("state")}</div>
                                     </div>
