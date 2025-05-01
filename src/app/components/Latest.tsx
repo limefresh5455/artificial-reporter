@@ -6,6 +6,7 @@ import imageUrlBuilder from '@sanity/image-url';
 import { client } from '@/lib/client';
 import { format } from 'date-fns';
 import { PortableText } from '@portabletext/react';
+import { ROUTES } from '../routes';
 
 const builder = imageUrlBuilder(client);
 
@@ -74,7 +75,7 @@ const Latest: React.FC = () => {
                  
                   {story.title ? (
                     <a
-                      href={story.link}
+                      href={`${ROUTES.NEWS}${story.slug.current}`}
                       className="text-2xl font-bold leading-snug mb-2"
                       style={{ zIndex: 20 }}
                     >
@@ -108,7 +109,7 @@ const Latest: React.FC = () => {
                   className="w-20 h-16 object-cover"
                 />
                 <div className="py-3 px-4">
-                  <p className="text-sm font-medium">{story.title}</p>
+                  <a href={`${ROUTES.NEWS}${story.slug.current}`} className="text-sm font-medium">{story.title}</a><br></br>
                   <span className="text-sm text-gray-500">
                     {formatDate(story._createdAt || story._createdAt)}
                   </span>

@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper/modules';
 import { getHeroData, HeroSlide } from '@/lib/sanity';
+import {urlFor} from "@/lib/sanityImage"
 
 import 'swiper/css';
 import 'swiper/css/autoplay';
@@ -20,6 +21,7 @@ const Hero: React.FC = () => {
     async function fetchSlides() {
       const data = await getHeroData();
       setSlides(data?.slides || []);
+      console.log(data)
     }
 
     fetchSlides();
@@ -65,9 +67,7 @@ const Hero: React.FC = () => {
                 <div
                   className="overlay text-white p-10 bg-cover bg-center min-h-100 flex flex-col justify-end"
                   style={{
-                    backgroundImage: `url("https://cdn.sanity.io/images/3pnjrasi/production/${slide.image.asset._ref
-                      .replace('image-', '')
-                      .replace('-jpg', '.jpg')}")`,
+                    backgroundImage: `url("${urlFor(slide.image.asset).url()}")`,
                   }}
                 >
                   <div className="text-sm mb-2 text-[#e0e0e0] z-2 relative">

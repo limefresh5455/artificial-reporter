@@ -10,6 +10,7 @@ import { getTopStories, HomeNewsData } from '@/lib/sanity';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { ROUTES } from '../routes';
 
 const builder = imageUrlBuilder(client);
 
@@ -99,9 +100,9 @@ const CardSlider: React.FC = () => {
                   </>
                 )}
                 <div className="absolute bottom-4 left-4 z-10">
-                  {story.link ? (
+                  {story.slug ? (
                     <a
-                      href={story.link}
+                      href={`${ROUTES.NEWS}${story.slug.current}`}
                       className="text-white text-lg font-semibold leading-tight hover:underline z-20"
                     >
                       {story.title}

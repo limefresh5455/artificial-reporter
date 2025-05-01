@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { ROUTES } from '../routes';
 import { signOut } from '@/lib/supabase/action';
 import { useAuth } from "@/context/AuthContext";
+import {  buildCroppedImageUrl } from "@/lib/sanityImage";
 
 const Header: React.FC = () => {
     const [navigation, setNavigation] = useState<NavigationData | null>(null);
@@ -19,6 +20,7 @@ const Header: React.FC = () => {
         const fetchData = async () => {
             const navData = await getNavigationData();
             setNavigation(navData);
+            // console.log(navData)
         };
         fetchData();
     }, []);
@@ -33,6 +35,7 @@ const Header: React.FC = () => {
         setUser(null);
         setIsOpen(false)
     };
+
 
     return (
         <header className="w-full bg-white border-b border-gray-200">
@@ -93,9 +96,24 @@ const Header: React.FC = () => {
             </div>
 
             {/* Logo + Ad */}
-            <div className="lg:grid lg:grid-cols-12 gap-6 bg-[#12498b] px-20 py-2">
+            <div className={`lg:grid lg:grid-cols-12 gap-6 px-20 py-2 bg-[${navigation?.bannerBgColor?.value?.hex}]`}>
                 <div className="lg:col-span-4 text-white font-bold text-4xl pt-4">
-                    <Link href={ROUTES.HOME}>LOGO</Link>
+                    <Link href={ROUTES.HOME}>
+                        {navigation?.logo?.image?.crop && navigation?.logo?.imageUrl ? (
+                            <img
+                                src={buildCroppedImageUrl(navigation.logo.imageUrl, navigation.logo.image.crop)}
+                                alt={navigation.logo.alt || 'Logo'}
+                                width= "130px"
+                            />
+                        ) : navigation?.logo?.imageUrl ? (
+                            <img
+                                src={navigation.logo.imageUrl}
+                                alt={navigation.logo.alt || 'Logo'}
+                                width= "130px"
+                            />
+                        ) : null}
+
+                    </Link>
                 </div>
                 <div className="lg:col-span-8">
                     <img
@@ -112,14 +130,14 @@ const Header: React.FC = () => {
                     {navigation?.menuItems?.map((item: MenuItem) => (
                         item.dropdown && item.dropdown.length > 0 ? (
                             <div key={item._key} className="relative group px-4">
-                                <button className={`hover:text-[#12498b] ${item.highlight ? 'text-[#12498b] font-semibold' : ''}`}>
+                                <a href={item.url} className={`hover:text-[#12498b] ${item.highlight ? 'text-[#12498b] font-semibold' : ''}`}>
                                     {item.title} ▾
-                                </button>
+                                </a>
                                 <div className="hidden group-hover:block absolute top-full left-0 bg-white shadow-md rounded border mt-1 z-50">
                                     {item.dropdown.map((subItem) => (
                                         <a
                                             key={subItem._key}
-                                            href="#"
+                                            href={subItem.url}
                                             className="block px-4 py-2 text-sm hover:bg-gray-100"
                                         >
                                             {subItem.title}
@@ -130,7 +148,7 @@ const Header: React.FC = () => {
                         ) : (
                             <a
                                 key={item._key}
-                                href="#"
+                                href={item.url}
                                 className={`px-4 hover:text-[#12498b] ${item.highlight ? 'text-[#12498b] font-semibold' : ''}`}
                             >
                                 {item.title}

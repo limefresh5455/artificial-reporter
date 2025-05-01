@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { getImageBlocks, ImageBlock } from "@/lib/sanity";
+import { urlFor } from "@/lib/sanityImage";
 
 const HeroSidebar: React.FC = () => {
   const [items, setItems] = useState<ImageBlock[]>([]);
@@ -10,6 +11,7 @@ const HeroSidebar: React.FC = () => {
     async function fetchData() {
       const data = await getImageBlocks();
       setItems(data);
+      console.log(data)
     }
 
     fetchData();
@@ -20,9 +22,7 @@ const HeroSidebar: React.FC = () => {
       {items.map((item) => (
         <div key={item._id} className="relative h-31 overflow-hidden">
           <img
-            src={`https://cdn.sanity.io/images/3pnjrasi/production/${item.image.asset._ref
-              .replace("image-", "")
-              .replace(/-(jpg|png|webp|jpeg)$/, ".$1")}`}
+            src={urlFor(item.image.asset).url()}
             alt={item.alt || item.title}
             className="w-full h-full object-cover"
           />

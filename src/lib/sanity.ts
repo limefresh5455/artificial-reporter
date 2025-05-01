@@ -21,11 +21,13 @@ export interface QuickLink {
 export interface DropdownItem {
     _key: string;
     title: string;
+    url: string;
 }
 
 export interface MenuItem {
     _key: string;
     title: string;
+    url: string;
     highlight?: boolean;
     dropdown?: DropdownItem[];
 }
@@ -33,6 +35,8 @@ export interface MenuItem {
 export interface NavigationData {
     title: string;
     menuItems: MenuItem[];
+    logo: any;
+    bannerBgColor: any;
 }
 
 export interface FooterData {
@@ -147,10 +151,30 @@ export async function getNavigationData(): Promise<NavigationData> {
       _key,
       title,
       highlight,
+      url,
       dropdown[] {
         _key,
-        title
+        title,
+        url
       }
+    },
+    "logo": *[_type == "logo"][0]{
+        alt,
+        "imageUrl": image.asset->url,
+        image {
+        crop,
+        hotspot
+        }
+    },
+     "bannerBgColor": *[_type == "bannerBgColor"][0]{
+        title,
+        value {
+        hex,
+        rgb,
+        hsl,
+        hsv,
+        alpha
+        }
     }
   }`;
 
@@ -341,50 +365,71 @@ export async function getTotalTopStoriesCount(): Promise<number> {
 
 export async function getStoryData(params = ''): Promise<any[]> {
     console.log(params)
-    const query = `*[_type == "newsArticle" && _id == "${decodeURI(params)}"]  {  
+    const query = `*[_type == "newsArticle" && slug.current == "${params}"]  {  
         _id,
         _createdAt,
         _updatedAt,
         _rev,
         _type,
         title,
-        overview,
+        content,
         eventType,
         sponsored,
         image,
-        tags
+        tags[]->{
+        title},
+        slug
       }`;
 
 
     return client.fetch(query);
 }
-export async function getRelatedStories(tags: string[], excludeTitle: string): Promise<any[]> {
+export async function getRelatedStories(tags: string[], slug: string): Promise<any[]> {
     if (!tags || tags.length === 0) {
         return [];
     }
 
-    const query = `
-      *[
-        _type == "newsArticle" &&
-        _id != $excludeTitle &&
-        count(tags[@ in $tags]) > 0
-      ][0...5] {
-        _id,
-        title,
-        overview,
-        image,
-        _createdAt
-      }
-    `;
+    const query = `*[
+                        _type == "newsArticle" &&
+                        slug.current != $slug &&
+                        count(tags[].title[@ in $tags]) > 0
+                    ][0...5] {
+                        _id,
+                        title,
+                        overview,
+                        image,
+                        slug,
+                        _createdAt
+                    }
+                    `;
+
 
     const params = {
         tags,
-        excludeTitle: decodeURI(excludeTitle),
+        slug: slug,
     };
 
 
     return client.fetch(query, params);
 }
+export async function getTags(): Promise<any[]> {
 
+
+    const query = `*[
+                        _type == "tag" 
+                    ][0...10] {
+                        _id,
+                        title,
+                        slug,
+                        _createdAt
+                    }
+                    `;
+
+
+
+
+
+    return client.fetch(query);
+}
 
 

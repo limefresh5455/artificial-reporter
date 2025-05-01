@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { getPopular, HomeNewsData } from '@/lib/sanity';
 import imageUrlBuilder from '@sanity/image-url';
 import { client } from '@/lib/client';
+import { ROUTES } from '../routes';
 
 
 const builder = imageUrlBuilder(client);
@@ -54,9 +55,9 @@ const Popular: React.FC = () => {
                 />
                 <div className="p-4 bg-white">
                  
-                  {story.link ? (
+                  {story.slug ? (
                     <a
-                      href={story.link}
+                      href={`${ROUTES.NEWS}${story.slug.current}`}
                       className="text-xl font-bold leading-snug mb-2"
                       style={{ zIndex: 20 }}
                     >
@@ -83,9 +84,9 @@ const Popular: React.FC = () => {
                   alt={story.title}
                   className="w-20 h-16 object-cover"
                 />                
-                  {story.link ? (
+                  {story.slug ? (
                     <a
-                      href={story.link}
+                      href={`${ROUTES.NEWS}${story.slug.current}`}
                       className="text-sm font-medium py-3 px-4"
                       style={{ zIndex: 20 }}
                     >

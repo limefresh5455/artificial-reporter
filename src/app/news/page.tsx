@@ -10,11 +10,7 @@ import Link from 'next/link';
 
 const PAGE_SIZE = 8;
 
-const TopStories = ({
-  params,
-}: {
-  params: Promise<{ category: string }>;
-}) => {
+const TopStories = () => {
   const [stories, setStories] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalCount, setTotalCount] = useState<number>(0);
@@ -27,11 +23,11 @@ const TopStories = ({
     const fetchData = async () => {
       setIsLoading(true);
 
-      const { category } = await params;  // resolve params first
-      setSlug(category);
+    //   const { category } = await params;  // resolve params first
+    //   setSlug(category);
 
       const [data, count] = await Promise.all([
-        getTopStoriesData(currentPage, PAGE_SIZE, category),
+        getTopStoriesData(currentPage, PAGE_SIZE, ''),
         getTotalTopStoriesCount()
         
       ]);
@@ -42,7 +38,7 @@ const TopStories = ({
     };
 
     fetchData();
-  }, [currentPage, params]); // <- Also add params as dependency
+  }, [currentPage]); // <- Also add params as dependency
 
   return (
     <section className="stories news_inner py-12">
@@ -73,13 +69,13 @@ const TopStories = ({
                           day: "2-digit",
                         })}</span>
                       </div>
-                      <Link href={`${ROUTES.NEWS}${slug}/${encodeURI(story._id)}`} className="text-lg font-semibold hover:underline">
+                      <Link href={`${ROUTES.NEWS}${story.slug.current}`} className="text-lg font-semibold hover:underline">
                         {story.title}
                       </Link>
                       <p className="text-sm mt-1">
                         {story.overview?.slice(0, 100)}
                         {story.overview?.length > 100 && '...'}
-                      </p>
+                      </p> 
                     </div>
                   </div>
                 ))}
