@@ -31,7 +31,7 @@ const Story = ({
         setIsLoading(true);
         const { slug } = await params;
         try {
-            const data = await getStoryData(slug, 'newsArticle');
+            const data = await getStoryData(slug, 'insight');
             if (Array.isArray(data) && data.length > 0) {
                 setStory(data[0]);
                 console.log(data[0]);

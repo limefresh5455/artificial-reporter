@@ -4,18 +4,21 @@ export interface SocialLink {
     _key: string;
     platform: string;
     url: string;
+    linkTarget: string;
 }
 
 export interface Category {
     _key: string;
     label: string;
     url: string;
+    linkTarget: string;
 }
 
 export interface QuickLink {
     _key: string;
     label: string;
     url: string;
+     linkTarget: string;
 }
 
 export interface DropdownItem {
@@ -53,6 +56,7 @@ export interface HeroSlide {
     title: string;
     subtitle: string;
     link: string;
+    linkTarget: string;
     image: {
         _type: 'image';
         asset: {
@@ -69,7 +73,8 @@ export interface HeroData {
 export interface TrendingItem {
     _key: string;
     title: string;
-    slug: string;
+    url: string;
+    linkTarget: string;
 }
 
 export interface TrendingData {
@@ -135,10 +140,10 @@ export interface HomeNewsData {
 export async function getFooterData(): Promise<FooterData> {
     const query = `*[_type == "footer"][0]{
         aboutText,
-        categories[] { label, url },
+        categories[] { label, url, linkTarget },
         copyright,
-        quickLinks[] { label, url },
-        socialLinks[] { platform, url },
+        quickLinks[] { label, url, linkTarget },
+        socialLinks[] { platform, url, linkTarget },
         logo {
             alt,
             asset->{
@@ -196,6 +201,7 @@ export async function getHeroData(): Promise<HeroData> {
       title,
       subtitle,
       link,
+      linkTarget,
       image {
         _type,
         asset {
@@ -215,7 +221,7 @@ export async function getTrendingData(): Promise<TrendingData> {
     items[] {
       _key,
       title,
-      slug
+      url
     }
   }`;
 
@@ -344,7 +350,7 @@ export async function getTopStoriesData(page = 1, pageSize = 4, params = ''): Pr
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
     console.log(params)
-    const query = `*[_type == "newsArticle"] | order(_createdAt desc) [${start}...${end}] {  
+    const query = `*[_type == '${params}'] | order(_createdAt desc) [${start}...${end}] {  
         _id,
         _createdAt,
         _updatedAt,
@@ -363,16 +369,16 @@ export async function getTopStoriesData(page = 1, pageSize = 4, params = ''): Pr
     return client.fetch(query);
 }
 
-export async function getTotalTopStoriesCount(): Promise<number> {
-    const query = `count(*[_type == "newsArticle"])`;
+export async function getTotalTopStoriesCount(params = ''): Promise<number> {
+    const query = `count(*[_type == ${params}])`;
     return client.fetch(query);
 }
 
 
 
-export async function getStoryData(params = ''): Promise<any[]> {
+export async function getStoryData(params = '', type=''): Promise<any[]> {
     console.log(params)
-    const query = `*[_type == "newsArticle" && slug.current == "${params}"]  {  
+    const query = `*[_type == "${type}" && slug.current == "${params}"]  {  
         _id,
         _createdAt,
         _updatedAt,

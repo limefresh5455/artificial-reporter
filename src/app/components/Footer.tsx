@@ -42,6 +42,7 @@ const Footer: React.FC = () => {
                             <a
                                 key={i}
                                 href={link.url}
+                                target={link.linkTarget}
                                 className="border p-3 rounded hover:bg-gray-600 hover:text-white"
                             >
                                 {link.platform === 'Facebook' && <Facebook size={16} />}
@@ -60,6 +61,7 @@ const Footer: React.FC = () => {
                         {footerData.categories.map((cat: Category, i: number) => (
                             <a
                                 key={i}
+                                target={cat.linkTarget}
                                 href={cat.url}
                                 className="text-sm border border-gray-400 rounded px-2 py-1 m-1 hover:bg-gray-100"
                             >
@@ -74,7 +76,7 @@ const Footer: React.FC = () => {
                     <ul className="space-y-2 text-sm">
                         {footerData.quickLinks.map((link: QuickLink, i: number) => (
                             <li key={i}>
-                                <a href={link.url} className="hover:underline flex">
+                                <a href={link.url} target={link.linkTarget} className="hover:underline flex">
                                     <span className="mr-2"><ChevronRight size={16} /></span>{link.label}
                                 </a>
                             </li>

@@ -47,7 +47,7 @@ const InsightsTags: React.FC = () => {
                     {data?.insight?.map((item: any) => (
                         <li key={item._id} className="flex items-center gap-3 bg-white">
                             <img src={urlFor(item.image.asset).url()} alt="thumb" className="w-16 h-16 object-contain" />
-                            <a href={ROUTES.NEWS+ item.slug.current} className="text-sm font-medium leading-snug">{item.title}</a>
+                            <a href={ROUTES.INSIGHT+ item.slug.current} className="text-sm font-medium leading-snug">{item.title}</a>
                         </li>
                     ))}
                 </ul>

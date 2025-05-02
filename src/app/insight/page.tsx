@@ -27,8 +27,8 @@ const TopStories = () => {
     //   setSlug(category);
 
       const [data, count] = await Promise.all([
-        getTopStoriesData(currentPage, PAGE_SIZE, 'newsArticle'),
-        getTotalTopStoriesCount('newsArticle')
+        getTopStoriesData(currentPage, PAGE_SIZE, 'insight'),
+        getTotalTopStoriesCount('insight')
         
       ]);
       console.log(data)
@@ -45,7 +45,7 @@ const TopStories = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-12 gap-8">
           <div className="lg:col-span-8 space-y-8">
-            <h2 className="text-3xl font-semibold mb-3">Top Stories</h2>
+            <h2 className="text-3xl font-semibold mb-3">Insights</h2>
 
             {isLoading ? (
               <p>Loading...</p>
@@ -69,7 +69,7 @@ const TopStories = () => {
                           day: "2-digit",
                         })}</span>
                       </div>
-                      <Link href={`${ROUTES.NEWS}${story.slug.current}`} className="text-lg font-semibold hover:underline">
+                      <Link href={`${ROUTES.INSIGHT}${story.slug.current}`} className="text-lg font-semibold hover:underline">
                         {story.title}
                       </Link>
                       <p className="text-sm mt-1">

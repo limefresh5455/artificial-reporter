@@ -2,13 +2,14 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { getTrendingData } from "@/lib/sanity";
+import { getTrendingData, TrendingItem } from "@/lib/sanity";
+import { ROUTES } from "../routes";
 
-interface TrendingItem {
-  _key: string;
-  title: string;
-  slug: string; // updated from { current: string } to string
-}
+// interface TrendingItem {
+//   _key: string;
+//   title: string;
+//   slug: string; // updated from { current: string } to string
+// }
 
 const TrendingSlider: React.FC = () => {
   const [items, setItems] = useState<TrendingItem[]>([]);
@@ -90,9 +91,9 @@ const TrendingSlider: React.FC = () => {
       </div>
       <div className="text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis max-w-xs">
         <a
-          href={`/${items[current]?.slug || "#"}`} // updated to use string
+          href={`${items[current]?.url || "#"}`} // updated to use string
           className="hover:underline"
-        //   target="_blank"
+          target={items[current]?.linkTarget}
           rel="noopener noreferrer"
         >
           {items[current]?.title || "No title available"}
