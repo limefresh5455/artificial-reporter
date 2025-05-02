@@ -9,6 +9,7 @@ import { urlFor } from "@/lib/sanityImage"
 import 'swiper/css';
 import 'swiper/css/autoplay';
 import 'swiper/css/navigation';
+import Link from 'next/link';
 
 const Hero: React.FC = () => {
     const [slides, setSlides] = useState<HeroSlide[]>([]);
@@ -71,15 +72,15 @@ const Hero: React.FC = () => {
                                     }}
                                 >
                                     <div className="text-sm mb-2 text-[#e0e0e0] z-2 relative">
-                                        <a target={slide.linkTarget} href={slide.link}>{slide.title || 'Fallback Title'}</a>
+                                        <Link target={slide.linkTarget} href={slide.link}>{slide.title || 'Fallback Title'}</Link>
                                     </div>
-                                    <a
+                                    <Link
                                         target={slide.linkTarget}
                                         href={slide.link}
                                         className="text-2xl lg:text-3xl font-bold leading-tight hover:underline z-2 relative"
                                     >
                                         {slide.subtitle}
-                                    </a>
+                                    </Link>
                                 </div>
                             </SwiperSlide>
                         ))}

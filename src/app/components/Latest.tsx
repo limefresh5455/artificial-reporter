@@ -7,6 +7,7 @@ import { client } from '@/lib/client';
 import { format } from 'date-fns';
 import { PortableText } from '@portabletext/react';
 import { ROUTES } from '../routes';
+import Link from 'next/link';
 
 const builder = imageUrlBuilder(client);
 
@@ -51,9 +52,9 @@ const Latest: React.FC = () => {
     <div className="mt-5">
       <div className="flex items-center justify-between bg-light py-3 px-4 mb-3 bgh3">
         <h3 className="text-2xl font-medium">{latestData.mainTitle}</h3>
-        <a className="text-secondary font-medium" href={latestData.viewAllLink}>
+        <Link className="text-secondary font-medium" href={latestData.viewAllLink}>
           {latestData.viewAllLinkText || "View All"}
-        </a>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -68,19 +69,19 @@ const Latest: React.FC = () => {
                 />
                 <div className="p-6 bg-white">
                   <div className="mb-2 text-base">
-                    <a href="#" className="link-a">Technology</a>
+                    <Link href="#" className="link-a">Technology</Link>
                     <span className="px-1">/</span>
                     <span>{formatDate(story._createdAt || story._createdAt)}</span>
                   </div>
                  
                   {story.title ? (
-                    <a
+                    <Link
                       href={`${ROUTES.NEWS}${story.slug.current}`}
                       className="text-2xl font-bold leading-snug mb-2"
                       style={{ zIndex: 20 }}
                     >
                       {story.title}
-                    </a>
+                    </Link>
                   ) : (
                     <span className="text-white text-lg font-semibold leading-tight">
                       {story.title}
@@ -109,7 +110,7 @@ const Latest: React.FC = () => {
                   className="w-20 h-16 object-cover"
                 />
                 <div className="py-3 px-4">
-                  <a href={`${ROUTES.NEWS}${story.slug.current}`} className="text-sm font-medium">{story.title}</a><br></br>
+                  <Link href={`${ROUTES.NEWS}${story.slug.current}`} className="text-sm font-medium">{story.title}</Link><br></br>
                   <span className="text-sm text-gray-500">
                     {formatDate(story._createdAt || story._createdAt)}
                   </span>

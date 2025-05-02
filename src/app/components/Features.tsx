@@ -10,6 +10,7 @@ import { client } from '@/lib/client';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { ROUTES } from '../routes';
+import Link from 'next/link';
 
 const builder = imageUrlBuilder(client);
 
@@ -44,9 +45,9 @@ const CardSlider: React.FC = () => {
     <section className="">
       <div className="flex items-center justify-between bg-light py-3 px-4 mb-3 bgh3">
         <h3 className="text-2xl font-medium">{features.mainTitle}</h3>
-        <a className="text-secondary font-weight-medium text-decoration-none" href={features.viewAllLink}>
+        <Link className="text-secondary font-weight-medium text-decoration-none" href={features.viewAllLink}>
           {features.viewAllLinkText}
-        </a>
+        </Link>
       </div>
       <div className="relative max-w-7xl mx-auto">
         <Swiper
@@ -77,9 +78,9 @@ const CardSlider: React.FC = () => {
                   className="w-[80px] object-cover"
                 />
 }
-                <a href={ROUTES.NEWS+ story.slug.current} className="p-4 text-[#42526E] text-sm font-medium">
+                <Link href={ROUTES.NEWS+ story.slug.current} className="p-4 text-[#42526E] text-sm font-medium">
                   {story.title}
-                </a>
+                </Link>
               </div>
             </SwiperSlide>
           ))}

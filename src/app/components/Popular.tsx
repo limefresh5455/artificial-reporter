@@ -5,6 +5,7 @@ import { getPopular, HomeNewsData } from '@/lib/sanity';
 import imageUrlBuilder from '@sanity/image-url';
 import { client } from '@/lib/client';
 import { ROUTES } from '../routes';
+import Link from 'next/link';
 
 
 const builder = imageUrlBuilder(client);
@@ -38,9 +39,9 @@ const Popular: React.FC = () => {
     <div className="">
       <div className="flex items-center justify-between bg-light py-3 px-4 mb-3 bgh3">
         <h3 className="text-2xl font-medium">{popularData.mainTitle}</h3>
-        <a className="text-secondary font-medium" href={popularData.viewAllLink}>
+        <Link className="text-secondary font-medium" href={popularData.viewAllLink}>
           {popularData.viewAllLinkText || "View All"}
-        </a>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -56,13 +57,13 @@ const Popular: React.FC = () => {
                 <div className="p-4 bg-white">
                  
                   {story.slug ? (
-                    <a
+                    <Link
                       href={`${ROUTES.NEWS}${story.slug.current}`}
                       className="text-xl font-bold leading-snug mb-2"
                       style={{ zIndex: 20 }}
                     >
                       {story.title}
-                    </a>
+                    </Link>
                   ) : (
                     <h4 className="text-xl font-bold leading-snug mb-2">
                     {story.title}
@@ -85,13 +86,13 @@ const Popular: React.FC = () => {
                   className="w-20 h-16 object-cover"
                 />                
                   {story.slug ? (
-                    <a
+                    <Link
                       href={`${ROUTES.NEWS}${story.slug.current}`}
                       className="text-sm font-medium py-3 px-4"
                       style={{ zIndex: 20 }}
                     >
                       {story.title}
-                    </a>
+                    </Link>
                   ) : (
                     <p className="text-sm font-medium py-3 px-4">
                   {story.title}

@@ -11,6 +11,7 @@ import { getTopStories, HomeNewsData } from '@/lib/sanity';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { ROUTES } from '../routes';
+import Link from 'next/link';
 
 const builder = imageUrlBuilder(client);
 
@@ -52,12 +53,12 @@ const CardSlider: React.FC = () => {
       <div className="flex items-center justify-between bg-light py-3 px-4 mb-3 bgh3">
         <h3 className="text-2xl font-medium">{data.mainTitle}</h3>
         {data.viewAllLink && (
-          <a
+          <Link
             href={data.viewAllLink}
             className="text-secondary font-weight-medium text-decoration-none"
           >
             {data.viewAllLinkText}
-          </a>
+          </Link>
         )}
       </div>
 
@@ -101,12 +102,12 @@ const CardSlider: React.FC = () => {
                 )}
                 <div className="absolute bottom-4 left-4 z-10">
                   {story.slug ? (
-                    <a
+                    <Link
                       href={`${ROUTES.NEWS}${story.slug.current}`}
                       className="text-white text-lg font-semibold leading-tight hover:underline z-20"
                     >
                       {story.title}
-                    </a>
+                    </Link>
                   ) : (
                     <span className="text-white text-lg font-semibold leading-tight">
                       {story.title}

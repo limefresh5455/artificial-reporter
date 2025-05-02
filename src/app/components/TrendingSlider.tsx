@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getTrendingData, TrendingItem } from "@/lib/sanity";
 import { ROUTES } from "../routes";
+import Link from "next/link";
 
 // interface TrendingItem {
 //   _key: string;
@@ -90,14 +91,14 @@ const TrendingSlider: React.FC = () => {
         </button>
       </div>
       <div className="text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis max-w-xs">
-        <a
+        <Link
           href={`${items[current]?.url || "#"}`} // updated to use string
           className="hover:underline"
           target={items[current]?.linkTarget}
           rel="noopener noreferrer"
         >
           {items[current]?.title || "No title available"}
-        </a>
+        </Link>
       </div>
     </div>
   );

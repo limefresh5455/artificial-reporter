@@ -130,29 +130,29 @@ const Header: React.FC = () => {
                     {navigation?.menuItems?.map((item: MenuItem) => (
                         item.dropdown && item.dropdown.length > 0 ? (
                             <div key={item._key} className="relative group px-4">
-                                <a href={item.url} className={`hover:text-[#12498b] ${item.highlight ? 'text-[#12498b] font-semibold' : ''}`}>
+                                <Link href={item.url || "#"} className={`hover:text-[#12498b] ${item.highlight ? 'text-[#12498b] font-semibold' : ''}`}>
                                     {item.title} ▾
-                                </a>
+                                </Link>
                                 <div className="hidden group-hover:block absolute top-full left-0 bg-white shadow-md rounded border mt-1 z-50">
                                     {item.dropdown.map((subItem) => (
-                                        <a
+                                        <Link
                                             key={subItem._key}
-                                            href={subItem.url}
+                                            href={item.url || "#"}
                                             className="block px-4 py-2 text-sm hover:bg-gray-100"
                                         >
                                             {subItem.title}
-                                        </a>
+                                        </Link>
                                     ))}
                                 </div>
                             </div>
                         ) : (
-                            <a
+                            <Link
                                 key={item._key}
-                                href={item.url}
+                                href={item.url || "#"}
                                 className={`px-4 hover:text-[#12498b] ${item.highlight ? 'text-[#12498b] font-semibold' : ''}`}
                             >
                                 {item.title}
-                            </a>
+                            </Link>
                         )
                     ))}
                 </div>

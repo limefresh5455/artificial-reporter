@@ -15,6 +15,8 @@ const Story = ({
     const [story, setStory] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [relatedStories, setRelatedStoriesData] = useState<any[]>([]);
+    const [showFullContent, setShowFullContent] = useState<boolean>(false);
+
 
     const tagClassMap: Record<string, string> = {
         h1: ' mb-4 section_heading',
@@ -129,7 +131,7 @@ const Story = ({
                             <div className="text-sm text-gray-600 mb-1">
                                 <a href="#" className="text-blue-600">{story.eventType || "Category"}</a>
                                 <span className="px-1">/</span>
-                                <span>{new Date(story._createdAt).toLocaleDateString("en-US", {
+                                <span>{new Date(story.publishedAt).toLocaleDateString("en-US", {
                                     year: "numeric",
                                     month: "long",
                                     day: "2-digit",
@@ -137,7 +139,7 @@ const Story = ({
                             </div>
 
                             <>
-                                {story.content.map((block: any) => {
+                                {(showFullContent ? story.content : story.content.slice(0, 2)).map((block: any) => {
                                     // Handle layout types (2column, 1column, 3column)
                                     if (block._type === "layout") {
                                         if (block.layoutType === "2column") {
@@ -258,6 +260,16 @@ const Story = ({
                                     return null;
                                 })}
                             </>
+                            {story.content.length > 3 && (
+                                <div className="text-center mt-4">
+                                    <button
+                                        onClick={() => setShowFullContent(!showFullContent)}
+                                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                                    >
+                                        {showFullContent ? 'See Less' : 'See More'}
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
 

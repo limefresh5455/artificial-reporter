@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { getImageBlocks, ImageBlock } from "@/lib/sanity";
 import { urlFor } from "@/lib/sanityImage";
+import Link from "next/link";
 
 const HeroSidebar: React.FC = () => {
   const [items, setItems] = useState<ImageBlock[]>([]);
@@ -27,12 +28,12 @@ const HeroSidebar: React.FC = () => {
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 flex items-center justify-center">
-            <a
+            <Link
               href=""
               className="overlay text-white font-semibold text-lg"
             >
               <span className="z-2 relative">{item.title}</span>
-            </a>
+            </Link>
           </div>
         </div>
       ))}

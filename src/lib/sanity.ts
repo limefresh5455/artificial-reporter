@@ -350,10 +350,11 @@ export async function getTopStoriesData(page = 1, pageSize = 4, params = ''): Pr
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
     console.log(params)
-    const query = `*[_type == '${params}'] | order(_createdAt desc) [${start}...${end}] {  
+    const query = `*[_type == '${params}'] | order(featured desc, _createdAt desc) [${start}...${end}] {
         _id,
         _createdAt,
         _updatedAt,
+        publishedAt,
         _rev,
         _type,
         title,
@@ -362,15 +363,16 @@ export async function getTopStoriesData(page = 1, pageSize = 4, params = ''): Pr
         sponsored,
         image,
         tags,
-        slug
+        slug,
+        featured
       }`;
-
+      
 
     return client.fetch(query);
 }
 
 export async function getTotalTopStoriesCount(params = ''): Promise<number> {
-    const query = `count(*[_type == ${params}])`;
+    const query = `count(*[_type == "${params}"])`;
     return client.fetch(query);
 }
 
@@ -382,6 +384,7 @@ export async function getStoryData(params = '', type=''): Promise<any[]> {
         _id,
         _createdAt,
         _updatedAt,
+        publishedAt,
         _rev,
         _type,
         title,
@@ -441,14 +444,15 @@ export async function getTags(): Promise<any[]> {
 
 export async function getInsights(): Promise<any[]> {
     const query = `*[
-                        _type == "insight" 
-                    ][0...10] {
-                        _id,
-                        title,
-                        slug,
-                        _createdAt,
-                        image
-                    }
-                    `;
+        _type == "insight"
+      ] | order(featured desc, _createdAt desc)[0...10] {
+        _id,
+        title,
+        slug,
+        _createdAt,
+        image,
+        featured
+      }`;
+      
     return client.fetch(query);
 }
