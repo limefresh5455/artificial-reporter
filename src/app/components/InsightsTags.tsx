@@ -1,8 +1,9 @@
 'use client';
 
-import { getTags } from '@/lib/sanity';
+import { getTags, getInsights } from '@/lib/sanity';
 import { useEffect, useState } from 'react';
 import { ROUTES } from '../routes';
+import { urlFor } from '@/lib/sanityImage';
 
 
 const InsightsTags: React.FC = () => {
@@ -16,8 +17,9 @@ const InsightsTags: React.FC = () => {
         const fetchData = async () => {
             try {
                 const topTagsData = await getTags();
-                setData(topTagsData);
-                console.log(topTagsData)
+                const topInsightsData = await getInsights();
+                setData({ tags: topTagsData, insight: topInsightsData });
+
             } catch (err) {
                 console.error('Failed to fetch top tags:', err);
                 setError('Failed to load top tags');
@@ -28,7 +30,7 @@ const InsightsTags: React.FC = () => {
 
         fetchData();
     }, []);
-
+    console.log(data)
 
     const tags = [
         "Business", "Corporate", "Sports", "Health", "Education",
@@ -42,36 +44,10 @@ const InsightsTags: React.FC = () => {
                     <h3 className="text-2xl font-medium">Insights</h3>
                 </div>
                 <ul className="space-y-3">
-                    {[
-                        {
-                            id: 1,
-                            image: "https://odeskthemes.com/10/news-portal/assets/img/2149611193.jpg",
-                            title: "Lorem ipsum dolor sit amet consec adipis elit",
-                        },
-                        {
-                            id: 2,
-                            image: "https://odeskthemes.com/10/news-portal/assets/img/2149611193.jpg",
-                            title: "Lorem ipsum dolor sit amet consec adipis elit",
-                        },
-                        {
-                            id: 3,
-                            image: "https://odeskthemes.com/10/news-portal/assets/img/2149611193.jpg",
-                            title: "Lorem ipsum dolor sit amet consec adipis elit",
-                        },
-                        {
-                            id: 4,
-                            image: "https://odeskthemes.com/10/news-portal/assets/img/2149611193.jpg",
-                            title: "Lorem ipsum dolor sit amet consec adipis elit",
-                        },
-                        {
-                            id: 5,
-                            image: "https://odeskthemes.com/10/news-portal/assets/img/2149611193.jpg",
-                            title: "Lorem ipsum dolor sit amet consec adipis elit",
-                        },
-                    ].map((item) => (
-                        <li key={item.id} className="flex items-center gap-3 bg-white">
-                            <img src={item.image} alt="thumb" className="w-16 h-16 object-cover" />
-                            <p className="text-sm font-medium leading-snug">{item.title}</p>
+                    {data?.insight?.map((item: any) => (
+                        <li key={item._id} className="flex items-center gap-3 bg-white">
+                            <img src={urlFor(item.image.asset).url()} alt="thumb" className="w-16 h-16 object-contain" />
+                            <a href={ROUTES.NEWS+ item.slug.current} className="text-sm font-medium leading-snug">{item.title}</a>
                         </li>
                     ))}
                 </ul>
@@ -85,8 +61,8 @@ const InsightsTags: React.FC = () => {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                    {data?.map((tag: any) => (
-                        <a href={`${ROUTES.NEWS}?tag=${tag.slug.current}`} key={tag._id} className="text-xs border-[1px] rounded-sm border-[gray] px-3 py-2 hover:bg-[#6c757d] hover:text-white">{tag.title}</a>
+                    {data?.tags?.map((tag: any) => (
+                        <a href={`${ROUTES.NEWS}?tag=${tag.slug?.current}`} key={tag._id} className="text-xs border-[1px] rounded-sm border-[gray] px-3 py-2 hover:bg-[#6c757d] hover:text-white">{tag.title}</a>
                     ))}
                 </div>
             </div>

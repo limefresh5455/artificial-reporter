@@ -9,6 +9,7 @@ import { client } from '@/lib/client';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { ROUTES } from '../routes';
 
 const builder = imageUrlBuilder(client);
 
@@ -23,7 +24,6 @@ const CardSlider: React.FC = () => {
       try {
         const data = await getFeatures();
         setFeatures(data);
-        console.log(data)
       } catch (error) {
         console.error('Error fetching features data:', error);
       }
@@ -77,9 +77,9 @@ const CardSlider: React.FC = () => {
                   className="w-[80px] object-cover"
                 />
 }
-                <div className="p-4 text-[#42526E] text-sm font-medium">
+                <a href={ROUTES.NEWS+ story.slug.current} className="p-4 text-[#42526E] text-sm font-medium">
                   {story.title}
-                </div>
+                </a>
               </div>
             </SwiperSlide>
           ))}

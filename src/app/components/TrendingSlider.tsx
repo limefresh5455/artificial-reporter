@@ -25,6 +25,7 @@ const TrendingSlider: React.FC = () => {
         const trendingData = await getTrendingData();
         if (trendingData?.items?.length) {
           setItems(trendingData.items);
+          console.log("items", trendingData )
         } else {
           setError("No items available in trending data");
         }
@@ -91,7 +92,7 @@ const TrendingSlider: React.FC = () => {
         <a
           href={`/${items[current]?.slug || "#"}`} // updated to use string
           className="hover:underline"
-          target="_blank"
+        //   target="_blank"
           rel="noopener noreferrer"
         >
           {items[current]?.title || "No title available"}

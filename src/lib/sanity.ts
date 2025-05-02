@@ -45,6 +45,7 @@ export interface FooterData {
     copyright: string;
     quickLinks: QuickLink[];
     socialLinks: SocialLink[];
+    logo: any;
 }
 
 export interface HeroSlide {
@@ -133,12 +134,18 @@ export interface HomeNewsData {
 // Footer
 export async function getFooterData(): Promise<FooterData> {
     const query = `*[_type == "footer"][0]{
-    aboutText,
-    categories[] { label, url },
-    copyright,
-    quickLinks[] { label, url },
-    socialLinks[] { platform, url }
-  }`;
+        aboutText,
+        categories[] { label, url },
+        copyright,
+        quickLinks[] { label, url },
+        socialLinks[] { platform, url },
+        logo {
+            alt,
+            asset->{
+            url,
+            },crop
+        }
+    }`;
 
     return client.fetch(query);
 }
@@ -208,7 +215,7 @@ export async function getTrendingData(): Promise<TrendingData> {
     items[] {
       _key,
       title,
-      "slug": slug.current
+      slug
     }
   }`;
 
@@ -413,8 +420,6 @@ export async function getRelatedStories(tags: string[], slug: string): Promise<a
     return client.fetch(query, params);
 }
 export async function getTags(): Promise<any[]> {
-
-
     const query = `*[
                         _type == "tag" 
                     ][0...10] {
@@ -424,12 +429,20 @@ export async function getTags(): Promise<any[]> {
                         _createdAt
                     }
                     `;
-
-
-
-
-
     return client.fetch(query);
 }
 
 
+export async function getInsights(): Promise<any[]> {
+    const query = `*[
+                        _type == "insight" 
+                    ][0...10] {
+                        _id,
+                        title,
+                        slug,
+                        _createdAt,
+                        image
+                    }
+                    `;
+    return client.fetch(query);
+}

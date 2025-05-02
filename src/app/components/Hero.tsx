@@ -21,7 +21,6 @@ const Hero: React.FC = () => {
     async function fetchSlides() {
       const data = await getHeroData();
       setSlides(data?.slides || []);
-      console.log(data)
     }
 
     fetchSlides();
