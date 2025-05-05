@@ -100,46 +100,43 @@ const Header: React.FC = () => {
 
                         {/* Suggestions Dropdown */}
                         {searchQuery && searchResults.length > 0 && (
-    <div className="absolute mt-1 w-[500px]  bg-white border border-gray-300 rounded shadow-md z-50 max-h-60 overflow-y-auto">
-        {["page", "newsArticle", "insight"].map((type) => {
-            const groupItems = searchResults.filter((item) => item._type === type);
-            if (groupItems.length === 0) return null;
+                            <div className="absolute mt-1 w-[500px]  bg-white border border-gray-300 rounded shadow-md z-50 max-h-60 overflow-y-auto">
+                                {["page", "newsArticle", "insight"].map((type) => {
+                                    const groupItems = searchResults.filter((item) => item._type === type);
+                                    if (groupItems.length === 0) return null;
 
-            const groupTitle = {
-                page: "Pages",
-                newsArticle: "News",
-                insight: "Insights",
-            }[type];
+                                    const groupTitle = {
+                                        page: "Pages",
+                                        newsArticle: "News",
+                                        insight: "Insights",
+                                    }[type];
 
-            return (
-                <div key={type}>
-                    <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50">
-                        {groupTitle}
-                    </div>
-                    {groupItems.map((item) => (
-                        <Link
-                            key={item._id}
-                            href={getHref(item)}
-                            className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 text-sm text-black"
-                        >
-                            {item.image && (
-                                <img
-                                    src={urlFor(item.image).url()}
-                                    alt={item.title}
-                                    className="w-10 h-10 object-cover rounded"
-                                />
-                            )}
-                            <span>{item.title}</span>
-                        </Link>
-                    ))}
-                </div>
-            );
-        })}
-    </div>
-)}
-
-
-
+                                    return (
+                                        <div key={type}>
+                                            <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50">
+                                                {groupTitle}
+                                            </div>
+                                            {groupItems.map((item) => (
+                                                <Link
+                                                    key={item._id}
+                                                    href={getHref(item)}
+                                                    className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 text-sm text-black"
+                                                >
+                                                    {item.image && (
+                                                        <img
+                                                            src={urlFor(item.image).url()}
+                                                            alt={item.title}
+                                                            className="w-10 h-10 object-cover rounded"
+                                                        />
+                                                    )}
+                                                    <span>{item.title}</span>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
 
                     <Link href={ROUTES.SPONSORS} className="text-gray-600 hover:underline m-0">Sponsors</Link>
