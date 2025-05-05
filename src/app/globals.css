@@ -43,7 +43,7 @@ body {
     padding: 10px 30px;
     display: inline-block;
     font-weight: 400;
-    color: #212529;
+    /* color: #212529; */
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
@@ -486,7 +486,8 @@ body {
     width: 15px;
 }
 
-.contact .links a .icon-contact, .contact .links a i {
+.contact .links a .icon-contact,
+.contact .links a i {
     width: 44px;
     font-size: 21px;
     margin-right: 14px;
@@ -503,4 +504,75 @@ body {
     padding: 40px;
     padding-bottom: 40px;
     background: #fff;
+}
+
+.padding-0 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 0 !important;
+}
+
+
+.sponsors {
+    padding: 50px 0;
+}
+
+.sponsors .container {
+    padding: 40px;
+    background: #fff;
+}
+
+.sponsors_inner {
+    border: 1px solid #00000038;
+    padding: 20px;
+    margin-top: 25px;
+    height: calc(100% - 25px);
+    border-radius: 10px;
+}
+
+.sponsors_inner .top img {
+    width: 120px;
+    height: 42px;
+    object-fit: contain;
+}
+
+.sponsors_inner .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.sponsors_inner .top .cat {
+    max-width: 200px;
+    text-align: center;
+}
+
+.sponsors_inner .top .cat p {
+    margin: 0;
+    font-size: 12px;
+    background: #f1f1f1;
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.sponsors_inner .middle {
+    margin-bottom: 35px;
+    border-top: 1px solid #00000038;
+    padding-top: 19px;
+}
+
+.sponsors_inner .middle a.h3 {
+    font-size: 30px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.sponsors_inner .middle p {
+    font-size: 14px;
+}
+
+.sponsors_inner .middle {
+    margin-bottom: 35px;
 }

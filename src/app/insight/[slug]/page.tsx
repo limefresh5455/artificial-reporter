@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { getStoryData, getRelatedStories } from '@/lib/sanity';
 import { urlFor } from '@/lib/sanityImage';
-import { slugify } from '@/lib/slugify';
 import { ROUTES } from '@/app/routes';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const Story = ({
     params
@@ -16,6 +16,7 @@ const Story = ({
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [relatedStories, setRelatedStoriesData] = useState<any[]>([]);
     const [showFullContent, setShowFullContent] = useState<boolean>(false);
+    const router = useRouter();
 
 
     const tagClassMap: Record<string, string> = {
@@ -139,7 +140,7 @@ const Story = ({
                             </div>
 
                             <>
-                                {(showFullContent ? story.content : story.content.slice(0, 2)).map((block: any) => {
+                                {(story.content.slice(0, 1)).map((block: any) => {
                                     // Handle layout types (2column, 1column, 3column)
                                     if (block._type === "layout") {
                                         if (block.layoutType === "2column") {
@@ -263,10 +264,10 @@ const Story = ({
                             {story.content.length > 3 && (
                                 <div className="text-center mt-4">
                                     <button
-                                        onClick={() => setShowFullContent(!showFullContent)}
+                                        onClick={() => router.push(ROUTES.LOGIN) }
                                         className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
                                     >
-                                        {showFullContent ? 'See Less' : 'See More'}
+                                        See More
                                     </button>
                                 </div>
                             )}

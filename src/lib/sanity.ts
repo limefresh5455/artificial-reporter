@@ -18,7 +18,7 @@ export interface QuickLink {
     _key: string;
     label: string;
     url: string;
-     linkTarget: string;
+    linkTarget: string;
 }
 
 export interface DropdownItem {
@@ -221,7 +221,8 @@ export async function getTrendingData(): Promise<TrendingData> {
     items[] {
       _key,
       title,
-      url
+      url,
+      linkTarget
     }
   }`;
 
@@ -366,7 +367,7 @@ export async function getTopStoriesData(page = 1, pageSize = 4, params = ''): Pr
         slug,
         featured
       }`;
-      
+
 
     return client.fetch(query);
 }
@@ -378,7 +379,7 @@ export async function getTotalTopStoriesCount(params = ''): Promise<number> {
 
 
 
-export async function getStoryData(params = '', type=''): Promise<any[]> {
+export async function getStoryData(params = '', type = ''): Promise<any[]> {
     console.log(params)
     const query = `*[_type == "${type}" && slug.current == "${params}"]  {  
         _id,
@@ -453,6 +454,24 @@ export async function getInsights(): Promise<any[]> {
         image,
         featured
       }`;
+
+    return client.fetch(query);
+}
+
+export async function getSponsors(): Promise<any[]> {
+    const query = `*[_type == "page" && slug.current == "sponsors"] {
+        _id,
+        title,
+        slug,
+        _createdAt,
+        content,
+        "collectionItem": collectionItem->{
+        sponsors,
+          _key,
+          groupTitle,
+        }
+      }`;
       
+
     return client.fetch(query);
 }

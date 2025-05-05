@@ -39,10 +39,21 @@ export async function signInWithEmail(email: string) {
     return response;
 }
 
+
 export async function signOut() {
     const supabase = await createClient()
     const { error } = await supabase.auth.signOut()
 }
+
+export async function newsLetterSignUp(array: any) {
+    const supabase = await createClient()
+    const response = await supabase.from('news_letters').insert(
+        array
+    );
+    return response;
+}
+
+
 export async function userMetaInsert(array: any) {
     const supabase = await createClient()
     const response = await supabase.from('user_meta').insert(
