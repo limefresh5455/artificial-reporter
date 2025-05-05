@@ -471,7 +471,22 @@ export async function getSponsors(): Promise<any[]> {
           groupTitle,
         }
       }`;
-      
+
 
     return client.fetch(query);
+}
+
+
+export async function getSearchResult(query: string): Promise<any[]> {
+    const results = await client.fetch(
+        `*[(_type == "page" || _type == "newsArticle" || _type == "insight") && (title match $q || body match $q)][0...10]{
+        _id,
+        title,
+        _type,
+        slug,
+        image
+      }`,
+        { q: `*${query}*` }
+    );
+    return results;
 }

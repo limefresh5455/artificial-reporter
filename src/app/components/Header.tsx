@@ -3,17 +3,20 @@
 import React, { useEffect, useState } from "react";
 import { Search, CircleUserRound } from "lucide-react";
 import TrendingSlider from "./TrendingSlider";
-import { getNavigationData, NavigationData, MenuItem } from "@/lib/sanity";
+import { getNavigationData, NavigationData, MenuItem, getSearchResult } from "@/lib/sanity";
 import Link from 'next/link';
 import { ROUTES } from '../routes';
 import { signOut } from '@/lib/supabase/action';
 import { useAuth } from "@/context/AuthContext";
-import {  buildCroppedImageUrl } from "@/lib/sanityImage";
+import { buildCroppedImageUrl, urlFor } from "@/lib/sanityImage";
 
 const Header: React.FC = () => {
     const [navigation, setNavigation] = useState<NavigationData | null>(null);
     const [isOpen, setIsOpen] = useState(false);
     const { user, setUser } = useAuth();
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState<any[]>([]);
+
 
     console.log(isOpen)
     useEffect(() => {
@@ -36,6 +39,40 @@ const Header: React.FC = () => {
         setIsOpen(false)
     };
 
+    const handleSearch = async () => {
+        if (!searchQuery.trim()) return;
+        try {
+            const data = await getSearchResult(searchQuery);
+            setSearchResults(data); // Directly use the returned array
+            // Optionally redirect or open a modal
+            console.log(data)
+        } catch (err) {
+            console.error('Search error', err);
+        }
+    };
+
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            if (searchQuery.trim()) {
+                getSearchResult(searchQuery).then((data) => {
+                    setSearchResults(data);
+                }).catch(console.error);
+            } else {
+                setSearchResults([]);
+            }
+        }, 300); // debounce delay
+
+        return () => clearTimeout(delayDebounce);
+    }, [searchQuery]);
+
+    const getHref = (item: any) => {
+        if (item._type === "page") return `/${item.slug.current}`;
+        if (item._type === "newsArticle") return `${ROUTES.NEWS}${item.slug.current}`;
+        if (item._type === "insight") return `${ROUTES.INSIGHT}${item.slug.current}`;
+        return `/${item.slug.current}`; // fallback
+    };
+
+
 
     return (
         <header className="w-full bg-white border-b border-gray-200">
@@ -48,10 +85,63 @@ const Header: React.FC = () => {
                         <input
                             type="text"
                             placeholder="Keyword"
-                            className="border border-gray-300 rounded-sm pl-2 pr-8 py-1 text-sm focus:outline-none"
+                            className="border border-gray-300 rounded-sm pl-2 pr-8 py-1 text-sm focus:outline-none w-64"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') handleSearch();
+                            }}
                         />
-                        <Search className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500" size={16} />
+                        <Search
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+                            size={16}
+                            onClick={handleSearch}
+                        />
+
+                        {/* Suggestions Dropdown */}
+                        {searchQuery && searchResults.length > 0 && (
+    <div className="absolute mt-1 w-[500px]  bg-white border border-gray-300 rounded shadow-md z-50 max-h-60 overflow-y-auto">
+        {["page", "newsArticle", "insight"].map((type) => {
+            const groupItems = searchResults.filter((item) => item._type === type);
+            if (groupItems.length === 0) return null;
+
+            const groupTitle = {
+                page: "Pages",
+                newsArticle: "News",
+                insight: "Insights",
+            }[type];
+
+            return (
+                <div key={type}>
+                    <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50">
+                        {groupTitle}
                     </div>
+                    {groupItems.map((item) => (
+                        <Link
+                            key={item._id}
+                            href={getHref(item)}
+                            className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 text-sm text-black"
+                        >
+                            {item.image && (
+                                <img
+                                    src={urlFor(item.image).url()}
+                                    alt={item.title}
+                                    className="w-10 h-10 object-cover rounded"
+                                />
+                            )}
+                            <span>{item.title}</span>
+                        </Link>
+                    ))}
+                </div>
+            );
+        })}
+    </div>
+)}
+
+
+
+                    </div>
+
                     <Link href={ROUTES.SPONSORS} className="text-gray-600 hover:underline m-0">Sponsors</Link>
                     <span className="text-gray-400 mx-2">|</span>
                     <a href="#" className="text-gray-600 hover:underline m-0">AI</a>
@@ -103,13 +193,13 @@ const Header: React.FC = () => {
                             <img
                                 src={buildCroppedImageUrl(navigation.logo.imageUrl, navigation.logo.image.crop)}
                                 alt={navigation.logo.alt || 'Logo'}
-                                width= "130px"
+                                width="130px"
                             />
                         ) : navigation?.logo?.imageUrl ? (
                             <img
                                 src={navigation.logo.imageUrl}
                                 alt={navigation.logo.alt || 'Logo'}
-                                width= "130px"
+                                width="130px"
                             />
                         ) : null}
 
