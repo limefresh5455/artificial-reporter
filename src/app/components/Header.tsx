@@ -52,7 +52,7 @@ const Header: React.FC = () => {
                         />
                         <Search className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500" size={16} />
                     </div>
-                    <a href="#" className="text-gray-600 hover:underline m-0">Sponsors</a>
+                    <Link href={ROUTES.SPONSORS} className="text-gray-600 hover:underline m-0">Sponsors</Link>
                     <span className="text-gray-400 mx-2">|</span>
                     <a href="#" className="text-gray-600 hover:underline m-0">AI</a>
                     <span className="text-gray-400 mx-2">|</span>

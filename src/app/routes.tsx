@@ -6,5 +6,6 @@ export const ROUTES = {
     ABOUT: '/about',
     CONTACT: '/contact',
     NEWS: '/news/',
-    INSIGHT: '/insight/'
+    INSIGHT: '/insight/',
+    SPONSORS: '/sponsors/'
 };
