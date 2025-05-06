@@ -31,6 +31,7 @@ const CardSlider: React.FC = () => {
       try {
         const topStoriesData = await getTopStories();
         setData(topStoriesData);
+        console.log("topStoriesData", topStoriesData)
       } catch (err) {
         console.error('Failed to fetch top stories:', err);
         setError('Failed to load top stories');
@@ -103,7 +104,7 @@ const CardSlider: React.FC = () => {
                 <div className="absolute bottom-4 left-4 z-10">
                   {story.slug ? (
                     <Link
-                      href={`${ROUTES.NEWS}${story.slug.current}`}
+                      href={`${ROUTES.NEWS}${story.newsCategory?.value.current}/${story.slug.current}`}
                       className="text-white text-lg font-semibold leading-tight hover:underline z-20"
                     >
                       {story.title}

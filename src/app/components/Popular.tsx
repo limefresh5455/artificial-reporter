@@ -58,7 +58,7 @@ const Popular: React.FC = () => {
                  
                   {story.slug ? (
                     <Link
-                      href={`${ROUTES.NEWS}${story.slug.current}`}
+                      href={`${ROUTES.NEWS}${story.newsCategory?.value.current}/${story.slug.current}`}
                       className="text-xl font-bold leading-snug mb-2"
                       style={{ zIndex: 20 }}
                     >
@@ -87,7 +87,7 @@ const Popular: React.FC = () => {
                 />                
                   {story.slug ? (
                     <Link
-                      href={`${ROUTES.NEWS}${story.slug.current}`}
+                      href={`${ROUTES.NEWS}${story.newsCategory?.value.current}/${story.slug.current}`}
                       className="text-sm font-medium py-3 px-4"
                       style={{ zIndex: 20 }}
                     >

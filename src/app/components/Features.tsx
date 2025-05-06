@@ -78,7 +78,7 @@ const CardSlider: React.FC = () => {
                   className="w-[80px] object-cover"
                 />
 }
-                <Link href={ROUTES.NEWS+ story.slug.current} className="p-4 text-[#42526E] text-sm font-medium">
+                <Link href={ROUTES.NEWS+story.newsCategory?.value.current+"/"+ story.slug.current} className="p-4 text-[#42526E] text-sm font-medium">
                   {story.title}
                 </Link>
               </div>

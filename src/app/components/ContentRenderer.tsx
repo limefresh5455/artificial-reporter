@@ -74,7 +74,7 @@ const renderColumn = (columnData: any[]) =>
 const ContentRenderer: React.FC<ContentRendererProps> = ({ content, type }) => {
     return (
         <>
-            {content.map((block) => {
+            {content?.map((block) => {
                 if (block._type === "layout") {
                     const { layoutType } = block;
 

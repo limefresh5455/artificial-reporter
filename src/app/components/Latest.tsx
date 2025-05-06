@@ -76,7 +76,7 @@ const Latest: React.FC = () => {
                  
                   {story.title ? (
                     <Link
-                      href={`${ROUTES.NEWS}${story.slug.current}`}
+                      href={`${ROUTES.NEWS}${story.newsCategory?.value.current}/${story.slug.current}`}
                       className="text-2xl font-bold leading-snug mb-2"
                       style={{ zIndex: 20 }}
                     >
@@ -110,7 +110,7 @@ const Latest: React.FC = () => {
                   className="w-20 h-16 object-cover"
                 />
                 <div className="py-3 px-4">
-                  <Link href={`${ROUTES.NEWS}${story.slug.current}`} className="text-sm font-medium">{story.title}</Link><br></br>
+                  <Link href={`${ROUTES.NEWS}${story.newsCategory?.value.current}/${story.slug.current}`} className="text-sm font-medium">{story.title}</Link><br></br>
                   <span className="text-sm text-gray-500">
                     {formatDate(story._createdAt || story._createdAt)}
                   </span>

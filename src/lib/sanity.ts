@@ -259,7 +259,11 @@ export async function getNewsByCategory(categorySlug: string): Promise<any[]> {
             overview,
             image,
             slug,
-            _createdAt
+            _createdAt,
+            newsCategory[0]->{
+                title,
+                value
+            },
         }
         `;
 
@@ -287,7 +291,7 @@ export async function getNewsData(param: string): Promise<any> {
 
     const response = await client.fetch(query);
 
-    
+
 
     const data = response.find((item: any) => item.mainTitle === param);
     // const features = response.find((item: any) => item.mainTitle === "Features");
@@ -295,8 +299,8 @@ export async function getNewsData(param: string): Promise<any> {
     // const latest = response.find((item: any) => item.mainTitle === "Latest");
 
     const responseArticle = await getNewsByCategory(data.newsCategory.value.current)
-    
-    return  {relatedArticles :responseArticle, ...data} ;
+
+    return { relatedArticles: responseArticle, ...data };
 }
 
 export async function getTopStories(): Promise<HomeNewsData> {
@@ -374,10 +378,10 @@ export async function getTopStoriesData(
     pageSize = 4,
     params = '',
     category: string | null = null
-  ): Promise<any[]> {
+): Promise<any[]> {
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
-  
+
     const query = `
       *[
         _type == $typeParam
@@ -401,55 +405,55 @@ export async function getTopStoriesData(
         featured
       }
     `;
-  
-    const fetchParams: any = {
-      typeParam: params,
-    };
-  
-    if (category) {
-      fetchParams.category = category;
-    }
-  
-    return client.fetch(query, fetchParams);
-  }
-  
 
-  export async function getTotalTopStoriesCount(
+    const fetchParams: any = {
+        typeParam: params,
+    };
+
+    if (category) {
+        fetchParams.category = category;
+    }
+
+    return client.fetch(query, fetchParams);
+}
+
+
+export async function getTotalTopStoriesCount(
     params = '',
     category: string | null = null
-  ): Promise<number> {
+): Promise<number> {
     const query = `
       count(*[
         _type == $typeParam
         ${category ? '&& $category in newsCategory[]->value.current' : ''}
       ])
     `;
-  
+
     const fetchParams: any = {
-      typeParam: params,
+        typeParam: params,
     };
-  
+
     if (category) {
-      fetchParams.category = category;
+        fetchParams.category = category;
     }
-  
+
     return client.fetch(query, fetchParams);
-  }
-  
-  export async function getCategoryTitleByValue(value: string): Promise<string | null> {
+}
+
+export async function getCategoryTitleByValue(value: string): Promise<string | null> {
     const query = `
       *[_type == "newsCategory" && value.current == $value][0] {
         title
       }
     `;
-  
+
     const params = { value };
-  
+
     const result = await client.fetch(query, params);
-  
+
     return result?.title || null;
-  }
-  
+}
+
 
 export async function getStoryData(params = '', type = ''): Promise<any[]> {
     console.log(params)
@@ -553,9 +557,12 @@ export async function getSponsors(): Promise<any[]> {
 
 export async function getSearchResult(query: string): Promise<any[]> {
     const results = await client.fetch(
-        `*[(_type == "page" || _type == "newsArticle" || _type == "insight") && (title match $q || body match $q)][0...10]{
+        `*[(_type == "page" || _type == "newsArticle" || _type == "insight" || _type == "newsCategory") && (title match $q || body match $q)][0...10]{
         _id,
         title,
+        value,
+        newsCategory[0]->{
+        value},
         _type,
         slug,
         image

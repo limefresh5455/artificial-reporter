@@ -66,9 +66,11 @@ const Header: React.FC = () => {
     }, [searchQuery]);
 
     const getHref = (item: any) => {
+        console.log("item", item)
         if (item._type === "page") return `/${item.slug.current}`;
-        if (item._type === "newsArticle") return `${ROUTES.NEWS}${item.slug.current}`;
+        if (item._type === "newsArticle") return `${ROUTES.NEWS}${item.newsCategory?.value.current}/${item.slug.current}`;
         if (item._type === "insight") return `${ROUTES.INSIGHT}${item.slug.current}`;
+        if (item._type === "newsCategory") return `${ROUTES.NEWS}${item?.value?.current}`;
         return `/${item.slug.current}`; // fallback
     };
 
@@ -101,7 +103,7 @@ const Header: React.FC = () => {
                         {/* Suggestions Dropdown */}
                         {searchQuery && searchResults.length > 0 && (
                             <div className="absolute mt-1 w-[500px]  bg-white border border-gray-300 rounded shadow-md z-50 max-h-60 overflow-y-auto">
-                                {["page", "newsArticle", "insight"].map((type) => {
+                                {["page", "newsArticle", "insight", "newsCategory"].map((type) => {
                                     const groupItems = searchResults.filter((item) => item._type === type);
                                     if (groupItems.length === 0) return null;
 
@@ -109,6 +111,7 @@ const Header: React.FC = () => {
                                         page: "Pages",
                                         newsArticle: "News",
                                         insight: "Insights",
+                                        newsCategory: "Category"
                                     }[type];
 
                                     return (
