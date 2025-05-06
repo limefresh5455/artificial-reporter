@@ -3,7 +3,7 @@ export const ROUTES = {
     HOME: '/',
     LOGIN: '/auth/login',
     REGISTER: '/auth/register',
-    ABOUT: '/about',
+    ABOUT: '/about-us',
     CONTACT: '/contact',
     NEWS: '/news/',
     INSIGHT: '/insight/',
