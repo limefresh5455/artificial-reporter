@@ -87,7 +87,7 @@ const CardSlider: React.FC = () => {
             1024: { slidesPerView: 4 },
           }}
         >
-          {data.relatedArticles.map((story) => (
+          {data.relatedArticles?.map((story) => (
             <SwiperSlide key={story._id}>
               <div className="relative w-full h-64 rounded overflow-hidden">
                 {story.image && (

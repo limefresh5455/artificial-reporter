@@ -170,7 +170,7 @@ const Story = ({
                                                 className="w-[70px] h-[70px] object-cover rounded"
                                             />
                                             <div className="flex-1 bg-gray-100 px-3 py-2 flex items-center h-[70px]">
-                                                <Link href={`${ROUTES.NEWS}/${item.slug.current}`} className="text-sm font-semibold hover:underline">
+                                                <Link href={`${ROUTES.NEWS}${item?.newsCategory?.value.current}/${item.slug.current}`} className="text-sm font-semibold hover:underline">
                                                     {item.title}
                                                 </Link>
                                             </div>

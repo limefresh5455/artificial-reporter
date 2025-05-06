@@ -47,7 +47,7 @@ const Popular: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div>
           <div className="flex gap-6">
-            {popularData.relatedArticles.slice(0, 2).map((story) => (
+            {popularData.relatedArticles?.slice(0, 2)?.map((story) => (
               <div key={story._id} className="overflow-hidden mb-4">
                 <img
                   src={urlFor(story.image)} 
@@ -78,7 +78,7 @@ const Popular: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap gap-4">
-            {popularData.relatedArticles.slice(2, 6).map((story) => (
+            {popularData.relatedArticles?.slice(2, 6)?.map((story) => (
               <div key={story._id+ Math.random()} className="flex items-center mb-3 bg-white w-90">
                 <img
                   src={urlFor(story.image)} 

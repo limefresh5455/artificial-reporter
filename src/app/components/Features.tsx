@@ -68,7 +68,7 @@ const CardSlider: React.FC = () => {
             1024: { slidesPerView: 3 },
           }}
         >
-          {features.relatedArticles.map((story: any) => (
+          {features.relatedArticles?.map((story: any) => (
             <SwiperSlide key={story._id+Math.random()}>
               <div className="flex bg-white h-full">
                 {story.image && 

@@ -31,11 +31,12 @@ const TopStories = () => {
         getTotalTopStoriesCount('newsArticle')
         
       ]);
-      console.log(data)
+      console.log("data" , data)
       setStories(data);
       setTotalCount(count);
       setIsLoading(false);
     };
+
 
     fetchData();
   }, [currentPage]); // <- Also add params as dependency
@@ -69,7 +70,7 @@ const TopStories = () => {
                           day: "2-digit",
                         })}</span>
                       </div>
-                      <Link href={`${ROUTES.NEWS}${story.slug.current}`} className="text-lg font-semibold hover:underline">
+                      <Link href={`${ROUTES.NEWS}${story?.newsCategory?.value.current}/${story.slug.current}`} className="text-lg font-semibold hover:underline">
                         {story.title}
                       </Link>
                       <p className="text-sm mt-1">

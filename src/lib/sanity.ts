@@ -248,20 +248,37 @@ export async function getImageBlocks(): Promise<ImageBlock[]> {
     return client.fetch(query);
 }
 
+export async function getNewsByCategory(categorySlug: string): Promise<any[]> {
+    const query = `
+        *[
+            _type == "newsArticle" &&
+            $categorySlug in newsCategory[]->value.current
+        ][0...5] {
+            _id,
+            title,
+            overview,
+            image,
+            slug,
+            _createdAt
+        }
+        `;
 
-export async function getNewsData(): Promise<{ topStories: HomeNewsData, features: HomeNewsData, popular: HomeNewsData, latest: HomeNewsData }> {
+
+    const params = { categorySlug };
+
+    const articles = await client.fetch(query, params);
+    return articles;
+}
+
+export async function getNewsData(param: string): Promise<any> {
     const query = `*[_type == "news"]{
         _id,
         _createdAt,
         _updatedAt,
         mainTitle,
-        relatedArticles[]->{
-          _id,
-          title,
-          slug,
-          _createdAt,
-          image,
-          overview
+        newsCategory->{
+        title,
+        value
         },
         viewAllLink,
         viewAllLinkText
@@ -270,32 +287,37 @@ export async function getNewsData(): Promise<{ topStories: HomeNewsData, feature
 
     const response = await client.fetch(query);
 
-    const topStories = response.find((item: any) => item.mainTitle === "Top Stories");
-    const features = response.find((item: any) => item.mainTitle === "Features");
-    const popular = response.find((item: any) => item.mainTitle === "Popular");
-    const latest = response.find((item: any) => item.mainTitle === "Latest");
+    
 
-    return { topStories, features, popular, latest };
+    const data = response.find((item: any) => item.mainTitle === param);
+    // const features = response.find((item: any) => item.mainTitle === "Features");
+    // const popular = response.find((item: any) => item.mainTitle === "Popular");
+    // const latest = response.find((item: any) => item.mainTitle === "Latest");
+
+    const responseArticle = await getNewsByCategory(data.newsCategory.value.current)
+    
+    return  {relatedArticles :responseArticle, ...data} ;
 }
 
 export async function getTopStories(): Promise<HomeNewsData> {
-    const data = await getNewsData();
-    return data.topStories;
+    const data = await getNewsData("Top Stories");
+    // console.log(data)
+    return data;
 }
 
 export async function getFeatures(): Promise<HomeNewsData> {
-    const data = await getNewsData();
-    return data.features;
+    const data = await getNewsData("Features");
+    return data;
 }
 
 export async function getPopular(): Promise<HomeNewsData> {
-    const data = await getNewsData();
-    return data.popular;
+    const data = await getNewsData("Popular");
+    return data;
 }
 
 export async function getLatest(): Promise<HomeNewsData> {
-    const data = await getNewsData();
-    return data.latest;
+    const data = await getNewsData("Latest");
+    return data;
 }
 
 
@@ -347,11 +369,20 @@ export async function getPageData(slug: string): Promise<PageData> {
 }
 
 
-export async function getTopStoriesData(page = 1, pageSize = 4, params = ''): Promise<any[]> {
+export async function getTopStoriesData(
+    page = 1,
+    pageSize = 4,
+    params = '',
+    category: string | null = null
+  ): Promise<any[]> {
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
-    console.log(params)
-    const query = `*[_type == '${params}'] | order(featured desc, _createdAt desc) [${start}...${end}] {
+  
+    const query = `
+      *[
+        _type == $typeParam
+        ${category ? '&& $category in newsCategory[]->value.current' : ''}
+      ] | order(featured desc, _createdAt desc) [${start}...${end}] {
         _id,
         _createdAt,
         _updatedAt,
@@ -361,23 +392,64 @@ export async function getTopStoriesData(page = 1, pageSize = 4, params = ''): Pr
         title,
         overview,
         eventType,
+        newsCategory[0]->{
+        value},
         sponsored,
         image,
         tags,
         slug,
         featured
-      }`;
+      }
+    `;
+  
+    const fetchParams: any = {
+      typeParam: params,
+    };
+  
+    if (category) {
+      fetchParams.category = category;
+    }
+  
+    return client.fetch(query, fetchParams);
+  }
+  
 
-
-    return client.fetch(query);
-}
-
-export async function getTotalTopStoriesCount(params = ''): Promise<number> {
-    const query = `count(*[_type == "${params}"])`;
-    return client.fetch(query);
-}
-
-
+  export async function getTotalTopStoriesCount(
+    params = '',
+    category: string | null = null
+  ): Promise<number> {
+    const query = `
+      count(*[
+        _type == $typeParam
+        ${category ? '&& $category in newsCategory[]->value.current' : ''}
+      ])
+    `;
+  
+    const fetchParams: any = {
+      typeParam: params,
+    };
+  
+    if (category) {
+      fetchParams.category = category;
+    }
+  
+    return client.fetch(query, fetchParams);
+  }
+  
+  export async function getCategoryTitleByValue(value: string): Promise<string | null> {
+    const query = `
+      *[_type == "newsCategory" && value.current == $value][0] {
+        title
+      }
+    `;
+  
+    const params = { value };
+  
+    const result = await client.fetch(query, params);
+  
+    return result?.title || null;
+  }
+  
 
 export async function getStoryData(params = '', type = ''): Promise<any[]> {
     console.log(params)
@@ -415,6 +487,8 @@ export async function getRelatedStories(tags: string[], slug: string): Promise<a
                         title,
                         overview,
                         image,
+                        newsCategory[0]->{
+                        value},
                         slug,
                         _createdAt
                     }
