@@ -24,7 +24,7 @@ const About: React.FC = () => {
         const fetchData = async () => {
             const data = await getPageData("about-us");
             setAboutData(data);
-            console.log(data);
+            // console.log(data);
         };
 
         fetchData();

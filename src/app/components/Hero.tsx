@@ -39,7 +39,7 @@ const Hero: React.FC = () => {
             swiper.navigation.update();
         }
     }, [slides]);
-    console.log(slides)
+    // console.log(slides)
 
     return (
         <section className="relative bg-cover bg-center">

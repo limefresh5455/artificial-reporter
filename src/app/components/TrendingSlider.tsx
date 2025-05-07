@@ -27,7 +27,7 @@ const TrendingSlider: React.FC = () => {
         const trendingData = await getTrendingData();
         if (trendingData?.items?.length) {
           setItems(trendingData.items);
-          console.log("items", trendingData )
+        //   console.log("items", trendingData )
         } else {
           setError("No items available in trending data");
         }

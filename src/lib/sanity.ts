@@ -253,7 +253,7 @@ export async function getNewsByCategory(categorySlug: string): Promise<any[]> {
         *[
             _type == "newsArticle" &&
             $categorySlug in newsCategory[]->value.current
-        ][0...5] {
+        ][0...6] {
             _id,
             title,
             overview,
@@ -456,7 +456,7 @@ export async function getCategoryTitleByValue(value: string): Promise<string | n
 
 
 export async function getStoryData(params = '', type = ''): Promise<any[]> {
-    console.log(params)
+    // console.log(params)
     const query = `*[_type == "${type}" && slug.current == "${params}"]  {  
         _id,
         _createdAt,
@@ -570,4 +570,59 @@ export async function getSearchResult(query: string): Promise<any[]> {
         { q: `*${query}*` }
     );
     return results;
+}
+
+
+
+export async function getJobs(
+    page = 1,
+    pageSize = 10
+): Promise<any[]> {
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+
+    const query = `
+      *[_type == "jobListing"] | order(_createdAt desc) [${start}...${end}] {
+        _id,
+        title,
+        jobTitle,
+        jobType,
+        location,
+        payAmount,
+        remoteWork,
+        datePosted,
+        dateUpdated,
+        hourlyOrSalary,
+        experienceLevel,
+        education,
+        jobDescription,
+        hiringManagerName,
+        hiringManagerEmail,
+        hiringManagerPhone,
+        company->{
+          _id,
+          aiType,
+          industry,
+          firmType,
+          employeeSize,
+          revenueSize,
+          companyUrl,
+          description,
+          advertiserLevel,
+          logo {
+            asset->{
+              _id,
+              url
+            }
+          }
+        }
+      }
+    `;
+
+    return await client.fetch(query);
+}
+
+export async function getTotalJobsCount(): Promise<number> {
+    const query = `count(*[_type == "jobListing"])`;
+    return await client.fetch(query);
 }

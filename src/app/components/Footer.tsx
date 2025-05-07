@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
         const fetchFooterData = async () => {
             const data = await getFooterData();
             setFooterData(data);
-            console.log(data)
+            // console.log(data)
         };
 
         fetchFooterData();

@@ -31,7 +31,7 @@ const TopStories = () => {
         getTotalTopStoriesCount('insight')
         
       ]);
-      console.log(data)
+    //   console.log(data)
       setStories(data);
       setTotalCount(count);
       setIsLoading(false);

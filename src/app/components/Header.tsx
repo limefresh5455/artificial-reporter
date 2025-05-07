@@ -18,7 +18,7 @@ const Header: React.FC = () => {
     const [searchResults, setSearchResults] = useState<any[]>([]);
 
 
-    console.log(isOpen)
+    // console.log(isOpen)
     useEffect(() => {
         const fetchData = async () => {
             const navData = await getNavigationData();
@@ -45,7 +45,7 @@ const Header: React.FC = () => {
             const data = await getSearchResult(searchQuery);
             setSearchResults(data); // Directly use the returned array
             // Optionally redirect or open a modal
-            console.log(data)
+            // console.log(data)
         } catch (err) {
             console.error('Search error', err);
         }

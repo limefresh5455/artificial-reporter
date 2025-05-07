@@ -18,7 +18,7 @@ const Sponsors = () => {
             try {
                 const sponsorPage = await getSponsors();
                 setData(sponsorPage[0]);
-                console.log(sponsorPage);
+                // console.log(sponsorPage);
             } catch (err) {
                 console.error('Error fetching sponsors:', err);
             } finally {

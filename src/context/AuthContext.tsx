@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const supabase = createClient();
 
     useEffect(() => {
-        console.log("User updated in context:", user);
+        // console.log("User updated in context:", user);
         async function fetchUser() {
             const { data: { user } } = await supabase.auth.getUser();
             setUser(user);

@@ -36,7 +36,7 @@ const CategroyNews = ({
                 getCategoryTitleByValue(category)
 
             ]);
-            console.log(data)
+            // console.log(data)
             setStories(data);
             setTotalCount(count);
             setIsLoading(false);

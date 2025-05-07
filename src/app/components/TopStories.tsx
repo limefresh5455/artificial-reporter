@@ -31,7 +31,7 @@ const CardSlider: React.FC = () => {
       try {
         const topStoriesData = await getTopStories();
         setData(topStoriesData);
-        console.log("topStoriesData", topStoriesData)
+        // console.log("topStoriesData", topStoriesData)
       } catch (err) {
         console.error('Failed to fetch top stories:', err);
         setError('Failed to load top stories');

@@ -101,23 +101,7 @@ const Latest: React.FC = () => {
             ))}
           </div>
 
-          <div className="flex flex-wrap gap-4">
-            {latestData.relatedArticles?.slice(2, 6)?.map((story) => (
-              <div key={story._id+Math.random()} className="flex items-center mb-3 bg-white w-90">
-                <img
-                  src={urlFor(story.image)}
-                  alt={story.title}
-                  className="w-20 h-16 object-cover"
-                />
-                <div className="py-3 px-4">
-                  <Link href={`${ROUTES.NEWS}${story.newsCategory?.value.current}/${story.slug.current}`} className="text-sm font-medium">{story.title}</Link><br></br>
-                  <span className="text-sm text-gray-500">
-                    {formatDate(story._createdAt || story._createdAt)}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+          
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@ const HeroSidebar: React.FC = () => {
     async function fetchData() {
       const data = await getImageBlocks();
       setItems(data);
-      console.log(data)
+    //   console.log(data)
     }
 
     fetchData();

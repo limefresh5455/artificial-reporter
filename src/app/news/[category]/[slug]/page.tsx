@@ -35,14 +35,14 @@ const Story = ({
             const data = await getStoryData(slug, 'newsArticle');
             if (Array.isArray(data) && data.length > 0) {
                 setStory(data[0]);
-                console.log(data[0]);
+                // console.log(data[0]);
 
                 // Fetch related stories correctly
                 const tags = (data[0].tags as any[]).map(tag => tag.title);
 
                 const relatedData = await getRelatedStories(tags || [], data[0].slug.current);
                 setRelatedStoriesData(relatedData);
-                console.log(relatedData);
+                // console.log(relatedData);
             } else {
                 setStory(null);
             }

@@ -31,7 +31,7 @@ const InsightsTags: React.FC = () => {
 
         fetchData();
     }, []);
-    console.log(data)
+    // console.log(data)
 
     const tags = [
         "Business", "Corporate", "Sports", "Health", "Education",
