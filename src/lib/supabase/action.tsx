@@ -32,7 +32,7 @@ export async function signInWithEmail(email: string) {
         options: {
             // set this to false if you do not want the user to be automatically signed up
 
-            emailRedirectTo: process.env.NEXT_PUBLIC_BASE_URL + ROUTES.REGISTER,
+            emailRedirectTo: "https://jazzy-platypus-aa6485.netlify.app/auth/register",
         },
     })
 
