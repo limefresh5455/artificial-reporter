@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { getJobs, getTotalJobsCount } from '@/lib/sanity';
 import { urlFor } from '@/lib/sanityImage';
-import { Search, MapPin, ChevronDown, Clock, Bookmark, ExternalLink, List, Grid, Plus, Minus } from 'lucide-react';
+import { Search, MapPin, ChevronDown, Clock, Bookmark, ExternalLink, List, Grid, Plus, Minus, ChevronRight, ChevronLeft } from 'lucide-react';
 import { ROUTES } from '@/app/routes';
 import Link from 'next/link';
 
@@ -43,13 +43,13 @@ const AIJobs: React.FC = () => {
 
     const toggleDropdownSort = () => {
         setIsOpen((prev) => !prev);
-      };
-    
-      const selectOptionSort = (option: string) => {
+    };
+
+    const selectOptionSort = (option: string) => {
         setSelectedOptionSort(option);
         setIsOpen(false); // Close dropdown after selection
-      };
-      
+    };
+
     const toggleDropdown = (id: string) => {
         setDropdownOpen((prev) => ({
             ...prev,
@@ -58,18 +58,59 @@ const AIJobs: React.FC = () => {
     };
 
     const selectOption = (filterId: string, option: string) => {
-        setSelectedOptions((prev) => ({
-            ...prev,
-            [filterId]: option,
-        }));
+        console.log(option)
+        if (filterId === "jobType" || filterId === "experience") {
+            if (!option) return; // Ignore empty/invalid options
+
+            setSelectedOptions((prev: any) => {
+                const prevOptions = prev[filterId] || [];
+                const exists = prevOptions.includes(option);
+
+                const updatedOptions = exists
+                    ? prevOptions.filter((o: any) => o !== option)
+                    : [...prevOptions, option];
+
+                if (updatedOptions.length === 0) {
+                    // Remove filter key when no options selected
+                    const { [filterId]: _, ...rest } = prev;
+                    return rest;
+                }
+
+                return {
+                    ...prev,
+                    [filterId]: updatedOptions,
+                };
+            });
+        } else {
+            if (!option) {
+                // Remove the key if option is empty
+                setSelectedOptions((prev) => {
+                    const { [filterId]: _, ...rest } = prev;
+                    return rest;
+                });
+            } else {
+                // Normal set for non-checkbox filters
+                setSelectedOptions((prev) => ({
+                    ...prev,
+                    [filterId]: option,
+                }));
+            }
+        }
+
+        // setSelectedOptions((prev) => ({
+        //     ...prev,
+        //     [filterId]: option,
+        // }));
         toggleDropdown(filterId); // Close dropdown after selection
+
+        console.log("selectedOptions", selectedOptions)
     };
 
     const filters: Filter[] = [
         {
             id: 'remote',
             title: 'Remote',
-            options: ['All Jobs', 'Remote', 'Hybrid', 'On-site'],
+            options: ['True', 'False'],
         },
         {
             id: 'datePosted',
@@ -79,22 +120,24 @@ const AIJobs: React.FC = () => {
         {
             id: 'pay',
             title: 'Pay',
-            options: ['$100,000+', '$130,000+', '$150,000+', '$170,000+', '$200,000+'],
+            options: ['$0 – $10,000', '$10,000 – $20,000', '$20,000 – $30,000', '$30,000 – $50,000', '$50,000 – $100,000', '$100,000+'],
         },
-        {
-            id: 'distance',
-            title: 'Distance',
-            options: [
-                'Exact location only',
-                'Within 5 miles',
-                'Within 10 miles',
-                'Within 15 miles',
-                'Within 25 miles',
-                'Within 35 miles',
-                'Within 50 miles',
-                'Within 100 miles',
-            ],
-        },
+
+
+        // {
+        //     id: 'distance',
+        //     title: 'Distance',
+        //     options: [
+        //         'Exact location only',
+        //         'Within 5 miles',
+        //         'Within 10 miles',
+        //         'Within 15 miles',
+        //         'Within 25 miles',
+        //         'Within 35 miles',
+        //         'Within 50 miles',
+        //         'Within 100 miles',
+        //     ],
+        // },
         {
             id: 'jobType',
             title: 'Job Type',
@@ -102,115 +145,146 @@ const AIJobs: React.FC = () => {
             options: [
                 { value: '01', label: 'Full-time' },
                 { value: '02', label: 'Part-time' },
-                { value: '03', label: 'Temporary' },
-                { value: '04', label: 'Volunteer' },
+                // { value: '03', label: 'Temporary' },
+                { value: '04', label: 'Contract' },
                 { value: '05', label: 'Internship' },
-                { value: '06', label: 'Contract', hidden: true },
-                { value: '07', label: 'Permanent', hidden: true },
-                { value: '08', label: 'Freelance', hidden: true },
-                { value: '09', label: 'Tenure track', hidden: true },
-                { value: '10', label: 'Seasonal', hidden: true },
+                // { value: '06', label: 'Volunteer', hidden: true },
+                // { value: '07', label: 'Permanent', hidden: true },
+                // { value: '08', label: 'Freelance', hidden: true },
+                // { value: '09', label: 'Tenure track', hidden: true },
+                // { value: '10', label: 'Seasonal', hidden: true },
             ],
         },
-        {
-            id: 'company',
-            title: 'Company',
-            options: [
-                'All Companies',
-                'Amazon.com',
-                'PwC',
-                'Flagship Pioneering, Inc.',
-                'Accenture',
-                'Google',
-                'Boston Consulting Group',
-                'Sanofi',
-                'Takeda Pharmaceuticals',
-                'Red Hat',
-                'Crowe LLP',
-            ],
-        },
-        {
-            id: 'employer',
-            title: 'Employer/Recruiter',
-            options: ['Employer and Recruiter', 'Employer', 'Staffing agency'],
-        },
-        {
-            id: 'location',
-            title: 'Location',
-            search: true,
-            options: [
-                'Boston, MA',
-                'Cambridge, MA',
-                'Somerville, MA',
-                'Charlestown, MA',
-                'Brighton, MA',
-                'Brookline, MA',
-                'Chelsea, MA',
-                'Allston, MA',
-            ],
-        },
+        // {
+        //     id: 'company',
+        //     title: 'Company',
+        //     options: [
+        //         'All Companies',
+        //         'Amazon.com',
+        //         'PwC',
+        //         'Flagship Pioneering, Inc.',
+        //         'Accenture',
+        //         'Google',
+        //         'Boston Consulting Group',
+        //         'Sanofi',
+        //         'Takeda Pharmaceuticals',
+        //         'Red Hat',
+        //         'Crowe LLP',
+        //     ],
+        // },
+        // {
+        //     id: 'employer',
+        //     title: 'Employer/Recruiter',
+        //     options: ['Employer and Recruiter', 'Employer', 'Staffing agency'],
+        // },
+        // {
+        //     id: 'location',
+        //     title: 'Location',
+        //     search: true,
+        //     options: [
+        //         'Boston, MA',
+        //         'Cambridge, MA',
+        //         'Somerville, MA',
+        //         'Charlestown, MA',
+        //         'Brighton, MA',
+        //         'Brookline, MA',
+        //         'Chelsea, MA',
+        //         'Allston, MA',
+        //     ],
+        // },
         {
             id: 'experience',
             title: 'Experience Level',
             type: 'checkbox',
             options: [
-                { value: '01', label: 'All Experience' },
-                { value: '02', label: 'Mid Level' },
-                { value: '03', label: 'Senior Level' },
-                { value: '04', label: 'Entry Level' },
-                { value: '05', label: 'No Experience Required' },
+                { value: '01', label: 'All' },
+                { value: '02', label: 'Mid' },
+                { value: '03', label: 'Senior' },
+                { value: '04', label: 'Entry' },
             ],
         },
         {
             id: 'education',
             title: 'Education',
             options: [
-                'All Education Levels',
-                'High school degree',
-                'Associate degree',
-                "Bachelor's degree",
-                "Master's degree",
-                'Doctoral degree',
+                'All',
+                'High School',
+                "Associate’s",
+                "Bachelor’s",
+                "Master’s",
+                'Doctoral',
             ],
         },
-        {
-            id: 'encouraged',
-            title: 'Encouraged to apply',
-            type: 'checkbox',
-            options: [
-                { value: '01', label: 'Fair chance' },
-                { value: '02', label: 'Military encouraged' },
-                { value: '03', label: 'Back to work' },
-                { value: '04', label: 'No degree' },
-            ],
-        },
+
+        // {
+        //     id: 'encouraged',
+        //     title: 'Encouraged to apply',
+        //     type: 'checkbox',
+        //     options: [
+        //         { value: '01', label: 'Fair chance' },
+        //         { value: '02', label: 'Military encouraged' },
+        //         { value: '03', label: 'Back to work' },
+        //         { value: '04', label: 'No degree' },
+        //     ],
+        // },
     ];
 
     const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
     const typeStyles = {
         'Full-time': 'bg-green-100 text-green-700',
-        'Part Time': 'bg-yellow-100 text-yellow-700',
+        'Part-time': 'bg-yellow-100 text-yellow-700',
         'Internship': 'bg-blue-100 text-blue-700',
         'Contract': 'bg-purple-100 text-purple-700',
         'Freelance': 'bg-pink-100 text-pink-700',
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setIsLoading(true);
-            const [data, count] = await Promise.all([
-                getJobs(currentPage, PAGE_SIZE),
-                getTotalJobsCount(),
-            ]);
-            setJobs(data);
-            console.log(data);
-            setTotalCount(count);
-            setIsLoading(false);
+    const fetchData = async () => {
+        setIsLoading(true);
+
+        const filters = {
+
+            // jobType: ['Full-time'],
         };
+        const [data, count] = await Promise.all([
+            getJobs(currentPage, PAGE_SIZE, selectedOptions),
+            getTotalJobsCount(selectedOptions),
+        ]);
+        setJobs(data);
+        console.log(data);
+        setTotalCount(count);
+        setIsLoading(false);
+    };
+    useEffect(() => {
+
 
         fetchData();
     }, [currentPage]);
+
+
+    const getPaginationRange = (totalPages: number, currentPage: number, delta = 2) => {
+        const range: (number | string)[] = [];
+        const left = Math.max(2, currentPage - delta);
+        const right = Math.min(totalPages - 1, currentPage + delta);
+
+        range.push(1); // Always show first page
+
+        if (left > 2) range.push('...');
+
+        for (let i = left; i <= right; i++) {
+            range.push(i);
+        }
+
+        if (right < totalPages - 1) range.push('...');
+
+        if (totalPages > 1) range.push(totalPages); // Always show last page
+
+        return range;
+    };
+
+    const paginationRange = getPaginationRange(totalPages, currentPage);
+
+
 
     return (
         <div className="job-listing">
@@ -282,7 +356,19 @@ const AIJobs: React.FC = () => {
                                                     {filter.options.map((option: any) => (
                                                         <li key={option.value} className={option.hidden ? 'hidden' : ''}>
                                                             <label className="flex items-center gap-2">
-                                                                <input type="checkbox" name={filter.id} value={option.value} />
+                                                                <input
+                                                                    type="checkbox"
+                                                                    name={filter.id}
+                                                                    value={option.value}
+                                                                    checked={selectedOptions[filter.id]?.includes(option.label) || false}
+                                                                    onChange={() =>
+                                                                        selectOption(
+                                                                            filter.id,
+                                                                            typeof option === 'string' ? option : option.label
+                                                                        )
+                                                                    }
+                                                                />
+
                                                                 {option.label}
                                                             </label>
                                                         </li>
@@ -332,7 +418,7 @@ const AIJobs: React.FC = () => {
                                     </div>
                                 ))}
 
-                                <button className="w-full mt-4 py-2 bg-[#005025] text-white rounded-md hover:bg-[#00bf58]">
+                                <button onClick={fetchData} className="w-full mt-4 py-2 bg-[#005025] text-white rounded-md hover:bg-[#00bf58]">
                                     Apply Filter
                                 </button>
                             </div>
@@ -352,7 +438,7 @@ const AIJobs: React.FC = () => {
                                         </button>
                                         <ul className={`absolute w-40 bg-white border border-gray-300 rounded-md mt-1 ${isOpen ? 'block' : 'hidden'
                                             }`}>
-                                            {['Latest', 'Job Title', 'Location', 'Distance'].map((option) => (
+                                            {['Latest', 'Job Title', 'Location'].map((option) => (
                                                 <li key={option} className="p-2 hover:bg-gray-100 cursor-pointer" onClick={() => selectOptionSort(option)}>
                                                     {option}
                                                 </li>
@@ -500,10 +586,51 @@ const AIJobs: React.FC = () => {
                                     ))}
                                 </div>
                             ) : ''}
+
+                            {/* Dynamic Pagination */}
+                            <div className="pt-6 border-t border-gray-200">
+                                <ul className="flex flex-wrap gap-2 justify-center sm:justify-start text-sm">
+                                    <li>
+                                        <button
+                                            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                            disabled={currentPage === 1}
+                                            className={`px-3 py-1 rounded ${currentPage === 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+                                        >
+                                            <ChevronLeft size={20} />
+                                        </button>
+                                    </li>
+
+                                    {paginationRange.map((page, index) =>
+                                        page === '...' ? (
+                                            <li key={`ellipsis-${index}`} className="px-3 py-1 text-gray-400">...</li>
+                                        ) : (
+                                            <li key={page}>
+                                                <button
+                                                    onClick={() => setCurrentPage(Number(page))}
+                                                    className={`px-3 py-1 rounded ${currentPage === page ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
+                                                >
+                                                    {page}
+                                                </button>
+                                            </li>
+                                        )
+                                    )}
+
+                                    <li>
+                                        <button
+                                            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                                            disabled={currentPage === totalPages}
+                                            className={`px-3 py-1 rounded ${currentPage === totalPages ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+                                        >
+                                            <ChevronRight size={20} />
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
+
         </div>
     );
 };

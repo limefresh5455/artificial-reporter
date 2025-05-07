@@ -1,4 +1,5 @@
 import { client } from './client';
+import { subDays, format } from 'date-fns'; // if using date-fns
 
 export interface SocialLink {
     _key: string;
@@ -557,7 +558,7 @@ export async function getSponsors(): Promise<any[]> {
 
 export async function getSearchResult(query: string): Promise<any[]> {
     const results = await client.fetch(
-        `*[(_type == "page" || _type == "newsArticle" || _type == "insight" || _type == "newsCategory") && (title match $q || body match $q)][0...10]{
+        `*[(_type == "page" || _type == "newsArticle" || _type == "insight" || _type == "newsCategory" || _type == "jobListing") && (title match $q || body match $q)][0...10]{
         _id,
         title,
         value,
@@ -573,16 +574,115 @@ export async function getSearchResult(query: string): Promise<any[]> {
 }
 
 
+function getDateFromLabel(label: string): string | null {
+    const daysMap: Record<string, number> = {
+        'Last 24 hours': 1,
+        'Last 3 days': 3,
+        'Last 7 days': 7,
+        'Last 14 days': 14,
+    };
+
+    const days = daysMap[label];
+    if (!days) return null;
+
+    const date = subDays(new Date(), days);
+    return format(date, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+}
+
+interface Filters {
+    [key: string]: string | string[] | undefined;
+}
 
 export async function getJobs(
     page = 1,
-    pageSize = 10
+    pageSize = 10,
+    filters: Filters = {}
 ): Promise<any[]> {
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
 
+    // Build GROQ filter conditions
+    const conditions: string[] = [];
+    const payAmountMapping: Record<string, string> = {
+        '$0 – $10,000': '$0 – $10,000',
+        '$10,000 – $20,000': '$10,000 – $20,000',
+        '$20,000 – $30,000': '$20,000 – $30,000',
+        '$30,000 – $50,000': '$30,000 – $50,000',
+        '$50,000 – $100,000': '$50,000 – $100,000',
+        '$100,000+': '$100,000+',
+        '$130,000+': '$130,000+',
+        '$150,000+': '$150,000+',
+        '$170,000+': '$170,000+',
+        '$200,000+': '$200,000+',
+    };
+    
+    
+    // Handle payAmount filtering
+    if (filters.pay) {
+        if (Array.isArray(filters.pay)) {
+            // If it's an array, map over the values
+            filters.pay.forEach((amount) => {
+                const payAmountValue = payAmountMapping[amount];
+                if (payAmountValue !== undefined) {
+                    conditions.push(`payAmount == "${payAmountValue}"`); // treat payAmount as string
+                }
+            });
+        } else {
+            // If it's a single string, handle it normally
+            const payAmountValue = payAmountMapping[filters.pay];
+            if (payAmountValue !== undefined) {
+                conditions.push(`payAmount == "${payAmountValue}"`); // treat payAmount as string
+            }
+        }
+    }
+
+    if (filters.datePosted && typeof filters.datePosted === 'string') {
+        const date = getDateFromLabel(filters.datePosted);
+        if (date) {
+            conditions.push(`datePosted >= "${date}"`);
+        }
+        console.log(conditions)
+    }
+
+
+    if (filters.remote) {
+        // Assume: 'Remote', 'Hybrid', 'On-site' mapped to remoteWork field
+        conditions.push(`remoteWork == ${filters.remote == 'True' ? true : false}`);
+    }
+
+    
+
+    if (filters.jobType) {
+        const types = Array.isArray(filters.jobType) ? filters.jobType : [filters.jobType];
+        conditions.push(`jobType in ${JSON.stringify(types)}`);
+    }
+
+    if (filters.experience) {
+        const levels = Array.isArray(filters.experience) ? filters.experience : [filters.experience];
+        conditions.push(`experienceLevel in ${JSON.stringify(levels)}`);
+    }
+
+    if (filters.education) {
+        console.log(filters.education)
+        conditions.push(`education == "${filters.education}"`);
+    }
+
+    if (filters.company) {
+        conditions.push(`company->name == "${filters.company}"`);
+    }
+
+    if (filters.location) {
+        conditions.push(`location == "${filters.location}"`);
+    }
+
+    // More filters can be added as needed...
+
+    const whereClause = conditions.length > 0
+        ? `*[ _type == "jobListing" && ${conditions.join(" && ")} ]`
+        : `*[ _type == "jobListing" ]`;
+
     const query = `
-      *[_type == "jobListing"] | order(_createdAt desc) [${start}...${end}] {
+      ${whereClause} | order(_createdAt desc) [${start}...${end}] {
         _id,
         title,
         jobTitle,
@@ -619,10 +719,100 @@ export async function getJobs(
       }
     `;
 
+    //     const query = `
+    //   *[_type == "jobListing" && datePosted >= "2025-05-05T00:00:00.000Z"] {
+    //     _id,
+    //     jobTitle,
+    //     datePosted,
+    //     // other fields
+    //   }
+    // `;
+
     return await client.fetch(query);
 }
 
-export async function getTotalJobsCount(): Promise<number> {
-    const query = `count(*[_type == "jobListing"])`;
+
+export async function getTotalJobsCount(filters: Filters): Promise<number> {
+    const conditions: string[] = [];
+
+    if (filters.remote) {
+        // Assume: 'Remote', 'Hybrid', 'On-site' mapped to remoteWork field
+        conditions.push(`remoteWork == ${filters.remote == 'True' ? true : false}`);
+    }
+
+    if (filters.datePosted && typeof filters.datePosted === 'string') {
+        const date = getDateFromLabel(filters.datePosted);
+        if (date) {
+            conditions.push(`datePosted >= "${date}"`);
+        }
+        console.log(conditions)
+    }
+
+    const payAmountMapping: Record<string, string> = {
+        '$0 – $10,000': '$0 – $10,000',
+        '$10,000 – $20,000': '$10,000 – $20,000',
+        '$20,000 – $30,000': '$20,000 – $30,000',
+        '$30,000 – $50,000': '$30,000 – $50,000',
+        '$50,000 – $100,000': '$50,000 – $100,000',
+        '$100,000+': '$100,000+',
+        '$130,000+': '$130,000+',
+        '$150,000+': '$150,000+',
+        '$170,000+': '$170,000+',
+        '$200,000+': '$200,000+',
+    };
+    
+    
+    // Handle payAmount filtering
+    if (filters.pay) {
+        if (Array.isArray(filters.pay)) {
+            // If it's an array, map over the values
+            filters.pay.forEach((amount) => {
+                const payAmountValue = payAmountMapping[amount];
+                if (payAmountValue !== undefined) {
+                    conditions.push(`payAmount == "${payAmountValue}"`); // treat payAmount as string
+                }
+            });
+        } else {
+            // If it's a single string, handle it normally
+            const payAmountValue = payAmountMapping[filters.pay];
+            if (payAmountValue !== undefined) {
+                conditions.push(`payAmount == "${payAmountValue}"`); // treat payAmount as string
+            }
+        }
+    }
+    
+    
+
+
+    if (filters.jobType) {
+        const types = Array.isArray(filters.jobType) ? filters.jobType : [filters.jobType];
+        conditions.push(`jobType in ${JSON.stringify(types)}`);
+    }
+
+    if (filters.experience) {
+        const levels = Array.isArray(filters.experience) ? filters.experience : [filters.experience];
+        conditions.push(`experienceLevel in ${JSON.stringify(levels)}`);
+    }
+
+    if (filters.education) {
+        conditions.push(`education == "${filters.education}"`);
+    }
+
+    if (filters.company) {
+        conditions.push(`company->name == "${filters.company}"`);
+    }
+
+    if (filters.location) {
+        conditions.push(`location == "${filters.location}"`);
+    }
+
+    // same filter conditions as above...
+
+    const whereClause = conditions.length > 0
+        ? `*[ _type == "jobListing" && ${conditions.join(" && ")} ]`
+        : `*[ _type == "jobListing" ]`;
+
+    const query = `count(${whereClause})`;
     return await client.fetch(query);
 }
+
