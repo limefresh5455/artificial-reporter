@@ -300,20 +300,32 @@ const AIJobs: React.FC = () => {
                                         <input
                                             type="text"
                                             placeholder="Artificial Intelligence"
-                                            className="w-full pl-3 pr-4 py-2 focus:outline-none"
+                                            className="w-full pl-8 pr-4 py-2 focus:outline-none"
+                                            onChange={(e) => selectOption(
+                                                "title",
+                                                e.target.value
+                                            )}
                                         />
                                     </div>
+
                                     <div className="input_box relative">
                                         <MapPin size={20} />
                                         <input
                                             type="text"
                                             placeholder="Location"
-                                            className="w-full pl-3 pr-4 py-2 focus:outline-none"
+                                            className="w-full pl-8 pr-4 py-2 focus:outline-none"
+
+                                            onChange={(e) => selectOption(
+                                                "location",
+                                                e.target.value
+                                            )}
                                         />
                                     </div>
+
                                     <div className="flex justify-end">
                                         <button
                                             type="submit"
+                                            onClick={fetchData}
                                             className="btn btn_bg w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-md"
                                         >
                                             Search

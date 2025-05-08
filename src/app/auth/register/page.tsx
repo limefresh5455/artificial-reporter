@@ -7,6 +7,8 @@ import { createClient } from '@/lib/supabase/client';
 import { ROUTES } from "@/app/routes";
 import { BadgeCheck, Eye, EyeClosed } from 'lucide-react';
 import { User } from '@supabase/supabase-js';
+import { getSiteLogo } from "@/lib/sanity";
+import { buildCroppedImageUrl } from "@/lib/sanityImage";
 
 type DropdownKey = "jobTitle" | "seniority" | "jobFunction" | "industry" | "country" | "state";
 
@@ -66,10 +68,19 @@ export default function Register() {
     const [userMeta, setUserMeta] = useState<UserMeta | null>(null);
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [siteLogo, setSiteLogo] = useState<any>([]);
 
     const router = useRouter();
     const supabase = createClient();
 
+    useEffect(() => {
+        const fetchLogo = async () => {
+            const response = await getSiteLogo();
+            setSiteLogo(response);
+            console.log(response)
+        }
+        fetchLogo()
+    }, [])
     useEffect(() => {
         let mounted = true;
 
@@ -259,7 +270,7 @@ export default function Register() {
                 if (response.data.session) {
                     setAuthUser(response.data.user);
                     setCurrentStep(2);
-                } 
+                }
             }
         } catch (error) {
             setErrors({ email: "An error occurred during email submission" });
@@ -443,7 +454,21 @@ export default function Register() {
 
                             {currentStep === 1 && (
                                 <form className="step" id="step1" onSubmit={handleSubmitEmail}>
-                                    <h1 className="logo text-3xl font-bold text-center mb-4">Logo</h1>
+                                    <h1 className="logo text-3xl font-bold text-center mb-4 flex justify-center">
+                                        {siteLogo?.image?.crop && siteLogo?.imageUrl ? (
+                                            <img
+                                                src={buildCroppedImageUrl(siteLogo.imageUrl, siteLogo.image.crop)}
+                                                alt={siteLogo.alt || 'Logo'}
+                                                width="130px"
+                                            />
+                                        ) : siteLogo?.imageUrl ? (
+                                            <img
+                                                src={siteLogo.imageUrl}
+                                                alt={siteLogo.alt || 'Logo'}
+                                                width="130px"
+                                            />
+                                        ) : null}
+                                    </h1>
                                     <div className="mb-4">
                                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                                             Corporate Email

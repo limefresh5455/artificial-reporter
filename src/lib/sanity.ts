@@ -615,8 +615,8 @@ export async function getJobs(
         '$170,000+': '$170,000+',
         '$200,000+': '$200,000+',
     };
-    
-    
+
+
     // Handle payAmount filtering
     if (filters.pay) {
         if (Array.isArray(filters.pay)) {
@@ -636,6 +636,11 @@ export async function getJobs(
         }
     }
 
+    if (filters.title && typeof filters.title === "string") {
+        conditions.push(`title match "*${filters.title}*"`);
+    }
+
+
     if (filters.datePosted && typeof filters.datePosted === 'string') {
         const date = getDateFromLabel(filters.datePosted);
         if (date) {
@@ -650,7 +655,7 @@ export async function getJobs(
         conditions.push(`remoteWork == ${filters.remote == 'True' ? true : false}`);
     }
 
-    
+
 
     if (filters.jobType) {
         const types = Array.isArray(filters.jobType) ? filters.jobType : [filters.jobType];
@@ -732,6 +737,7 @@ export async function getJobs(
 }
 
 
+
 export async function getTotalJobsCount(filters: Filters): Promise<number> {
     const conditions: string[] = [];
 
@@ -760,8 +766,8 @@ export async function getTotalJobsCount(filters: Filters): Promise<number> {
         '$170,000+': '$170,000+',
         '$200,000+': '$200,000+',
     };
-    
-    
+
+
     // Handle payAmount filtering
     if (filters.pay) {
         if (Array.isArray(filters.pay)) {
@@ -780,8 +786,12 @@ export async function getTotalJobsCount(filters: Filters): Promise<number> {
             }
         }
     }
-    
-    
+
+    if (filters.title && typeof filters.title === "string") {
+        conditions.push(`title match "*${filters.title}*"`);
+    }
+
+
 
 
     if (filters.jobType) {
@@ -816,3 +826,15 @@ export async function getTotalJobsCount(filters: Filters): Promise<number> {
     return await client.fetch(query);
 }
 
+export async function getSiteLogo(): Promise<any> {
+    const query = `*[_type == "logo"][0]{
+        alt,
+        "imageUrl": image.asset->url,
+        image {
+        crop,
+        hotspot
+        }
+    }`;
+
+    return client.fetch(query);
+}

@@ -26,13 +26,14 @@ export async function login(formData: FormData) {
 
 export async function signInWithEmail(email: string) {
     const supabase = await createClient()
+    
     const response = await supabase.auth.signUp({
         email: email,
         password: Math.random + "",
         options: {
             // set this to false if you do not want the user to be automatically signed up
 
-            emailRedirectTo: process.env.NEXT_PUBLIC_BASE_URL + ROUTES.REGISTER,
+            emailRedirectTo: "https://jazzy-platypus-aa6485.netlify.app/auth/register",
         },
     })
 
