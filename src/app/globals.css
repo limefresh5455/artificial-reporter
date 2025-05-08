@@ -501,8 +501,7 @@ body {
 
 
 .news_inner .container {
-    padding: 40px;
-    padding-bottom: 40px;
+    padding: 20px;
     background: #fff;
 }
 
@@ -600,6 +599,7 @@ body {
     align-items: center;
     grid-template-columns: 1fr 1fr auto;
 }
+
 .job_search_inner {
     text-align: center;
     max-width: 1000px;
@@ -1436,52 +1436,52 @@ body {
 .single_article {
     overflow: hidden;
     margin-bottom: 40px;
-  }
-  
-  .article_img img {
+}
+
+.article_img img {
     height: 500px;
     object-fit: cover;
     width: 100%;
-  }
-  
-  .single_article_inner {
+}
+
+.single_article_inner {
     margin: 0 auto;
     background: #fff;
     padding: 40px;
     margin-top: -325px;
     z-index: 99;
     position: relative;
-  }
-  
-  .single_article_inner .section_heading {
+}
+
+.single_article_inner .section_heading {
     margin-bottom: 30px;
     line-height: 60px;
-  }
-  
-  .post_header {
+}
+
+.post_header {
     padding-bottom: 25px;
     border-bottom: 1px solid #0000003d;
     margin-bottom: 60px;
-  }
-  
-  span.post_date {
+}
+
+span.post_date {
     color: #000;
-  }
-  
-  .post_categories a {
+}
+
+.post_categories a {
     background: #000000;
     color: #fff;
     padding: 10px 20px;
     font-size: 15px;
     border-radius: 33px;
     display: inline-block;
-  }
-  
-  .post_share {
+}
+
+.post_share {
     position: relative;
-  }
-  
-  .post_share .share-icon {
+}
+
+.post_share .share-icon {
     background: white;
     padding: 0px;
     border-radius: 50%;
@@ -1493,10 +1493,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  .visually-hidden,
-  .visually-hidden-focusable:not(:focus):not(:focus-within) {
+}
+
+.visually-hidden,
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
     position: absolute !important;
     width: 1px !important;
     height: 1px !important;
@@ -1506,14 +1506,14 @@ body {
     clip: rect(0, 0, 0, 0) !important;
     white-space: nowrap !important;
     border: 0 !important;
-  }
-  
-  .post_share .share-icon i {
+}
+
+.post_share .share-icon i {
     font-size: 16px;
     line-height: 25px;
-  }
-  
-  .post_share .social-icons {
+}
+
+.post_share .social-icons {
     position: absolute;
     z-index: 99;
     top: 55px;
@@ -1530,15 +1530,15 @@ body {
     padding: 5px 0px;
     border: 1px solid #0000004f;
     border-radius: 40px;
-  }
-  
-  .post_share .share-container:hover .social-icons {
+}
+
+.post_share .share-container:hover .social-icons {
     opacity: 1;
     visibility: visible;
     transform: translate(-50%, 0px);
-  }
-  
-  .post_share .social-icons a {
+}
+
+.post_share .social-icons a {
     background: white;
     border-radius: 50%;
     display: flex;
@@ -1549,76 +1549,74 @@ body {
     width: 40px;
     height: 40px;
     margin: 0 auto;
-  }
-  
-  .post_share .social-icons a i {
+}
+
+.post_share .social-icons a i {
     font-size: 18px;
     line-height: 24px;
     color: #333;
-  }
-  
-  .post_share .social-icons a:hover {
+}
+
+.post_share .social-icons a:hover {
     transform: scale(1);
     background-color: #000000;
-  }
-  
-  .post_share .social-icons a:hover i {
+}
+
+.post_share .social-icons a:hover i {
     color: #ffffff;
-  }
-  
-  .post_author_img img {
+}
+
+.post_author_img img {
     width: 40px;
     height: 40px;
     object-fit: cover;
     border-radius: 50%;
-  }
-  
-  .post_author_img:hover {
+}
+
+.post_author_img:hover {
     color: #af0e14;
-  }
-  
-  .post_author_img {
+}
+
+.post_author_img {
     display: flex;
     align-items: center;
     gap: 10px;
     color: #2c2c2c;
     text-transform: uppercase;
     font-weight: 600;
-  }
-  
-  .post_author_detail {
+}
+
+.post_author_detail {
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-  
-  .content_wrap {
+}
+
+.content_wrap {
     padding-right: 30px;
-  }
-  
-  .content_wrap h5 {
+}
+
+.content_wrap h5 {
     font-size: 25px;
     margin: 15px 0 13px;
     display: inline-block;
-  }
-  
-  .content_wrap .ad_img {
+}
+
+.content_wrap .ad_img {
     float: right;
     width: 30%;
     margin-left: 30px;
-  }
-  
-  .post_sidebar {
+}
+
+.post_sidebar {
     padding-left: 30px;
-  }
-  
-  .post_sidebar h5 {
+}
+
+.post_sidebar h5 {
     border-bottom: 1px solid #0000008c;
     padding-bottom: 10px;
     text-transform: uppercase;
     margin-bottom: 15px;
     font-size: 20px;
     font-weight: 600;
-  }
-  
-  
+}
