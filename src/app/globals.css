@@ -1595,6 +1595,23 @@ span.post_date {
 .content_wrap {
     padding-right: 30px;
 }
+.content_wrap h2{font-size: 50px !important;font-weight: 600 !important;margin-bottom: 10px;}
+.content_wrap h3{font-size: 25px !important;font-weight: 600 !important;margin-bottom: 10px;}
+.content_wrap h4{font-size: 22px !important;font-weight: 600 !important;margin-bottom: 10px;}
+.content_wrap h5{font-size: 20px !important;font-weight: 600 !important;margin-bottom: 10px;}
+.content_wrap h6{font-size: 18px !important;font-weight: 600 !important;margin-bottom: 10px;}
+
+.content_wrap ul{
+    list-style-type: disc;
+    margin: 0 0 25px 18px;
+}
+.content_wrap ol{
+    list-style-type: auto;
+    margin: 0 0 25px 18px;
+}
+.content_wrap ol li, .content_wrap ul li{
+    margin-bottom: 15px;
+}
 
 .content_wrap h5 {
     font-size: 25px;
