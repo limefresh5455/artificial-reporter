@@ -50,9 +50,7 @@ const Header: React.FC = () => {
     useEffect(() => {
         const delayDebounce = setTimeout(() => {
             if (searchQuery.trim()) {
-                getSearchResult(searchQuery).then((data) => {
-                    setSearchResults(data);
-                }).catch(console.error);
+                getSearchResult(searchQuery).then(setSearchResults).catch(console.error);
             } else {
                 setSearchResults([]);
             }
@@ -73,15 +71,128 @@ const Header: React.FC = () => {
         <header className="w-full bg-white border-b border-gray-200">
             {/* Top bar */}
             <div className="flex flex-col justify-start lg:flex-row lg:justify-between text-sm px-4 lg:px-20 py-2 border-b border-gray-100">
-                <TrendingSlider />                
-                
-               
-                 <div className="lg:flex items-center text-center lg:text-right space-x-4 mt-4 lg:mt-0">    
-                 <div className="hidden lg:block relative mb-0">
+                <TrendingSlider />
+                <div className="lg:flex items-center text-center lg:text-right space-x-4 mt-4 lg:mt-0">
+                    {/* Desktop search bar */}
+                    <div className="hidden lg:block relative mb-0">
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            className="border border-gray-300 rounded-sm pl-2 pr-8 py-1 text-sm focus:outline-none w-full"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                        />
+                        <Search
+                            className="absolute right-2 top-6 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+                            size={16}
+                            onClick={handleSearch}
+                        />
+                        {searchQuery && searchResults.length > 0 && (
+                            <div className="absolute mt-1 w-full bg-white border border-gray-300 rounded shadow-md z-50 max-h-60 overflow-y-auto">
+                                {['page', 'newsArticle', 'insight', 'newsCategory', 'jobListing'].map(type => {
+                                    const groupItems = searchResults.filter(i => i._type === type);
+                                    if (!groupItems.length) return null;
+                                    const groupTitle = {
+                                        page: 'Pages',
+                                        newsArticle: 'News',
+                                        insight: 'Insights',
+                                        newsCategory: 'Category',
+                                        jobListing: 'Jobs'
+                                    }[type];
+                                    return (
+                                        <div key={type}>
+                                            <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50">{groupTitle}</div>
+                                            {groupItems.map(item => (
+                                                <Link
+                                                    key={item._id}
+                                                    href={getHref(item)}
+                                                    className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 text-sm text-black"
+                                                    onClick={() => setMobileMenuOpen(false)}
+                                                >
+                                                    {item.image && <img src={urlFor(item.image).url()} alt={item.title} className="w-8 h-8 object-cover rounded" />}
+                                                    <span>{item.title}</span>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+                    <Link href={ROUTES.SPONSORS} className="text-gray-600 hover:underline">Sponsors</Link>
+                    <span className="text-gray-400">|</span>
+                    <a href="#" className="text-gray-600 hover:underline">AI</a>
+                    <span className="text-gray-400">|</span>
+                    {user == null ? (
+                        <>
+                            <Link href={ROUTES.LOGIN} className="text-gray-600 hover:underline">Login</Link>
+                            <span className="text-gray-400">|</span>
+                            <Link href={ROUTES.REGISTER} className="text-gray-600 hover:underline">Register</Link>
+                        </>
+                    ) : (
+                        <div className="relative">
+                            <button onClick={toggleDropdown} className="text-gray-700"><CircleUserRound /></button>
+                            {isOpen && (
+                                <div className="absolute right-0 z-10 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black/5">
+                                    <div className="py-1">
+                                        <button onClick={handleLogout} className="block w-full px-4 py-2 text-left text-sm text-gray-700">Sign out</button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Mobile logo and menu */}
+            <div className="block lg:hidden mx-auto w-96">
+                <img src="https://odeskthemes.com/10/news-portal/assets/img/ad-1.png" alt="Feature" className="float-right" />
+            </div>
+            <div className="h-15 block lg:hidden"></div>
+
+            <div className={`flex lg:hidden flex-wrap items-center justify-between px-4 md:px-20 py-4 bg-[${navigation?.bannerBgColor?.value?.hex}]`}>
+                <div className="lg:col-span-4 text-white font-bold text-4xl">
+                    <Link href={ROUTES.HOME}>
+                        {navigation?.logo?.image?.crop && navigation?.logo?.imageUrl ? (
+                            <img src={buildCroppedImageUrl(navigation.logo.imageUrl, navigation.logo.image.crop)} alt={navigation.logo.alt || 'Logo'} width="130px" />
+                        ) : navigation?.logo?.imageUrl ? (
+                            <img src={navigation.logo.imageUrl} alt={navigation.logo.alt || 'Logo'} width="130px" />
+                        ) : null}
+                    </Link>
+                </div>
+                <div className="">
+                    <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-white focus:outline-none">
+                        <Menu className="w-8 h-8" />
+                    </button>
+                </div>
+            </div>
+
+            {/* Accordion-style Mobile Menu */}
+            <div className={`w-full overflow-hidden transition-all duration-300 ease-in-out lg:hidden px-4 ${mobileMenuOpen ? 'max-h-[800px] py-4' : 'max-h-0'}`}>
+                <div className="space-y-2">
+                    {navigation?.menuItems?.map((item: MenuItem) => (
+                        <div key={item._key}>
+                            <Link href={item.url || "#"} className={`block py-2 px-0 text-sm text-white hover:text-[#fff] ${item.highlight ? 'text-[#fff] font-semibold' : ''}`} onClick={() => setMobileMenuOpen(false)}>
+                                {item.title}
+                            </Link>
+                            {Array.isArray(item.dropdown) && item.dropdown.length > 0 && (
+                                <div className="ml-4 space-y-1">
+                                    {item.dropdown.map(sub => (
+                                        <Link key={sub._key} href={item.url || "#"} className="block py-1 px-2 text-sm text-white hover:text-[#fff]" onClick={() => setMobileMenuOpen(false)}>
+                                            {sub.title}
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+                <div className="relative mt-4">
                     <input
                         type="text"
                         placeholder="Search..."
-                        className="border border-gray-300 rounded-sm pl-2 pr-8 py-1 text-sm focus:outline-none w-full"
+                        className="bg-white border border-gray-300 rounded-lg pl-2 pr-8 py-1 text-sm focus:outline-none w-full"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -122,139 +233,11 @@ const Header: React.FC = () => {
                             })}
                         </div>
                     )}
-                </div>                
-                  
-                    <Link href={ROUTES.SPONSORS} className="text-gray-600 hover:underline">Sponsors</Link>
-                    <span className="text-gray-400">|</span>
-                    <a href="#" className="text-gray-600 hover:underline">AI</a>
-                    <span className="text-gray-400">|</span>
-                    {user == null ? (
-                        <>
-                            <Link href={ROUTES.LOGIN} className="text-gray-600 hover:underline">Login</Link>
-                            <span className="text-gray-400">|</span>
-                            <Link href={ROUTES.REGISTER} className="text-gray-600 hover:underline">Register</Link>
-                        </>
-                    ) : (
-                        <div className="relative">
-                            <button onClick={toggleDropdown} className="text-gray-700"><CircleUserRound /></button>
-                            {isOpen && (
-                                <div className="absolute right-0 z-10 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black/5">
-                                    <div className="py-1">
-                                        <button onClick={handleLogout} className="block w-full px-4 py-2 text-left text-sm text-gray-700">Sign out</button>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    )}
                 </div>
-               
-
             </div>
-            <div className="block lg:hidden mx-auto w-96">
-                <img src="https://odeskthemes.com/10/news-portal/assets/img/ad-1.png" alt="Feature" className="float-right" />
-            </div>
-                        <div className="h-15 block lg:hidden"></div>
 
-                <div className={`flex lg:hidden flex-wrap items-center justify-between px-4 md:px-20 py-4 bg-[${navigation?.bannerBgColor?.value?.hex}]`}>
-                    
-                    <div className="lg:col-span-4 text-white font-bold text-4xl">
-                        <Link href={ROUTES.HOME}>
-                            {navigation?.logo?.image?.crop && navigation?.logo?.imageUrl ? (
-                                <img src={buildCroppedImageUrl(navigation.logo.imageUrl, navigation.logo.image.crop)} alt={navigation.logo.alt || 'Logo'} width="130px" />
-                            ) : navigation?.logo?.imageUrl ? (
-                                <img src={navigation.logo.imageUrl} alt={navigation.logo.alt || 'Logo'} width="130px" />
-                            ) : null}
-                        </Link>
-                    </div>
-                    
-                     
-                <div className="">                
-                    {/* Mobile Menu Toggle */}
-                    <div className="lg:hidden flex items-center px-0">
-                    <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-white focus:outline-none">
-                        <Menu className="w-8 h-8" />
-                    </button>
-                    </div>
-            
-                  
-               </div> 
-                 {/* Accordion-style Mobile Menu */}
-                 <div className={`w-100 overflow-hidden transition-all duration-300 ease-in-out lg:hidden px-4 ${mobileMenuOpen ? 'max-h-[800px] py-4' : 'max-h-0'}`}>
-                        
-                        <div className="space-y-2">
-                            {navigation?.menuItems?.map((item: MenuItem) => (
-                                <div key={item._key}>
-                                    <Link href={item.url || "#"} className={`block py-2 px-0 text-sm text-white hover:text-[#fff] ${item.highlight ? 'text-[#fff] font-semibold' : ''}`} onClick={() => setMobileMenuOpen(false)}>
-                                        {item.title}
-                                    </Link>
-                                    {item.dropdown?.length > 0 && (
-                                        <div className="ml-4 space-y-1">
-                                            {item.dropdown.map(sub => (
-                                                <Link key={sub._key} href={item.url || "#"} className="block py-1 px-2 text-sm text-white hover:text-[#fff]" onClick={() => setMobileMenuOpen(false)}>
-                                                    {sub.title}
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                        <div className="relative mt-4">
-                            <input
-                                type="text"
-                                placeholder="Search..."
-                                className="bg-white border border-gray-300 rounded-lg pl-2 pr-8 py-1 text-sm focus:outline-none w-full"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                            />
-                            <Search
-                                className="absolute right-2 top-6 transform -translate-y-1/2 text-gray-500 cursor-pointer"
-                                size={16}
-                                onClick={handleSearch}
-                            />
-                            {searchQuery && searchResults.length > 0 && (
-                                <div className="absolute mt-1 w-full bg-white border border-gray-300 rounded shadow-md z-50 max-h-60 overflow-y-auto">
-                                    {['page', 'newsArticle', 'insight', 'newsCategory', 'jobListing'].map(type => {
-                                        const groupItems = searchResults.filter(i => i._type === type);
-                                        if (!groupItems.length) return null;
-                                        const groupTitle = {
-                                            page: 'Pages',
-                                            newsArticle: 'News',
-                                            insight: 'Insights',
-                                            newsCategory: 'Category',
-                                            jobListing: 'Jobs'
-                                        }[type];
-                                        return (
-                                            <div key={type}>
-                                                <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50">{groupTitle}</div>
-                                                {groupItems.map(item => (
-                                                    <Link
-                                                        key={item._id}
-                                                        href={getHref(item)}
-                                                        className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 text-sm text-black"
-                                                        onClick={() => setMobileMenuOpen(false)}
-                                                    >
-                                                        {item.image && <img src={urlFor(item.image).url()} alt={item.title} className="w-8 h-8 object-cover rounded" />}
-                                                        <span>{item.title}</span>
-                                                    </Link>
-                                                ))}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                                        
-
-                </div>
-              
-
-
-            {/* Logo and Banner */}
+            {/* Desktop header */}
             <div className={`hidden lg:grid lg:grid-cols-12 gap-6 px-2 lg:px-20 py-2 bg-[${navigation?.bannerBgColor?.value?.hex}]`}>
-                
                 <div className="lg:col-span-4 text-white font-bold text-4xl pt-4">
                     <Link href={ROUTES.HOME}>
                         {navigation?.logo?.image?.crop && navigation?.logo?.imageUrl ? (
@@ -266,15 +249,14 @@ const Header: React.FC = () => {
                 </div>
                 <div className="hidden lg:block lg:col-span-8">
                     <img src="https://odeskthemes.com/10/news-portal/assets/img/ad-1.png" alt="Feature" className="float-right" />
-                </div>                                  
-
-            </div>          
+                </div>
+            </div>
 
             {/* Desktop Nav */}
             <nav className="hidden lg:flex justify-center py-5 bg-white text-base font-medium text-black">
                 <div className="flex items-center divide-x divide-gray-300 text-base">
                     {navigation?.menuItems?.map((item: MenuItem) => (
-                        item.dropdown && item.dropdown.length > 0 ? (
+                        Array.isArray(item.dropdown) && item.dropdown.length > 0 ? (
                             <div key={item._key} className="relative group px-4">
                                 <Link href={item.url || "#"} className={`hover:text-[#12498b] ${item.highlight ? 'text-[#12498b] font-semibold' : ''}`}>{item.title} ▾</Link>
                                 <div className="hidden group-hover:block absolute top-full left-0 bg-white shadow-md rounded border mt-1 z-50">
