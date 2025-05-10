@@ -169,7 +169,7 @@ const Header: React.FC = () => {
             </div>
 
             {/* Accordion-style Mobile Menu */}
-            <div className={`w-full overflow-hidden transition-all duration-300 ease-in-out lg:hidden px-4 ${mobileMenuOpen ? 'max-h-[800px] py-4' : 'max-h-0'}`}>
+            <div className={`w-full overflow-hidden transition-all bg-black duration-300 ease-in-out lg:hidden px-4 ${mobileMenuOpen ? 'max-h-[800px] py-4' : 'max-h-0'}`}>
                 <div className="space-y-2">
                     {navigation?.menuItems?.map((item: MenuItem) => (
                         <div key={item._key}>
