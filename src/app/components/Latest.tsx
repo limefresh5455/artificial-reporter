@@ -57,9 +57,9 @@ const Latest: React.FC = () => {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid gap-6">
         <div>
-          <div className="flex gap-6">
+          <div className="block lg:flex gap-6">
             {latestData.relatedArticles?.slice(0, 2)?.map((story) => (
               <div key={story._id+Math.random()} className="overflow-hidden mb-4">
                 <img

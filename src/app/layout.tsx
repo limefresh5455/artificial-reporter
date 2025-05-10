@@ -46,6 +46,10 @@ export default function RootLayout({
                 }
             }
         };
+        const tailwindLink = document.createElement('link');
+        tailwindLink.rel = 'stylesheet';
+        tailwindLink.href = 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
+        document.head.appendChild(tailwindLink);
         checkUser();
     }, []);
 
@@ -63,7 +67,7 @@ export default function RootLayout({
                 <AuthProvider>
                     <div className="min-h-screen flex flex-col font-poppins">
                         <Header />
-                        <main className="flex-1 container mx-auto px-20 py-6 space-y-10">
+                        <main className="flex-1 container mx-auto px-5 lg:px-20 py-6 space-y-10">
                             {children}
                         </main>
                         <Footer />

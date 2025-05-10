@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
     if (!footerData) return <div>Loading...</div>;
 
     return (
-        <footer className="bg-white pt-10 text-gray-800">
+        <footer className="bg-white pt-10 text-gray-800 px-5 lg:px-0">
             <div className="max-w-7xl mx-auto lg:grid lg:grid-cols-12 gap-6">
                 <div className="lg:col-span-3 md:col-span-6">
                     <h2 className="text-2xl font-bold mb-2">
@@ -38,13 +38,13 @@ const Footer: React.FC = () => {
 
 
                     <p className="text-sm mb-4">{footerData.aboutText}</p>
-                    <div className="flex space-x-3">
+                    <div className="flex mr-4">
                         {footerData.socialLinks.map((link: SocialLink, i: number) => (
                             <Link
                                 key={i}
                                 href={link.url}
                                 target={link.linkTarget}
-                                className="border p-3 rounded hover:bg-gray-600 hover:text-white"
+                                className="border mr-3 p-3 rounded hover:bg-gray-600 hover:text-white"
                             >
                                 {link.platform === 'Facebook' && <Facebook size={16} />}
                                 {link.platform === 'Twitter' && <Twitter size={16} />}
@@ -56,7 +56,7 @@ const Footer: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="lg:col-span-6 md:col-span-6">
+                <div className="lg:col-span-6 md:col-span-6 mt-6 lg:mt-0">
                     <h3 className="text-xl font-semibold mb-3">Categories</h3>
                     <div className="flex flex-wrap">
                         {footerData.categories.map((cat: Category, i: number) => (

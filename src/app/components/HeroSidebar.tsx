@@ -19,7 +19,7 @@ const HeroSidebar: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col space-y-3.5">
+    <div className="flex flex-col space-y-3.5 mt-6 lg:mt-0">
       {items.map((item) => (
         <div key={item._id} className="relative h-31 overflow-hidden">
           <img

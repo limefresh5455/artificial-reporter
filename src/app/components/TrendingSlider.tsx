@@ -90,7 +90,7 @@ const TrendingSlider: React.FC = () => {
           <ChevronRight size={16} />
         </button>
       </div>
-      <div className="text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis max-w-xs">
+      <div className="text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis max-w-xs w-full">
         <Link
           href={`${items[current]?.url || "#"}`} // updated to use string
           className="hover:underline"

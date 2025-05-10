@@ -1612,7 +1612,9 @@ span.post_date {
 .content_wrap ol li, .content_wrap ul li{
     margin-bottom: 15px;
 }
-
+section.about {
+    margin-bottom: 40px;
+}
 .content_wrap h5 {
     font-size: 25px;
     margin: 15px 0 13px;
@@ -1636,4 +1638,10 @@ span.post_date {
     margin-bottom: 15px;
     font-size: 20px;
     font-weight: 600;
+}
+
+@media (max-width: 767px) {
+    .popularWrap{
+      width: 100%;
+ }
 }
