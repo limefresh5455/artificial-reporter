@@ -39,7 +39,7 @@ const NewsletterAd: React.FC = () => {
       console.error('Unexpected error:', error);
       setStatus('Unexpected error occurred.');
     }
-  };
+  };  
 
   return (
     <div>
@@ -69,13 +69,7 @@ const NewsletterAd: React.FC = () => {
 
         {status && <p className="text-sm text-gray-600 px-4 pt-2">{status}</p>}
       </div>
-
-      <div className="mt-6">         
-        <img
-          src="https://odeskthemes.com/10/news-portal/assets/img/news-500x280-4.png"
-          alt="Ad"
-        />
-      </div>
+     
     </div>
   );
 };

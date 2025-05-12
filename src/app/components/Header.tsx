@@ -9,6 +9,7 @@ import { ROUTES } from '../routes';
 import { signOut } from '@/lib/supabase/action';
 import { useAuth } from "@/context/AuthContext";
 import { buildCroppedImageUrl, urlFor } from "@/lib/sanityImage";
+import HeaderAd from "./HeaderAd";
 
 const Header: React.FC = () => {
     const [navigation, setNavigation] = useState<NavigationData | null>(null);
@@ -45,7 +46,7 @@ const Header: React.FC = () => {
         } catch (err) {
             console.error('Search error', err);
         }
-    };
+    };      
 
     useEffect(() => {
         const delayDebounce = setTimeout(() => {
@@ -248,8 +249,9 @@ const Header: React.FC = () => {
                     </Link>
                 </div>
                 <div className="hidden lg:block lg:col-span-8">
-                    <img src="https://odeskthemes.com/10/news-portal/assets/img/ad-1.png" alt="Feature" className="float-right" />
+                   <HeaderAd />
                 </div>
+
             </div>
 
             {/* Desktop Nav */}

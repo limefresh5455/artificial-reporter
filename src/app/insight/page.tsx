@@ -7,6 +7,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { slugify } from '@/lib/slugify';
 import { ROUTES } from '@/app/routes';
 import Link from 'next/link';
+import SidebarAd from '../components/SidebarAd';
+import SidebarAdVerticle from '../components/SidebarAdVerticle';
 
 const PAGE_SIZE = 8;
 
@@ -122,16 +124,10 @@ const TopStories = () => {
 
           <div className="lg:col-span-4 space-y-10">
             <div>
-              <p className="text-lg font-semibold mb-2">Advertisement</p>
-              <button>
-                <img className="w-full" src="https://odeskthemes.com/10/news-portal/assets/img/ad-4.png" alt="Ad" />
-              </button>
+             <SidebarAd />
             </div>
             <div>
-              <p className="text-lg font-semibold mb-2">Advertisement</p>
-              <button>
-                <img className="w-full" src="https://odeskthemes.com/10/news-portal/assets/img/news-500x280-4.png" alt="Ad" />
-              </button>
+             <SidebarAdVerticle />
             </div>
           </div>
         </div>

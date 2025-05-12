@@ -4,6 +4,7 @@ import InsightsTags from "./InsightsTags";
 import NewsletterAd from "./NewsletterAd";
 import Podcast from "./Podcast";
 import Latest from "./Latest";
+import SidebarAd from "./SidebarAd";
 
 
 const MidtwoColumn: React.FC = () => {
@@ -17,10 +18,8 @@ const MidtwoColumn: React.FC = () => {
         </div>
         <div className="lg:col-span-4">
         <NewsletterAd />
-        <div className="mt-6">
-        <InsightsTags />
-        </div>
-                  
+        <SidebarAd />        
+        <InsightsTags /> 
         </div>
       </div> 
      

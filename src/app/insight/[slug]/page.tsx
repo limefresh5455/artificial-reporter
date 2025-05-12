@@ -6,6 +6,8 @@ import { urlFor } from '@/lib/sanityImage';
 import { ROUTES } from '@/app/routes';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import SidebarAdVerticle from '@/app/components/SidebarAdVerticle';
+import SidebarAd from '@/app/components/SidebarAd';
 
 const Story = ({
     params
@@ -278,10 +280,7 @@ const Story = ({
                     <div className="lg:col-span-4 space-y-10">
                         {/* Ad 1 */}
                         <div>
-                            <p className="text-lg font-semibold mb-2">Advertisement</p>
-                            <button>
-                                <img className="w-full" src="https://odeskthemes.com/10/news-portal/assets/img/news-500x280-4.png" alt="Ad" />
-                            </button>
+                            <SidebarAd />
                         </div>
 
                         {/* Related Stories */}
@@ -314,10 +313,7 @@ const Story = ({
 
                         {/* Ad 2 */}
                         <div>
-                            <p className="text-lg font-semibold mb-2">Advertisement</p>
-                            <button>
-                                <img className="w-full" src="https://odeskthemes.com/10/news-portal/assets/img/ad-4.png" alt="Ad" />
-                            </button>
+                           <SidebarAdVerticle />
                         </div>
                     </div>
                 </div>

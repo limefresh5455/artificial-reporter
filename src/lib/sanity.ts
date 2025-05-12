@@ -216,7 +216,44 @@ export async function getHeroData(): Promise<HeroData> {
     return client.fetch(query);
 }
 
-// Trending
+// Ad Apace
+export const getActiveHeaderAd = async () => {
+    const now = new Date().toISOString();
+    const query = `*[_type == "adSpaceBlock" && placement == "header" && active == true && startDate <= $now && endDate >= $now][0]{
+      title,
+      link,
+      alt,
+      "imageUrl": image.asset->url
+    }`;
+    return await client.fetch(query, { now });
+  };
+  
+  export const getActiveSidebarAd = async () => {
+    const now = new Date().toISOString();
+    const query = `*[_type == "adSpaceBlock" && placement == "sidebar" && active == true && startDate <= $now && endDate >= $now][0]{
+      title,
+      link,
+      alt,
+      "imageUrl": image.asset->url
+    }`;
+    return await client.fetch(query, { now });
+  };
+  
+  
+  export const getActiveSidebarAdVerticle = async () => {
+    const now = new Date().toISOString();
+    const query = `*[_type == "adSpaceBlock" && placement == "sidebar-vertical" && active == true && startDate <= $now && endDate >= $now][0]{
+      title,
+      link,
+      alt,
+      "imageUrl": image.asset->url
+    }`;
+    return await client.fetch(query, { now });
+  };
+  
+
+  
+// Trending Verticle
 export async function getTrendingData(): Promise<TrendingData> {
     const query = `*[_type == "tranding"][0]{
     items[] {
