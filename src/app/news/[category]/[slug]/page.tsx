@@ -167,9 +167,14 @@ const Story = ({
                                             </div>
                                             <h2 className="section_heading">{story.title}</h2>
                                             <div className="post_author_detail">
-                                                <a className="post_author" href="#">
-                                                    <span className="post_author_img"><img alt="" src={urlFor(story.editor.image).url()} />{story.editor.name}</span>
-                                                </a>
+
+                                                {story.editor ? (
+                                                    <a className="post_author" href="#">
+                                                        <span className="post_author_img"><img alt="" src={story.editor?.image ? urlFor(story.editor.image).url() : ''} />{story.editor?.name}</span>
+                                                    </a>
+                                                ) : <p></p>}
+
+
                                                 <span className="post_date">{new Date(story.date).toLocaleDateString("en-US", {
                                                     year: "numeric",
                                                     month: "long",
@@ -224,7 +229,7 @@ const Story = ({
 
                                         {/* Ad 2 */}
                                         <div>
-                                           <SidebarAdVerticle />
+                                            <SidebarAdVerticle />
                                         </div>
                                     </div>
                                 </div>
@@ -273,7 +278,7 @@ const Story = ({
                         <div className="lg:col-span-4 space-y-10">
                             {/* Ad 1 */}
                             <div>
-                               <SidebarAd />
+                                <SidebarAd />
                             </div>
 
                             {/* Related Stories */}
@@ -306,7 +311,7 @@ const Story = ({
 
                             {/* Ad 2 */}
                             <div>
-                               <SidebarAdVerticle />
+                                <SidebarAdVerticle />
                             </div>
                         </div>
                     </div>
