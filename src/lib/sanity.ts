@@ -237,6 +237,9 @@ export const getActiveHeaderAd = async () => {
       title,
       link,
       alt,
+      adType,
+      googleAdScript,
+      customEmbedCode,
       "imageUrl": image.asset->url
     }`;
     return await client.fetch(query, { now });
@@ -249,6 +252,9 @@ export const getActiveHeaderAd = async () => {
       title,
       link,
       alt,
+      adType,
+      googleAdScript,
+      customEmbedCode,
       "imageUrl": image.asset->url
     }`;
     return await client.fetch(query, { now });
