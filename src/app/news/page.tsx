@@ -51,7 +51,7 @@ const TopStories = () => {
             <h2 className="text-3xl font-semibold mb-3">News</h2>
 
             {isLoading ? (
-              <p>Loading...</p>
+              ''
             ) : (
               <div className="grid sm:grid-cols-2 gap-6">
                 {stories.map((story: any, index: number) => (

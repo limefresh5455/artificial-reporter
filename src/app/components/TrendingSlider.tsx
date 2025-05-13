@@ -63,7 +63,7 @@ const TrendingSlider: React.FC = () => {
     }
   };
 
-  if (loading) return <div className="text-sm text-gray-500">Loading trending items...</div>;
+  if (loading) return '';
   if (error) return <div className="text-sm text-red-500">{error}</div>;
   if (!items.length) return <div className="text-sm text-gray-500">No trending items available.</div>;
 

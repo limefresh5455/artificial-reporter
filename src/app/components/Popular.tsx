@@ -24,7 +24,7 @@ const Popular: React.FC = () => {
   }, []);
 
   if (!popularData) {
-    return <div>Loading...</div>; 
+    return ''; 
   }
 
   

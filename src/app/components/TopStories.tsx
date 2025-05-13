@@ -43,7 +43,7 @@ const CardSlider: React.FC = () => {
     fetchData();
   }, []);
 
-  if (loading) return <div className="text-center py-8">Loading top stories...</div>;
+  if (loading) return '';
   if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
   if (!data || !data.relatedArticles || data.relatedArticles.length === 0) {
     return <div className="text-center py-8">No top stories available.</div>;

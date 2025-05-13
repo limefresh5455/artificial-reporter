@@ -61,7 +61,7 @@ const Story = ({
     }, []);
 
     if (isLoading) {
-        return <p>Loading...</p>;
+        return '';
     }
 
     if (!story) {

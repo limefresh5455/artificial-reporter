@@ -46,7 +46,7 @@ const Header: React.FC = () => {
         } catch (err) {
             console.error('Search error', err);
         }
-    };      
+    };
 
     useEffect(() => {
         const delayDebounce = setTimeout(() => {
@@ -148,7 +148,7 @@ const Header: React.FC = () => {
 
             {/* Mobile logo and menu */}
             <div className="block lg:hidden mx-auto w-96">
-                <img src="https://odeskthemes.com/10/news-portal/assets/img/ad-1.png" alt="Feature" className="float-right" />
+                <HeaderAd />
             </div>
             <div className="h-15 block lg:hidden"></div>
 
@@ -249,7 +249,7 @@ const Header: React.FC = () => {
                     </Link>
                 </div>
                 <div className="hidden lg:block lg:col-span-8">
-                   <HeaderAd />
+                    <HeaderAd />
                 </div>
 
             </div>

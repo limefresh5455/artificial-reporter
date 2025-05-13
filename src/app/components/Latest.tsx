@@ -45,7 +45,7 @@ const Latest: React.FC = () => {
   };
 
   if (!latestData) {
-    return <div>Loading...</div>;
+    return '';
   }
 
   return (

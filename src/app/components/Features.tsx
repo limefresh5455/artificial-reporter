@@ -34,7 +34,7 @@ const CardSlider: React.FC = () => {
   }, []);
 
   if (!features) {
-    return <div>Loading...</div>;
+    return '';
   }
 
   const getImageUrl = (source: any) => {

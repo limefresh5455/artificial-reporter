@@ -223,6 +223,9 @@ export const getActiveHeaderAd = async () => {
       title,
       link,
       alt,
+      adType,
+      googleAdScript,
+      customEmbedCode,
       "imageUrl": image.asset->url
     }`;
     return await client.fetch(query, { now });
@@ -499,13 +502,17 @@ export async function getStoryData(params = '', type = ''): Promise<any[]> {
         _id,
         _createdAt,
         _updatedAt,
-        publishedAt,
+        date,
         _rev,
         _type,
         title,
         content,
         eventType,
         sponsored,
+        editor->{
+        name,
+        image
+        },
         image,
         tags[]->{
         title},

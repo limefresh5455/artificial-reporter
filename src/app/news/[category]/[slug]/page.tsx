@@ -61,7 +61,7 @@ const Story = ({
     }, []);
 
     if (isLoading) {
-        return <p>Loading...</p>;
+        return '';
     }
 
     if (!story) {
@@ -168,9 +168,9 @@ const Story = ({
                                             <h2 className="section_heading">{story.title}</h2>
                                             <div className="post_author_detail">
                                                 <a className="post_author" href="#">
-                                                    <span className="post_author_img"><img alt="" src="https://odeskthemes.com/10/news-portal/assets/img/img-1.jpg" />adipiscing elit</span>
+                                                    <span className="post_author_img"><img alt="" src={urlFor(story.editor.image).url()} />{story.editor.name}</span>
                                                 </a>
-                                                <span className="post_date">{new Date(story.publishedAt).toLocaleDateString("en-US", {
+                                                <span className="post_date">{new Date(story.date).toLocaleDateString("en-US", {
                                                     year: "numeric",
                                                     month: "long",
                                                     day: "2-digit",

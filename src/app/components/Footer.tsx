@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
         fetchFooterData();
     }, []);
 
-    if (!footerData) return <div>Loading...</div>;
+    if (!footerData) return '';
 
     return (
         <footer className="bg-white pt-10 text-gray-800 px-5 lg:px-0">

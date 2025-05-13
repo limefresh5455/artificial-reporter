@@ -22,7 +22,7 @@ const Page = ({
         fetchData();
     }, []);
 
-    if (!pageData) return <div>Loading...</div>;
+    if (!pageData) return '';
 
 
 

@@ -56,7 +56,7 @@ const CategroyNews = ({
                         <h2 className="text-3xl font-semibold mb-3">{CategoryTitle}</h2>
 
                         {isLoading ? (
-                            <p>Loading...</p>
+                            ''
                         ) : (
                             <div className="grid sm:grid-cols-2 gap-6">
                                 {stories.length > 0 ? stories?.map((story: any, index: number) => (

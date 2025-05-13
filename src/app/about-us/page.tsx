@@ -30,7 +30,7 @@ const About: React.FC = () => {
         fetchData();
     }, []);
 
-    if (!aboutData) return <div>Loading...</div>;
+    if (!aboutData) return '';
 
 
 
