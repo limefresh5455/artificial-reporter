@@ -477,8 +477,12 @@ const AIJobs: React.FC = () => {
                                                         {job.name}{" (" + formatWebsiteUrl(job.website) + ")"}
                                                     </a>
                                                     <span className="text-sm text-gray-500 flex items-center gap-1 mt-2">
+                                                        {job.description.slice(0, 145)}
+                                                    </span>
 
-                                                        <b>{job.description.slice(0, 100)}...</b>
+                                                    <span className="text-sm text-gray-500 flex items-center gap-1 mt-2">
+
+                                                        <b>{job.locationCity}, {job.locationState}, {job.locationCountry}</b>
                                                     </span>
                                                 </div>
                                             </div>

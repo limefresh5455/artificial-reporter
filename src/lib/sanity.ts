@@ -905,14 +905,12 @@ export async function getCompanies(
     conditions.push(`locationCity == "${filters.locationCity}"`);
   }
 
-  if (filters.employeeCount) {
-    const employeeFilter = Array.isArray(filters.employees)
-      ? filters.employees[0] // take the first value if it's an array
-      : filters.employees;
+  if (filters.employees) {
 
-    const cleanedCount = employeeFilter.replace('+', '');
 
-    conditions.push(`employeeCount > ${cleanedCount}`);
+    const cleanedCount = filters.employees + "".replace('+', '');
+
+    conditions.push(`employeeCount > ${parseInt(cleanedCount)}`);
   }
 
   if (filters.isAICompany !== undefined) {
@@ -969,11 +967,11 @@ export async function getTotalCompaniesCount(
   }
 
   if (filters.employees) {
-    
 
-    const cleanedCount = filters.employees+"".replace('+', '');
 
-    conditions.push(`employeeCount > "${cleanedCount}"`);
+    const cleanedCount = filters.employees + "".replace('+', '');
+
+    conditions.push(`employeeCount > ${parseInt(cleanedCount)}`);
   }
 
   if (filters.isAICompany !== undefined) {
@@ -1023,8 +1021,8 @@ export async function getCompaniesLocations(searchTerm: string): Promise<any> {
 
   // Remove duplicates based on the company name
 
-  const deduplicatedResults = results.filter((value:any, index:any, self:any) => {
-    return index === self.findIndex((t:any) => (
+  const deduplicatedResults = results.filter((value: any, index: any, self: any) => {
+    return index === self.findIndex((t: any) => (
       t.locationCity === value.locationCity ||
       t.locationState === value.locationState ||
       t.locationCountry === value.locationCountry
