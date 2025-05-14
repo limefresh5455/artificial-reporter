@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { getJobs, getTotalJobsCount } from '@/lib/sanity';
+import { getCompanies, getTotalCompaniesCount } from '@/lib/sanity';
 import { urlFor } from '@/lib/sanityImage';
 import { Search, MapPin, ChevronDown, Clock, Bookmark, ExternalLink, List, Grid, Plus, Minus, ChevronRight, ChevronLeft } from 'lucide-react';
 import { ROUTES } from '@/app/routes';
@@ -26,7 +26,7 @@ interface Filter {
 const AIJobs: React.FC = () => {
     const [jobs, setJobs] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalCount, setTotalCount] = useState<number>(0);
+    const [totalCount, setTotalCount] = useState<any>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
     const [activeFilter, setActiveFilter] = useState<string | null>(null);
@@ -108,126 +108,73 @@ const AIJobs: React.FC = () => {
 
     const filters: Filter[] = [
         {
-            id: 'remote',
-            title: 'Remote',
-            options: ['True', 'False'],
-        },
-        {
-            id: 'datePosted',
-            title: 'Date Posted',
-            options: ['Last 24 hours', 'Last 3 days', 'Last 7 days', 'Last 14 days'],
-        },
-        {
-            id: 'pay',
-            title: 'Pay',
-            options: ['$0 – $10,000', '$10,000 – $20,000', '$20,000 – $30,000', '$30,000 – $50,000', '$50,000 – $100,000', '$100,000+'],
-        },
-
-
-        // {
-        //     id: 'distance',
-        //     title: 'Distance',
-        //     options: [
-        //         'Exact location only',
-        //         'Within 5 miles',
-        //         'Within 10 miles',
-        //         'Within 15 miles',
-        //         'Within 25 miles',
-        //         'Within 35 miles',
-        //         'Within 50 miles',
-        //         'Within 100 miles',
-        //     ],
-        // },
-        {
-            id: 'jobType',
-            title: 'Job Type',
-            type: 'checkbox',
+            id: 'companyType',
+            title: 'Company Type',
             options: [
-                { value: '01', label: 'Full-time' },
-                { value: '02', label: 'Part-time' },
-                // { value: '03', label: 'Temporary' },
-                { value: '04', label: 'Contract' },
-                { value: '05', label: 'Internship' },
-                // { value: '06', label: 'Volunteer', hidden: true },
-                // { value: '07', label: 'Permanent', hidden: true },
-                // { value: '08', label: 'Freelance', hidden: true },
-                // { value: '09', label: 'Tenure track', hidden: true },
-                // { value: '10', label: 'Seasonal', hidden: true },
-            ],
-        },
-        // {
-        //     id: 'company',
-        //     title: 'Company',
-        //     options: [
-        //         'All Companies',
-        //         'Amazon.com',
-        //         'PwC',
-        //         'Flagship Pioneering, Inc.',
-        //         'Accenture',
-        //         'Google',
-        //         'Boston Consulting Group',
-        //         'Sanofi',
-        //         'Takeda Pharmaceuticals',
-        //         'Red Hat',
-        //         'Crowe LLP',
-        //     ],
-        // },
-        // {
-        //     id: 'employer',
-        //     title: 'Employer/Recruiter',
-        //     options: ['Employer and Recruiter', 'Employer', 'Staffing agency'],
-        // },
-        // {
-        //     id: 'location',
-        //     title: 'Location',
-        //     search: true,
-        //     options: [
-        //         'Boston, MA',
-        //         'Cambridge, MA',
-        //         'Somerville, MA',
-        //         'Charlestown, MA',
-        //         'Brighton, MA',
-        //         'Brookline, MA',
-        //         'Chelsea, MA',
-        //         'Allston, MA',
-        //     ],
-        // },
-        {
-            id: 'experience',
-            title: 'Experience Level',
-            type: 'checkbox',
-            options: [
-                { value: '01', label: 'All' },
-                { value: '02', label: 'Mid' },
-                { value: '03', label: 'Senior' },
-                { value: '04', label: 'Entry' },
+                'AI Startup',
+                'AI Research Lab',
+                'AI Consultancy',
+                'Enterprise AI Vendor',
+                'AI Tool Provider',
+                'AI Product Company',
+                'Open-Source Organization',
+                'AI Platform/Infrastructure',
+                'AI-Powered Service Company',
+                'Other',
             ],
         },
         {
-            id: 'education',
-            title: 'Education',
+            id: 'productsServices',
+            title: 'Products / Services',
             options: [
-                'All',
-                'High School',
-                "Associate’s",
-                "Bachelor’s",
-                "Master’s",
-                'Doctoral',
+                'Computer Vision',
+                'Predictive Analytics',
+                'Generative AI',
+                'AI for Healthcare',
+                'AI Chatbots',
+                'AI for Finance',
+                'AI for Retail / eCommerce',
+                'AI Infrastructure / MLOps',
+                'Robotics & Automation',
+                'AI APIs & SDKs',
+                'AI Security & Risk',
+                'Recommendation Engines',
+                'AI for Education',
+                'Custom AI Solutions',
+                'Other',
             ],
         },
-
-        // {
-        //     id: 'encouraged',
-        //     title: 'Encouraged to apply',
-        //     type: 'checkbox',
-        //     options: [
-        //         { value: '01', label: 'Fair chance' },
-        //         { value: '02', label: 'Military encouraged' },
-        //         { value: '03', label: 'Back to work' },
-        //         { value: '04', label: 'No degree' },
-        //     ],
-        // },
+        {
+            id: 'employees',
+            title: 'Employees',
+            options: [
+                '1–10',
+                '11–50',
+                '51–200',
+                '201–500',
+                '501–1000',
+                '1001–5000',
+                '5000+',
+            ],
+        },
+        {
+            id: 'financingRound',
+            title: 'Financing Round',
+            options: [
+                'Bootstrapped',
+                'Pre-Seed',
+                'Seed',
+                'Series A',
+                'Series B',
+                'Series C',
+                'Series D+',
+                'IPO',
+                'Acquired',
+                'Undisclosed',
+            ],
+        },
     ];
+
 
     const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
@@ -247,8 +194,8 @@ const AIJobs: React.FC = () => {
             // jobType: ['Full-time'],
         };
         const [data, count] = await Promise.all([
-            getJobs(currentPage, PAGE_SIZE, selectedOptions),
-            getTotalJobsCount(selectedOptions),
+            getCompanies(currentPage, PAGE_SIZE, selectedOptions),
+            getTotalCompaniesCount(selectedOptions),
         ]);
         setJobs(data);
         console.log(data);
@@ -292,7 +239,7 @@ const AIJobs: React.FC = () => {
                 <div className="container mx-auto px-4">
                     <div className="row">
                         <div className="col-12">
-                            <h2 className="section_heading text-3xl font-bold text-center mb-8">Find AI Jobs</h2>
+                            <h2 className="section_heading text-3xl font-bold text-center mb-8">AI Company Directory</h2>
                             <div className="job_search_inner">
                                 <div className="search_box grid grid-cols-3 gap-4 items-center">
                                     <div className="input_box relative">
@@ -302,7 +249,7 @@ const AIJobs: React.FC = () => {
                                             placeholder="Artificial Intelligence"
                                             className="w-full pl-8 pr-4 py-2 focus:outline-none"
                                             onChange={(e) => selectOption(
-                                                "title",
+                                                "name",
                                                 e.target.value
                                             )}
                                         />
@@ -484,62 +431,48 @@ const AIJobs: React.FC = () => {
                                                     href="#"
                                                     className="text-lg font-semibold text-gray-800 hover:text-blue-600"
                                                 >
-                                                    {job.title}
+                                                    {job.name}
                                                 </a>
                                             </div>
 
                                             {/* Company Info */}
-                                            <div className="sm:col-span-5 flex items-start sm:items-center gap-4">
+                                            <div className="sm:col-span-10 flex items-start sm:items-center gap-4">
                                                 <img
-                                                    src={job.company?.logo?.asset?.url}
+                                                    src={job?.logo && urlFor(job?.logo.asset).url()}
                                                     alt="Company Logo"
                                                     className="w-12 h-12 rounded-md object-contain"
                                                 />
                                                 <div>
                                                     <a
-                                                        href="#"
-                                                        className={`text-sm capitalize px-2 py-1 rounded 
-                              ${typeStyles[job.jobType as keyof typeof typeStyles]}`}
+                                                        href={job.website}
+                                                        className={`text-sm capitalize px-2 py-1 rounded  bg-green-100 text-green-700`}
                                                     >
-                                                        {job.jobType}
+                                                        {job.website}
                                                     </a>
                                                     <span className="text-sm text-gray-500 flex items-center gap-1 mt-2">
-                                                        <Clock className="w-4 h-4" />
-                                                        <b> Posted {job.datePosted ? new Date(job.datePosted).toDateString() : ''}</b>
+
+                                                        <b>{job.description.slice(0, 100)}...</b>
                                                     </span>
                                                 </div>
                                             </div>
 
-                                            {/* Location & Salary */}
-                                            <div className="sm:col-span-4">
-                                                <div className="text-sm">
-                                                    <a href="#" className="text-gray-600 hover:text-blue-600">
-                                                        {job.location}
-                                                    </a>
-                                                </div>
-                                                <div className="text-sm">
-                                                    From{" "}
-                                                    <span className="text-gray-800 font-semibold">
-                                                        {job.payAmount}
-                                                    </span>{" "}
-                                                    per {job.hourlyOrSalary?.toLowerCase()}
-                                                </div>
-                                            </div>
+
 
                                             {/* Actions */}
-                                            <div className="sm:col-span-3 flex gap-2">
+                                            <div className="sm:col-span-2 flex flex-col gap-2">
                                                 <a
                                                     href="#"
                                                     className="py-2 px-4 bg-[#005025] text-white rounded-md flex items-center gap-2 hover:bg-[#00bf58]"
                                                 >
-                                                    Apply
+                                                    Consulting
                                                     <ExternalLink className="w-4 h-4" />
                                                 </a>
                                                 <a
                                                     href="#"
-                                                    className="py-2 px-4 hover:bg-[#e7f6ef] hover:border-[#e7f6ef] border border-gray-300 rounded-md flex items-center"
+                                                    className="py-2 px-4 bg-[#005025] text-white rounded-md flex items-center gap-2 hover:bg-[#00bf58]"
                                                 >
-                                                    <Bookmark className="w-4 h-4" />
+                                                    AI Apps
+                                                    <ExternalLink className="w-4 h-4" />
                                                 </a>
                                             </div>
                                         </div>
@@ -555,42 +488,38 @@ const AIJobs: React.FC = () => {
 
                                             {/* Company Logo */}
                                             <a href="#" className="company_logo">
-                                                <img src={job.company?.logo?.asset?.url} alt={`${job.company?.name} logo`} className="w-12 h-12 rounded-md mb-2 object-contain" />
+                                                <img src={job?.logo && urlFor(job?.logo?.asset).url()} alt={`${job?.name} logo`} className="w-12 h-12 rounded-md mb-2 object-contain" />
                                             </a>
 
-                                            {/* Save Button */}
-                                            <a href="#" className="save-btn absolute top-4 right-4">
-                                                <Bookmark className="w-5 h-5 text-gray-600" />
-                                            </a>
+
 
                                             {/* Job Type */}
-                                            <span className={`text-xs px-2 py-1 text-center rounded font-medium inline-block job-duration ${typeStyles[job.jobType as keyof typeof typeStyles]}`}>
-                                                {job.jobType}
+                                            <span className={`text-sm px-4 py-1 text-center rounded font-medium inline-block job-duration bg-green-100 text-green-700`}>
+                                                {job.website}
                                             </span>
 
                                             {/* Job Title */}
                                             <a href={`/jobs/${job.id}`} className="title text-lg font-semibold text-gray-800 hover:text-blue-600 mt-2">
-                                                {job.title}
+                                                {job.name}
                                             </a>
 
-                                            {/* Posted Date */}
-                                            <span className="post_time text-sm text-gray-500 flex items-center gap-1 mt-2">
-                                                <Clock className="w-4 h-4" />
-                                                Posted {job.datePosted ? new Date(job.datePosted).toDateString() : ''}
+                                            <span className="text-sm text-gray-500 flex items-center gap-1 mt-2">
+
+                                                <b>{job.description.slice(0, 100)}...</b>
                                             </span>
 
-                                            {/* Job Salary */}
-                                            <div className="job-salary text-sm mt-2">
-                                                From <span className="text-gray-800 font-semibold">{job.payAmount}</span> per {job.hourlyOrSalary?.toLowerCase()}
-                                            </div>
-
                                             {/* Job Location and Apply Button */}
-                                            <div className="d-flex align-items-center justify-content-between mt-auto flex justify-between items-center">
-                                                <div className="job-location text-sm">
-                                                    <a href="#" className="text-gray-600 hover:text-blue-600">{job.location}</a>
-                                                </div>
-                                                <a href="#" className="apply-btn py-2 px-4 bg-[#005025] text-white rounded-md flex items-center gap-2 hover:bg-blue-700">
-                                                    Apply
+                                            <div className="d-flex mt-5 items-center  flex justify-start gap-5">
+
+                                                <a href="#" className=" py-2 px-4 bg-[#005025] text-white rounded-md flex items-center  gap-2">
+                                                    Consulting
+                                                    <ExternalLink className="w-4 h-4" />
+                                                </a>
+                                                <a
+                                                    href="#"
+                                                    className="py-2 px-4 bg-[#005025] text-white  rounded-md flex items-center gap-2"
+                                                >
+                                                    AI Apps
                                                     <ExternalLink className="w-4 h-4" />
                                                 </a>
                                             </div>

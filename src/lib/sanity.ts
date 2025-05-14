@@ -876,6 +876,112 @@ export async function getTotalJobsCount(filters: Filters): Promise<number> {
     return await client.fetch(query);
 }
 
+
+
+export async function getCompanies(
+  page = 1,
+  pageSize = 10,
+  filters: Record<string, any> = {}
+): Promise<any[]> {
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize;
+
+  const conditions: string[] = [];
+
+  if (filters.name && typeof filters.name === "string") {
+    conditions.push(`name match "*${filters.name}*"`);
+  }
+
+  if (filters.locationCountry) {
+    conditions.push(`locationCountry == "${filters.locationCountry}"`);
+  }
+
+  if (filters.locationState) {
+    conditions.push(`locationState == "${filters.locationState}"`);
+  }
+
+  if (filters.locationCity) {
+    conditions.push(`locationCity == "${filters.locationCity}"`);
+  }
+
+  if (filters.employeeCount) {
+    conditions.push(`employeeCount == "${filters.employeeCount}"`);
+  }
+
+  if (filters.isAICompany !== undefined) {
+    conditions.push(`isAICompany == ${filters.isAICompany}`);
+  }
+
+  if (filters.category) {
+    conditions.push(`category._ref == "${filters.category}"`);
+  }
+
+  const whereClause = conditions.length > 0
+    ? `*[ _type == "aiCompany" && ${conditions.join(" && ")} ]`
+    : `*[ _type == "aiCompany" ]`;
+
+  const query = `
+    ${whereClause} | order(_createdAt desc) [${start}...${end}] {
+      _id,
+      name,
+      description,
+      employeeCount,
+      isAICompany,
+      logo,
+      linkedin,
+      website,
+      locationCity,
+      locationState,
+      locationCountry,
+      category->{ _id, title }
+    }
+  `;
+
+  return await client.fetch(query);
+}
+
+export async function getTotalCompaniesCount(
+  filters: Filters): Promise<any[]> {
+  
+  const conditions: string[] = [];
+
+  if (filters.name && typeof filters.name === "string") {
+    conditions.push(`name match "*${filters.name}*"`);
+  }
+
+  if (filters.locationCountry) {
+    conditions.push(`locationCountry == "${filters.locationCountry}"`);
+  }
+
+  if (filters.locationState) {
+    conditions.push(`locationState == "${filters.locationState}"`);
+  }
+
+  if (filters.locationCity) {
+    conditions.push(`locationCity == "${filters.locationCity}"`);
+  }
+
+  if (filters.employeeCount) {
+    conditions.push(`employeeCount == "${filters.employeeCount}"`);
+  }
+
+  if (filters.isAICompany !== undefined) {
+    conditions.push(`isAICompany == ${filters.isAICompany}`);
+  }
+
+  if (filters.category) {
+    conditions.push(`category._ref == "${filters.category}"`);
+  }
+
+  const whereClause = conditions.length > 0
+    ? `*[ _type == "aiCompany" && ${conditions.join(" && ")} ]`
+    : `*[ _type == "aiCompany" ]`;
+
+  const query = `count(${whereClause})`;
+
+  return await client.fetch(query);
+}
+
 export async function getSiteLogo(): Promise<any> {
     const query = `*[_type == "logo"][0]{
         alt,
