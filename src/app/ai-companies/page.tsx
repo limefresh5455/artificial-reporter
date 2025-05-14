@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { getCompanies, getTotalCompaniesCount } from '@/lib/sanity';
 import { urlFor } from '@/lib/sanityImage';
-import { Search, MapPin, ChevronDown, Clock, Bookmark, ExternalLink, List, Grid, Plus, Minus, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Search, Building2, MapPin, ChevronDown, Clock, Bookmark, ExternalLink, List, Grid, Plus, Minus, ChevronRight, ChevronLeft } from 'lucide-react';
 import { ROUTES } from '@/app/routes';
 import Link from 'next/link';
 import LocationInput from "@/app/components/LocationInput";
@@ -286,14 +286,14 @@ const AIJobs: React.FC = () => {
                                         />
                                     </div>
 
-                                    
-                                        {/* <MapPin size={20} /> */}
-                                        <LocationInput
-                                            onSelect={handleLocationSelect}
-                                            placeholder="Location"
-                                            className=" input_box"
-                                        />
-                                    
+
+                                    {/* <MapPin size={20} /> */}
+                                    <LocationInput
+                                        onSelect={handleLocationSelect}
+                                        placeholder="Location"
+                                        className=" input_box"
+                                    />
+
 
                                     <div className="flex justify-end">
                                         <button
@@ -463,11 +463,14 @@ const AIJobs: React.FC = () => {
 
                                             {/* Company Info */}
                                             <div className="sm:col-span-10 flex items-start sm:items-center gap-4">
-                                                <img
-                                                    src={job?.logo && urlFor(job?.logo.asset).url()}
-                                                    alt="Company Logo"
-                                                    className="w-12 h-12 rounded-md object-contain"
-                                                />
+                                                {job?.logo ?
+                                                    (<img
+                                                        src={job?.logo && urlFor(job?.logo.asset).url()}
+                                                        alt="Company Logo"
+                                                        className="w-12 h-12 rounded-md object-contain"
+                                                    />) :
+                                                    <Building2 size={66} />
+                                                }
                                                 <div>
                                                     <a
                                                         href={job.website}
@@ -519,8 +522,15 @@ const AIJobs: React.FC = () => {
 
                                             {/* Company Logo */}
                                             <a href="#" className="company_logo">
-                                                <img src={job?.logo && urlFor(job?.logo?.asset).url()} alt={`${job?.name} logo`} className="w-12 h-12 rounded-md mb-2 object-contain" />
+                                                {job?.logo ?
+                                                    (<img src={job?.logo && urlFor(job?.logo?.asset).url()} alt={`${job?.name} logo`} className="w-12 h-12 rounded-md mb-2 object-contain" />) :
+                                                    <Building2 size={66} className=" mb-2 " />
+                                                }
+
+
                                             </a>
+
+
 
 
 
