@@ -595,7 +595,7 @@ body {
 .job_search-result .search_box {
     background: #fff;
     border-radius: 10px;
-    overflow: hidden;
+    /* overflow: hidden; */
     align-items: center;
     grid-template-columns: 1fr 1fr auto;
 }

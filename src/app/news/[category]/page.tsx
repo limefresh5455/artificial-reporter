@@ -71,7 +71,7 @@ const CategroyNews = ({
                                             <div className="text-sm text-gray-600 mb-1">
                                                 <Link href="#" className="text-blue-600">{story.eventType || "Category"}</Link>
                                                 <span className="px-1">/</span>
-                                                <span>{new Date(story.publishedAt).toLocaleDateString("en-US", {
+                                                <span>{new Date(story.date).toLocaleDateString("en-US", {
                                                     year: "numeric",
                                                     month: "long",
                                                     day: "2-digit",

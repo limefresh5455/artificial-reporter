@@ -15,3 +15,14 @@ export function slugify  (text: string) {
       .replace(/(^-|-$)+/g, '');   // Remove starting/ending hyphens
   };
   
+
+  export function formatWebsiteUrl(url: string): string {
+  if (!url) return "";
+
+  // Add 'www.' if missing and starts with 'https://'
+  if (url.startsWith("https://") && !url.startsWith("https://www.")) {
+    return url.replace("https://", "www.");
+  }
+
+  return url;
+}

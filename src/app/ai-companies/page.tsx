@@ -6,6 +6,8 @@ import { urlFor } from '@/lib/sanityImage';
 import { Search, MapPin, ChevronDown, Clock, Bookmark, ExternalLink, List, Grid, Plus, Minus, ChevronRight, ChevronLeft } from 'lucide-react';
 import { ROUTES } from '@/app/routes';
 import Link from 'next/link';
+import LocationInput from "@/app/components/LocationInput";
+import { formatWebsiteUrl } from '@/lib/slugify';
 
 const PAGE_SIZE = 8;
 
@@ -108,71 +110,95 @@ const AIJobs: React.FC = () => {
 
     const filters: Filter[] = [
         {
-            id: 'companyType',
-            title: 'Company Type',
-            options: [
-                'AI Startup',
-                'AI Research Lab',
-                'AI Consultancy',
-                'Enterprise AI Vendor',
-                'AI Tool Provider',
-                'AI Product Company',
-                'Open-Source Organization',
-                'AI Platform/Infrastructure',
-                'AI-Powered Service Company',
-                'Other',
-            ],
+            id: 'isAICompany',
+            title: 'AI Company',
+            options: ['True', 'False'],
         },
         {
-            id: 'productsServices',
-            title: 'Products / Services',
+            id: 'category',
+            title: 'Company Type',
             options: [
-                'Computer Vision',
-                'Predictive Analytics',
-                'Generative AI',
-                'AI for Healthcare',
-                'AI Chatbots',
-                'AI for Finance',
-                'AI for Retail / eCommerce',
-                'AI Infrastructure / MLOps',
-                'Robotics & Automation',
-                'AI APIs & SDKs',
-                'AI Security & Risk',
-                'Recommendation Engines',
-                'AI for Education',
-                'Custom AI Solutions',
-                'Other',
-            ],
+                "Software Development",
+                "Computer Software",
+                "IT Services and IT Consulting",
+                "Technology, Information and Internet",
+                "Information Technology & Services",
+                "Computer and Network Security",
+                "Technology, Information and Media",
+                "Data Infrastructure and Analytics",
+                "Information Services",
+                "Internet Marketplace Platforms",
+                "IT System Custom Software Development",
+                "Computer Games",
+                "Data Security Software Products",
+                "Computer Networking Products",
+                "Embedded Software Products",
+                "Mobile Computing Software Products",
+                "Desktop Computing Software Products",
+                "Climate Data and Analytics",
+                "IT System Data Services",
+                "Business Intelligence Platforms",
+                "Business Consulting and Services",
+                "Climate Technology Product Manufacturing",
+                "Internet Publishing",
+                "IT System Testing and Evaluation",
+                "Mobile Gaming Apps",
+                "Social Networking Platforms",
+                "Space Research and Technology",
+                "Telecommunications"
+            ]
+            ,
         },
+        // {
+        //     id: 'productsServices',
+        //     title: 'Products / Services',
+        //     options: [
+        //         'Computer Vision',
+        //         'Predictive Analytics',
+        //         'Generative AI',
+        //         'AI for Healthcare',
+        //         'AI Chatbots',
+        //         'AI for Finance',
+        //         'AI for Retail / eCommerce',
+        //         'AI Infrastructure / MLOps',
+        //         'Robotics & Automation',
+        //         'AI APIs & SDKs',
+        //         'AI Security & Risk',
+        //         'Recommendation Engines',
+        //         'AI for Education',
+        //         'Custom AI Solutions',
+        //         'Other',
+        //     ],
+        // },
         {
             id: 'employees',
             title: 'Employees',
             options: [
-                '1–10',
-                '11–50',
-                '51–200',
-                '201–500',
-                '501–1000',
-                '1001–5000',
+                '1+',
+                '11+',
+                '51+',
+                '201+',
+                '501+',
+                '1001+',
                 '5000+',
             ],
         },
-        {
-            id: 'financingRound',
-            title: 'Financing Round',
-            options: [
-                'Bootstrapped',
-                'Pre-Seed',
-                'Seed',
-                'Series A',
-                'Series B',
-                'Series C',
-                'Series D+',
-                'IPO',
-                'Acquired',
-                'Undisclosed',
-            ],
-        },
+        // {
+        //     id: 'financingRound',
+        //     title: 'Financing Round',
+        //     options: [
+        //         'Bootstrapped',
+        //         'Pre-Seed',
+        //         'Seed',
+        //         'Series A',
+        //         'Series B',
+        //         'Series C',
+        //         'Series D+',
+        //         'IPO',
+        //         'Acquired',
+        //         'Undisclosed',
+        //     ],
+        // },
     ];
 
 
@@ -232,6 +258,11 @@ const AIJobs: React.FC = () => {
     const paginationRange = getPaginationRange(totalPages, currentPage);
 
 
+    const handleLocationSelect = (location: string) => {
+        console.log("Selected location:", location);
+        // do something like setForm({ ...form, location });
+    };
+
 
     return (
         <div className="job-listing">
@@ -255,19 +286,14 @@ const AIJobs: React.FC = () => {
                                         />
                                     </div>
 
-                                    <div className="input_box relative">
-                                        <MapPin size={20} />
-                                        <input
-                                            type="text"
+                                    
+                                        {/* <MapPin size={20} /> */}
+                                        <LocationInput
+                                            onSelect={handleLocationSelect}
                                             placeholder="Location"
-                                            className="w-full pl-8 pr-4 py-2 focus:outline-none"
-
-                                            onChange={(e) => selectOption(
-                                                "location",
-                                                e.target.value
-                                            )}
+                                            className=" input_box"
                                         />
-                                    </div>
+                                    
 
                                     <div className="flex justify-end">
                                         <button
@@ -346,7 +372,7 @@ const AIJobs: React.FC = () => {
                                                         />
                                                     )}
                                                     <button
-                                                        className="w-full p-2 border border-gray-300 rounded-md flex justify-between items-center"
+                                                        className="w-full text-left p-2 border border-gray-300 rounded-md flex justify-between items-center"
                                                         onClick={() => toggleDropdown(filter.id)}
                                                     >
                                                         <span>{selectedOptions[filter.id] || filter.title}</span>
@@ -445,9 +471,10 @@ const AIJobs: React.FC = () => {
                                                 <div>
                                                     <a
                                                         href={job.website}
-                                                        className={`text-sm capitalize px-2 py-1 rounded  bg-green-100 text-green-700`}
+                                                        target='_blank'
+                                                        className={`text-sm  px-2 py-1 rounded  bg-green-100 text-green-700`}
                                                     >
-                                                        {job.website}
+                                                        {job.name}{" (" + formatWebsiteUrl(job.website) + ")"}
                                                     </a>
                                                     <span className="text-sm text-gray-500 flex items-center gap-1 mt-2">
 
@@ -495,7 +522,7 @@ const AIJobs: React.FC = () => {
 
                                             {/* Job Type */}
                                             <span className={`text-sm px-4 py-1 text-center rounded font-medium inline-block job-duration bg-green-100 text-green-700`}>
-                                                {job.website}
+                                                {job.name}{" (" + formatWebsiteUrl(job.website) + ")"}
                                             </span>
 
                                             {/* Job Title */}

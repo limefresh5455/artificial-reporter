@@ -122,8 +122,7 @@ const Header: React.FC = () => {
                         )}
                     </div>
                     <Link href={ROUTES.SPONSORS} className="text-gray-600 hover:underline">Sponsors</Link>
-                    <span className="text-gray-400">|</span>
-                    <a href="#" className="text-gray-600 hover:underline">AI</a>
+                    
                     <span className="text-gray-400">|</span>
                     {user == null ? (
                         <>

@@ -2,121 +2,121 @@ import { client } from './client';
 import { subDays, format } from 'date-fns'; // if using date-fns
 
 export interface SocialLink {
-    _key: string;
-    platform: string;
-    url: string;
-    linkTarget: string;
+  _key: string;
+  platform: string;
+  url: string;
+  linkTarget: string;
 }
 
 export interface Category {
-    _key: string;
-    label: string;
-    url: string;
-    linkTarget: string;
+  _key: string;
+  label: string;
+  url: string;
+  linkTarget: string;
 }
 
 export interface QuickLink {
-    _key: string;
-    label: string;
-    url: string;
-    linkTarget: string;
+  _key: string;
+  label: string;
+  url: string;
+  linkTarget: string;
 }
 
 export interface DropdownItem {
-    _key: string;
-    title: string;
-    url: string;
+  _key: string;
+  title: string;
+  url: string;
 }
 
 export interface MenuItem {
-    _key: string;
-    title: string;
-    url: string;
-    highlight?: boolean;
-    dropdown?: DropdownItem[];
+  _key: string;
+  title: string;
+  url: string;
+  highlight?: boolean;
+  dropdown?: DropdownItem[];
 }
 
 export interface NavigationData {
-    title: string;
-    menuItems: MenuItem[];
-    logo: any;
-    bannerBgColor: any;
+  title: string;
+  menuItems: MenuItem[];
+  logo: any;
+  bannerBgColor: any;
 }
 
 export interface FooterData {
-    aboutText: string;
-    categories: Category[];
-    copyright: string;
-    quickLinks: QuickLink[];
-    socialLinks: SocialLink[];
-    logo: any;
+  aboutText: string;
+  categories: Category[];
+  copyright: string;
+  quickLinks: QuickLink[];
+  socialLinks: SocialLink[];
+  logo: any;
 }
 
 export interface HeroSlide {
-    _key: string;
-    title: string;
-    subtitle: string;
-    link: string;
-    linkTarget: string;
-    image: {
-        _type: 'image';
-        asset: {
-            _ref: string;
-            _type: 'reference';
-        };
+  _key: string;
+  title: string;
+  subtitle: string;
+  link: string;
+  linkTarget: string;
+  image: {
+    _type: 'image';
+    asset: {
+      _ref: string;
+      _type: 'reference';
     };
+  };
 }
 
 export interface HeroData {
-    slides: HeroSlide[];
+  slides: HeroSlide[];
 }
 
 export interface TrendingItem {
-    _key: string;
-    title: string;
-    url: string;
-    linkTarget: string;
+  _key: string;
+  title: string;
+  url: string;
+  linkTarget: string;
 }
 
 export interface TrendingData {
-    items: TrendingItem[];
+  items: TrendingItem[];
 }
 
 export interface ImageBlock {
-    _id: string;
-    title: string;
-    alt: string;
-    fullWidth: boolean;
-    caption?: string;
-    image: {
-        _type: 'image';
-        asset: {
-            _ref: string;
-            _type: 'reference';
-        };
+  _id: string;
+  title: string;
+  alt: string;
+  fullWidth: boolean;
+  caption?: string;
+  image: {
+    _type: 'image';
+    asset: {
+      _ref: string;
+      _type: 'reference';
     };
+  };
 }
 
 export interface TopStory {
-    description: any;
-    _createdAt: any;
-    _updatedAt: any;
-    _rev: string | number | Date;
-    _key: string;
-    _type: string;
-    title: string;
-    overview: string;
-    eventType: string;
-    sponsored: string;
-    tags: string;
-    link: string;
-    image: {
-        _type: 'image';
-        asset: {
-            _ref: string;
-            _type: 'reference';
-        };
+  description: any;
+  _createdAt: any;
+  _updatedAt: any;
+  _rev: string | number | Date;
+  _key: string;
+  _type: string;
+  title: string;
+  overview: string;
+  eventType: string;
+  sponsored: string;
+  tags: string;
+  link: string;
+  image: {
+    _type: 'image';
+    asset: {
+      _ref: string;
+      _type: 'reference';
     };
+  };
 }
 
 // _id,
@@ -130,16 +130,16 @@ export interface TopStory {
 //         sponsored,
 //         tags
 export interface HomeNewsData {
-    features: any;
-    mainTitle: string;
-    viewAllLink: string;
-    viewAllLinkText: string;
-    relatedArticles: any[];
+  features: any;
+  mainTitle: string;
+  viewAllLink: string;
+  viewAllLinkText: string;
+  relatedArticles: any[];
 }
 
 // Footer
 export async function getFooterData(): Promise<FooterData> {
-    const query = `*[_type == "footer"][0]{
+  const query = `*[_type == "footer"][0]{
         aboutText,
         categories[] { label, url, linkTarget },
         copyright,
@@ -153,12 +153,12 @@ export async function getFooterData(): Promise<FooterData> {
         }
     }`;
 
-    return client.fetch(query);
+  return client.fetch(query);
 }
 
 // Navigation
 export async function getNavigationData(): Promise<NavigationData> {
-    const query = `*[_type == "navigation"][0]{
+  const query = `*[_type == "navigation"][0]{
     title,
     menuItems[] {
       _key,
@@ -191,12 +191,12 @@ export async function getNavigationData(): Promise<NavigationData> {
     }
   }`;
 
-    return client.fetch(query);
+  return client.fetch(query);
 }
 
 // Hero
 export async function getHeroData(): Promise<HeroData> {
-    const query = `*[_type == "hero"][0]{
+  const query = `*[_type == "hero"][0]{
     slides[] {
       _key,
       title,
@@ -213,13 +213,13 @@ export async function getHeroData(): Promise<HeroData> {
     }
   }`;
 
-    return client.fetch(query);
+  return client.fetch(query);
 }
 
 // Ad Apace
 export const getActiveHeaderAd = async () => {
-    const now = new Date().toISOString();
-    const query = `*[_type == "adSpaceBlock" && placement == "header" && active == true && startDate <= $now && endDate >= $now][0]{
+  const now = new Date().toISOString();
+  const query = `*[_type == "adSpaceBlock" && placement == "header" && active == true && startDate <= $now && endDate >= $now][0]{
       title,
       link,
       alt,
@@ -228,43 +228,43 @@ export const getActiveHeaderAd = async () => {
       customEmbedCode,
       "imageUrl": image.asset->url
     }`;
-    return await client.fetch(query, { now });
-  };
-  
-  export const getActiveSidebarAd = async () => {
-    const now = new Date().toISOString();
-    const query = `*[_type == "adSpaceBlock" && placement == "sidebar" && active == true && startDate <= $now && endDate >= $now][0]{
-      title,
-      link,
-      alt,
-      adType,
-      googleAdScript,
-      customEmbedCode,
-      "imageUrl": image.asset->url
-    }`;
-    return await client.fetch(query, { now });
-  };
-  
-  
-  export const getActiveSidebarAdVerticle = async () => {
-    const now = new Date().toISOString();
-    const query = `*[_type == "adSpaceBlock" && placement == "sidebar-vertical" && active == true && startDate <= $now && endDate >= $now][0]{
-      title,
-      link,
-      alt,
-      adType,
-      googleAdScript,
-      customEmbedCode,
-      "imageUrl": image.asset->url
-    }`;
-    return await client.fetch(query, { now });
-  };
-  
+  return await client.fetch(query, { now });
+};
 
-  
+export const getActiveSidebarAd = async () => {
+  const now = new Date().toISOString();
+  const query = `*[_type == "adSpaceBlock" && placement == "sidebar" && active == true && startDate <= $now && endDate >= $now][0]{
+      title,
+      link,
+      alt,
+      adType,
+      googleAdScript,
+      customEmbedCode,
+      "imageUrl": image.asset->url
+    }`;
+  return await client.fetch(query, { now });
+};
+
+
+export const getActiveSidebarAdVerticle = async () => {
+  const now = new Date().toISOString();
+  const query = `*[_type == "adSpaceBlock" && placement == "sidebar-vertical" && active == true && startDate <= $now && endDate >= $now][0]{
+      title,
+      link,
+      alt,
+      adType,
+      googleAdScript,
+      customEmbedCode,
+      "imageUrl": image.asset->url
+    }`;
+  return await client.fetch(query, { now });
+};
+
+
+
 // Trending Verticle
 export async function getTrendingData(): Promise<TrendingData> {
-    const query = `*[_type == "tranding"][0]{
+  const query = `*[_type == "tranding"][0]{
     items[] {
       _key,
       title,
@@ -273,11 +273,11 @@ export async function getTrendingData(): Promise<TrendingData> {
     }
   }`;
 
-    return client.fetch(query);
+  return client.fetch(query);
 }
 
 export async function getImageBlocks(): Promise<ImageBlock[]> {
-    const query = `*[_type == "imageBlock"]{
+  const query = `*[_type == "imageBlock"]{
     _id,
     title,
     alt,
@@ -292,11 +292,11 @@ export async function getImageBlocks(): Promise<ImageBlock[]> {
     }
   }`;
 
-    return client.fetch(query);
+  return client.fetch(query);
 }
 
 export async function getNewsByCategory(categorySlug: string): Promise<any[]> {
-    const query = `
+  const query = `
         *[
             _type == "newsArticle" &&
             $categorySlug in newsCategory[]->value.current
@@ -315,14 +315,14 @@ export async function getNewsByCategory(categorySlug: string): Promise<any[]> {
         `;
 
 
-    const params = { categorySlug };
+  const params = { categorySlug };
 
-    const articles = await client.fetch(query, params);
-    return articles;
+  const articles = await client.fetch(query, params);
+  return articles;
 }
 
 export async function getNewsData(param: string): Promise<any> {
-    const query = `*[_type == "news"]{
+  const query = `*[_type == "news"]{
         _id,
         _createdAt,
         _updatedAt,
@@ -336,70 +336,70 @@ export async function getNewsData(param: string): Promise<any> {
       }`;
 
 
-    const response = await client.fetch(query);
+  const response = await client.fetch(query);
 
 
 
-    const data = response.find((item: any) => item.mainTitle === param);
-    // const features = response.find((item: any) => item.mainTitle === "Features");
-    // const popular = response.find((item: any) => item.mainTitle === "Popular");
-    // const latest = response.find((item: any) => item.mainTitle === "Latest");
+  const data = response.find((item: any) => item.mainTitle === param);
+  // const features = response.find((item: any) => item.mainTitle === "Features");
+  // const popular = response.find((item: any) => item.mainTitle === "Popular");
+  // const latest = response.find((item: any) => item.mainTitle === "Latest");
 
-    const responseArticle = await getNewsByCategory(data.newsCategory.value.current)
+  const responseArticle = await getNewsByCategory(data.newsCategory.value.current)
 
-    return { relatedArticles: responseArticle, ...data };
+  return { relatedArticles: responseArticle, ...data };
 }
 
 export async function getTopStories(): Promise<HomeNewsData> {
-    const data = await getNewsData("Top Stories");
-    // console.log(data)
-    return data;
+  const data = await getNewsData("Top Stories");
+  // console.log(data)
+  return data;
 }
 
 export async function getFeatures(): Promise<HomeNewsData> {
-    const data = await getNewsData("Features");
-    return data;
+  const data = await getNewsData("Features");
+  return data;
 }
 
 export async function getPopular(): Promise<HomeNewsData> {
-    const data = await getNewsData("Popular");
-    return data;
+  const data = await getNewsData("Popular");
+  return data;
 }
 
 export async function getLatest(): Promise<HomeNewsData> {
-    const data = await getNewsData("Latest");
-    return data;
+  const data = await getNewsData("Latest");
+  return data;
 }
 
 
 export interface PageData {
-    title: string;
-    slug: { current: string };
-    seo: {
-        metaTitle: string;
-        metaDescription: string;
-    };
-    content: Array<any>;
+  title: string;
+  slug: { current: string };
+  seo: {
+    metaTitle: string;
+    metaDescription: string;
+  };
+  content: Array<any>;
 }
 
 export interface TopStoriesData {
-    _id: string;
-    _createdAt: string;
-    _updatedAt: string;
-    _rev: string;
-    _type: "newsArticle";
-    title: string;
-    overview: string;
-    eventType: string;
-    sponsored: boolean;
-    tags: string[];
-    image: any[];
+  _id: string;
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  _type: "newsArticle";
+  title: string;
+  overview: string;
+  eventType: string;
+  sponsored: boolean;
+  tags: string[];
+  image: any[];
 }
 
 
 // About
 export async function getPageData(slug: string): Promise<PageData> {
-    const query = `*[_type == "page" && slug.current == "${slug}"][0] {
+  const query = `*[_type == "page" && slug.current == "${slug}"][0] {
         _createdAt,
         _id,
         _rev,
@@ -416,20 +416,20 @@ export async function getPageData(slug: string): Promise<PageData> {
         }
       }`;
 
-    return client.fetch(query);
+  return client.fetch(query);
 }
 
 
 export async function getTopStoriesData(
-    page = 1,
-    pageSize = 4,
-    params = '',
-    category: string | null = null
+  page = 1,
+  pageSize = 4,
+  params = '',
+  category: string | null = null
 ): Promise<any[]> {
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize;
 
-    const query = `
+  const query = `
       *[
         _type == $typeParam
         ${category ? '&& $category in newsCategory[]->value.current' : ''}
@@ -438,6 +438,7 @@ export async function getTopStoriesData(
         _createdAt,
         _updatedAt,
         publishedAt,
+        date,
         _rev,
         _type,
         title,
@@ -453,58 +454,58 @@ export async function getTopStoriesData(
       }
     `;
 
-    const fetchParams: any = {
-        typeParam: params,
-    };
+  const fetchParams: any = {
+    typeParam: params,
+  };
 
-    if (category) {
-        fetchParams.category = category;
-    }
+  if (category) {
+    fetchParams.category = category;
+  }
 
-    return client.fetch(query, fetchParams);
+  return client.fetch(query, fetchParams);
 }
 
 
 export async function getTotalTopStoriesCount(
-    params = '',
-    category: string | null = null
+  params = '',
+  category: string | null = null
 ): Promise<number> {
-    const query = `
+  const query = `
       count(*[
         _type == $typeParam
         ${category ? '&& $category in newsCategory[]->value.current' : ''}
       ])
     `;
 
-    const fetchParams: any = {
-        typeParam: params,
-    };
+  const fetchParams: any = {
+    typeParam: params,
+  };
 
-    if (category) {
-        fetchParams.category = category;
-    }
+  if (category) {
+    fetchParams.category = category;
+  }
 
-    return client.fetch(query, fetchParams);
+  return client.fetch(query, fetchParams);
 }
 
 export async function getCategoryTitleByValue(value: string): Promise<string | null> {
-    const query = `
+  const query = `
       *[_type == "newsCategory" && value.current == $value][0] {
         title
       }
     `;
 
-    const params = { value };
+  const params = { value };
 
-    const result = await client.fetch(query, params);
+  const result = await client.fetch(query, params);
 
-    return result?.title || null;
+  return result?.title || null;
 }
 
 
 export async function getStoryData(params = '', type = ''): Promise<any[]> {
-    // console.log(params)
-    const query = `*[_type == "${type}" && slug.current == "${params}"]  {  
+  // console.log(params)
+  const query = `*[_type == "${type}" && slug.current == "${params}"]  {  
         _id,
         _createdAt,
         _updatedAt,
@@ -526,14 +527,14 @@ export async function getStoryData(params = '', type = ''): Promise<any[]> {
       }`;
 
 
-    return client.fetch(query);
+  return client.fetch(query);
 }
 export async function getRelatedStories(tags: string[], slug: string): Promise<any[]> {
-    if (!tags || tags.length === 0) {
-        return [];
-    }
+  if (!tags || tags.length === 0) {
+    return [];
+  }
 
-    const query = `*[
+  const query = `*[
                         _type == "newsArticle" &&
                         slug.current != $slug &&
                         count(tags[].title[@ in $tags]) > 0
@@ -550,16 +551,16 @@ export async function getRelatedStories(tags: string[], slug: string): Promise<a
                     `;
 
 
-    const params = {
-        tags,
-        slug: slug,
-    };
+  const params = {
+    tags,
+    slug: slug,
+  };
 
 
-    return client.fetch(query, params);
+  return client.fetch(query, params);
 }
 export async function getTags(): Promise<any[]> {
-    const query = `*[
+  const query = `*[
                         _type == "tag" 
                     ][0...10] {
                         _id,
@@ -568,12 +569,12 @@ export async function getTags(): Promise<any[]> {
                         _createdAt
                     }
                     `;
-    return client.fetch(query);
+  return client.fetch(query);
 }
 
 
 export async function getInsights(): Promise<any[]> {
-    const query = `*[
+  const query = `*[
         _type == "insight"
       ] | order(featured desc, _createdAt desc)[0...10] {
         _id,
@@ -584,11 +585,11 @@ export async function getInsights(): Promise<any[]> {
         featured
       }`;
 
-    return client.fetch(query);
+  return client.fetch(query);
 }
 
 export async function getSponsors(): Promise<any[]> {
-    const query = `*[_type == "page" && slug.current == "sponsors"] {
+  const query = `*[_type == "page" && slug.current == "sponsors"] {
         _id,
         title,
         slug,
@@ -602,13 +603,13 @@ export async function getSponsors(): Promise<any[]> {
       }`;
 
 
-    return client.fetch(query);
+  return client.fetch(query);
 }
 
 
 export async function getSearchResult(query: string): Promise<any[]> {
-    const results = await client.fetch(
-        `*[(_type == "page" || _type == "newsArticle" || _type == "insight" || _type == "newsCategory" || _type == "jobListing") && (title match $q || body match $q)][0...10]{
+  const results = await client.fetch(
+    `*[(_type == "page" || _type == "newsArticle" || _type == "insight" || _type == "newsCategory" || _type == "jobListing") && (title match $q || body match $q)][0...10]{
         _id,
         title,
         value,
@@ -618,125 +619,125 @@ export async function getSearchResult(query: string): Promise<any[]> {
         slug,
         image
       }`,
-        { q: `*${query}*` }
-    );
-    return results;
+    { q: `*${query}*` }
+  );
+  return results;
 }
 
 
 function getDateFromLabel(label: string): string | null {
-    const daysMap: Record<string, number> = {
-        'Last 24 hours': 1,
-        'Last 3 days': 3,
-        'Last 7 days': 7,
-        'Last 14 days': 14,
-    };
+  const daysMap: Record<string, number> = {
+    'Last 24 hours': 1,
+    'Last 3 days': 3,
+    'Last 7 days': 7,
+    'Last 14 days': 14,
+  };
 
-    const days = daysMap[label];
-    if (!days) return null;
+  const days = daysMap[label];
+  if (!days) return null;
 
-    const date = subDays(new Date(), days);
-    return format(date, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+  const date = subDays(new Date(), days);
+  return format(date, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 }
 
 interface Filters {
-    [key: string]: string | string[] | undefined;
+  [key: string]: string | string[] | undefined;
 }
 
 export async function getJobs(
-    page = 1,
-    pageSize = 10,
-    filters: Filters = {}
+  page = 1,
+  pageSize = 10,
+  filters: Filters = {}
 ): Promise<any[]> {
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize;
 
-    // Build GROQ filter conditions
-    const conditions: string[] = [];
-    const payAmountMapping: Record<string, string> = {
-        '$0 – $10,000': '$0 – $10,000',
-        '$10,000 – $20,000': '$10,000 – $20,000',
-        '$20,000 – $30,000': '$20,000 – $30,000',
-        '$30,000 – $50,000': '$30,000 – $50,000',
-        '$50,000 – $100,000': '$50,000 – $100,000',
-        '$100,000+': '$100,000+',
-        '$130,000+': '$130,000+',
-        '$150,000+': '$150,000+',
-        '$170,000+': '$170,000+',
-        '$200,000+': '$200,000+',
-    };
+  // Build GROQ filter conditions
+  const conditions: string[] = [];
+  const payAmountMapping: Record<string, string> = {
+    '$0 – $10,000': '$0 – $10,000',
+    '$10,000 – $20,000': '$10,000 – $20,000',
+    '$20,000 – $30,000': '$20,000 – $30,000',
+    '$30,000 – $50,000': '$30,000 – $50,000',
+    '$50,000 – $100,000': '$50,000 – $100,000',
+    '$100,000+': '$100,000+',
+    '$130,000+': '$130,000+',
+    '$150,000+': '$150,000+',
+    '$170,000+': '$170,000+',
+    '$200,000+': '$200,000+',
+  };
 
 
-    // Handle payAmount filtering
-    if (filters.pay) {
-        if (Array.isArray(filters.pay)) {
-            // If it's an array, map over the values
-            filters.pay.forEach((amount) => {
-                const payAmountValue = payAmountMapping[amount];
-                if (payAmountValue !== undefined) {
-                    conditions.push(`payAmount == "${payAmountValue}"`); // treat payAmount as string
-                }
-            });
-        } else {
-            // If it's a single string, handle it normally
-            const payAmountValue = payAmountMapping[filters.pay];
-            if (payAmountValue !== undefined) {
-                conditions.push(`payAmount == "${payAmountValue}"`); // treat payAmount as string
-            }
+  // Handle payAmount filtering
+  if (filters.pay) {
+    if (Array.isArray(filters.pay)) {
+      // If it's an array, map over the values
+      filters.pay.forEach((amount) => {
+        const payAmountValue = payAmountMapping[amount];
+        if (payAmountValue !== undefined) {
+          conditions.push(`payAmount == "${payAmountValue}"`); // treat payAmount as string
         }
+      });
+    } else {
+      // If it's a single string, handle it normally
+      const payAmountValue = payAmountMapping[filters.pay];
+      if (payAmountValue !== undefined) {
+        conditions.push(`payAmount == "${payAmountValue}"`); // treat payAmount as string
+      }
     }
+  }
 
-    if (filters.title && typeof filters.title === "string") {
-        conditions.push(`title match "*${filters.title}*"`);
+  if (filters.title && typeof filters.title === "string") {
+    conditions.push(`title match "*${filters.title}*"`);
+  }
+
+
+  if (filters.datePosted && typeof filters.datePosted === 'string') {
+    const date = getDateFromLabel(filters.datePosted);
+    if (date) {
+      conditions.push(`datePosted >= "${date}"`);
     }
+    console.log(conditions)
+  }
 
 
-    if (filters.datePosted && typeof filters.datePosted === 'string') {
-        const date = getDateFromLabel(filters.datePosted);
-        if (date) {
-            conditions.push(`datePosted >= "${date}"`);
-        }
-        console.log(conditions)
-    }
-
-
-    if (filters.remote) {
-        // Assume: 'Remote', 'Hybrid', 'On-site' mapped to remoteWork field
-        conditions.push(`remoteWork == ${filters.remote == 'True' ? true : false}`);
-    }
+  if (filters.remote) {
+    // Assume: 'Remote', 'Hybrid', 'On-site' mapped to remoteWork field
+    conditions.push(`remoteWork == ${filters.remote == 'True' ? true : false}`);
+  }
 
 
 
-    if (filters.jobType) {
-        const types = Array.isArray(filters.jobType) ? filters.jobType : [filters.jobType];
-        conditions.push(`jobType in ${JSON.stringify(types)}`);
-    }
+  if (filters.jobType) {
+    const types = Array.isArray(filters.jobType) ? filters.jobType : [filters.jobType];
+    conditions.push(`jobType in ${JSON.stringify(types)}`);
+  }
 
-    if (filters.experience) {
-        const levels = Array.isArray(filters.experience) ? filters.experience : [filters.experience];
-        conditions.push(`experienceLevel in ${JSON.stringify(levels)}`);
-    }
+  if (filters.experience) {
+    const levels = Array.isArray(filters.experience) ? filters.experience : [filters.experience];
+    conditions.push(`experienceLevel in ${JSON.stringify(levels)}`);
+  }
 
-    if (filters.education) {
-        console.log(filters.education)
-        conditions.push(`education == "${filters.education}"`);
-    }
+  if (filters.education) {
+    console.log(filters.education)
+    conditions.push(`education == "${filters.education}"`);
+  }
 
-    if (filters.company) {
-        conditions.push(`company->name == "${filters.company}"`);
-    }
+  if (filters.company) {
+    conditions.push(`company->name == "${filters.company}"`);
+  }
 
-    if (filters.location) {
-        conditions.push(`location == "${filters.location}"`);
-    }
+  if (filters.location) {
+    conditions.push(`location == "${filters.location}"`);
+  }
 
-    // More filters can be added as needed...
+  // More filters can be added as needed...
 
-    const whereClause = conditions.length > 0
-        ? `*[ _type == "jobListing" && ${conditions.join(" && ")} ]`
-        : `*[ _type == "jobListing" ]`;
+  const whereClause = conditions.length > 0
+    ? `*[ _type == "jobListing" && ${conditions.join(" && ")} ]`
+    : `*[ _type == "jobListing" ]`;
 
-    const query = `
+  const query = `
       ${whereClause} | order(_createdAt desc) [${start}...${end}] {
         _id,
         title,
@@ -774,106 +775,106 @@ export async function getJobs(
       }
     `;
 
-    //     const query = `
-    //   *[_type == "jobListing" && datePosted >= "2025-05-05T00:00:00.000Z"] {
-    //     _id,
-    //     jobTitle,
-    //     datePosted,
-    //     // other fields
-    //   }
-    // `;
+  //     const query = `
+  //   *[_type == "jobListing" && datePosted >= "2025-05-05T00:00:00.000Z"] {
+  //     _id,
+  //     jobTitle,
+  //     datePosted,
+  //     // other fields
+  //   }
+  // `;
 
-    return await client.fetch(query);
+  return await client.fetch(query);
 }
 
 
 
 export async function getTotalJobsCount(filters: Filters): Promise<number> {
-    const conditions: string[] = [];
+  const conditions: string[] = [];
 
-    if (filters.remote) {
-        // Assume: 'Remote', 'Hybrid', 'On-site' mapped to remoteWork field
-        conditions.push(`remoteWork == ${filters.remote == 'True' ? true : false}`);
+  if (filters.remote) {
+    // Assume: 'Remote', 'Hybrid', 'On-site' mapped to remoteWork field
+    conditions.push(`remoteWork == ${filters.remote == 'True' ? true : false}`);
+  }
+
+  if (filters.datePosted && typeof filters.datePosted === 'string') {
+    const date = getDateFromLabel(filters.datePosted);
+    if (date) {
+      conditions.push(`datePosted >= "${date}"`);
     }
+    console.log(conditions)
+  }
 
-    if (filters.datePosted && typeof filters.datePosted === 'string') {
-        const date = getDateFromLabel(filters.datePosted);
-        if (date) {
-            conditions.push(`datePosted >= "${date}"`);
+  const payAmountMapping: Record<string, string> = {
+    '$0 – $10,000': '$0 – $10,000',
+    '$10,000 – $20,000': '$10,000 – $20,000',
+    '$20,000 – $30,000': '$20,000 – $30,000',
+    '$30,000 – $50,000': '$30,000 – $50,000',
+    '$50,000 – $100,000': '$50,000 – $100,000',
+    '$100,000+': '$100,000+',
+    '$130,000+': '$130,000+',
+    '$150,000+': '$150,000+',
+    '$170,000+': '$170,000+',
+    '$200,000+': '$200,000+',
+  };
+
+
+  // Handle payAmount filtering
+  if (filters.pay) {
+    if (Array.isArray(filters.pay)) {
+      // If it's an array, map over the values
+      filters.pay.forEach((amount) => {
+        const payAmountValue = payAmountMapping[amount];
+        if (payAmountValue !== undefined) {
+          conditions.push(`payAmount == "${payAmountValue}"`); // treat payAmount as string
         }
-        console.log(conditions)
+      });
+    } else {
+      // If it's a single string, handle it normally
+      const payAmountValue = payAmountMapping[filters.pay];
+      if (payAmountValue !== undefined) {
+        conditions.push(`payAmount == "${payAmountValue}"`); // treat payAmount as string
+      }
     }
+  }
 
-    const payAmountMapping: Record<string, string> = {
-        '$0 – $10,000': '$0 – $10,000',
-        '$10,000 – $20,000': '$10,000 – $20,000',
-        '$20,000 – $30,000': '$20,000 – $30,000',
-        '$30,000 – $50,000': '$30,000 – $50,000',
-        '$50,000 – $100,000': '$50,000 – $100,000',
-        '$100,000+': '$100,000+',
-        '$130,000+': '$130,000+',
-        '$150,000+': '$150,000+',
-        '$170,000+': '$170,000+',
-        '$200,000+': '$200,000+',
-    };
-
-
-    // Handle payAmount filtering
-    if (filters.pay) {
-        if (Array.isArray(filters.pay)) {
-            // If it's an array, map over the values
-            filters.pay.forEach((amount) => {
-                const payAmountValue = payAmountMapping[amount];
-                if (payAmountValue !== undefined) {
-                    conditions.push(`payAmount == "${payAmountValue}"`); // treat payAmount as string
-                }
-            });
-        } else {
-            // If it's a single string, handle it normally
-            const payAmountValue = payAmountMapping[filters.pay];
-            if (payAmountValue !== undefined) {
-                conditions.push(`payAmount == "${payAmountValue}"`); // treat payAmount as string
-            }
-        }
-    }
-
-    if (filters.title && typeof filters.title === "string") {
-        conditions.push(`title match "*${filters.title}*"`);
-    }
+  if (filters.title && typeof filters.title === "string") {
+    conditions.push(`title match "*${filters.title}*"`);
+  }
 
 
 
 
-    if (filters.jobType) {
-        const types = Array.isArray(filters.jobType) ? filters.jobType : [filters.jobType];
-        conditions.push(`jobType in ${JSON.stringify(types)}`);
-    }
+  if (filters.jobType) {
+    const types = Array.isArray(filters.jobType) ? filters.jobType : [filters.jobType];
+    conditions.push(`jobType in ${JSON.stringify(types)}`);
+  }
 
-    if (filters.experience) {
-        const levels = Array.isArray(filters.experience) ? filters.experience : [filters.experience];
-        conditions.push(`experienceLevel in ${JSON.stringify(levels)}`);
-    }
+  if (filters.experience) {
+    const levels = Array.isArray(filters.experience) ? filters.experience : [filters.experience];
+    conditions.push(`experienceLevel in ${JSON.stringify(levels)}`);
+  }
 
-    if (filters.education) {
-        conditions.push(`education == "${filters.education}"`);
-    }
+  if (filters.education) {
+    conditions.push(`education == "${filters.education}"`);
+  }
 
-    if (filters.company) {
-        conditions.push(`company->name == "${filters.company}"`);
-    }
+  if (filters.company) {
+    conditions.push(`company->name == "${filters.company}"`);
+  }
 
-    if (filters.location) {
-        conditions.push(`location == "${filters.location}"`);
-    }
+  if (filters.location) {
+    conditions.push(`location == "${filters.location}"`);
+  }
 
-    // same filter conditions as above...
+  // same filter conditions as above...
 
-    const whereClause = conditions.length > 0
-        ? `*[ _type == "jobListing" && ${conditions.join(" && ")} ]`
-        : `*[ _type == "jobListing" ]`;
+  const whereClause = conditions.length > 0
+    ? `*[ _type == "jobListing" && ${conditions.join(" && ")} ]`
+    : `*[ _type == "jobListing" ]`;
 
-    const query = `count(${whereClause})`;
-    return await client.fetch(query);
+  const query = `count(${whereClause})`;
+  return await client.fetch(query);
 }
 
 
@@ -905,15 +906,21 @@ export async function getCompanies(
   }
 
   if (filters.employeeCount) {
-    conditions.push(`employeeCount == "${filters.employeeCount}"`);
+    const employeeFilter = Array.isArray(filters.employees)
+      ? filters.employees[0] // take the first value if it's an array
+      : filters.employees;
+
+    const cleanedCount = employeeFilter.replace('+', '');
+
+    conditions.push(`employeeCount > ${cleanedCount}`);
   }
 
   if (filters.isAICompany !== undefined) {
-    conditions.push(`isAICompany == ${filters.isAICompany}`);
+    conditions.push(`isAICompany == ${filters.isAICompany == 'True' ? true : false}`);
   }
 
   if (filters.category) {
-    conditions.push(`category._ref == "${filters.category}"`);
+    conditions.push(`category->title == "${filters.category}"`);
   }
 
   const whereClause = conditions.length > 0
@@ -942,7 +949,7 @@ export async function getCompanies(
 
 export async function getTotalCompaniesCount(
   filters: Filters): Promise<any[]> {
-  
+
   const conditions: string[] = [];
 
   if (filters.name && typeof filters.name === "string") {
@@ -961,16 +968,20 @@ export async function getTotalCompaniesCount(
     conditions.push(`locationCity == "${filters.locationCity}"`);
   }
 
-  if (filters.employeeCount) {
-    conditions.push(`employeeCount == "${filters.employeeCount}"`);
+  if (filters.employees) {
+    
+
+    const cleanedCount = filters.employees+"".replace('+', '');
+
+    conditions.push(`employeeCount > "${cleanedCount}"`);
   }
 
   if (filters.isAICompany !== undefined) {
-    conditions.push(`isAICompany == ${filters.isAICompany}`);
+    conditions.push(`isAICompany == ${filters.isAICompany == 'True' ? true : false}`);
   }
 
   if (filters.category) {
-    conditions.push(`category._ref == "${filters.category}"`);
+    conditions.push(`category->title == "${filters.category}"`);
   }
 
   const whereClause = conditions.length > 0
@@ -978,12 +989,12 @@ export async function getTotalCompaniesCount(
     : `*[ _type == "aiCompany" ]`;
 
   const query = `count(${whereClause})`;
-
+  console.log(query)
   return await client.fetch(query);
 }
 
 export async function getSiteLogo(): Promise<any> {
-    const query = `*[_type == "logo"][0]{
+  const query = `*[_type == "logo"][0]{
         alt,
         "imageUrl": image.asset->url,
         image {
@@ -992,5 +1003,33 @@ export async function getSiteLogo(): Promise<any> {
         }
     }`;
 
-    return client.fetch(query);
+  return client.fetch(query);
+}
+
+
+
+export async function getCompaniesLocations(searchTerm: string): Promise<any> {
+  const query = `
+  *[_type == "aiCompany" && (locationCity match "*${searchTerm}*" || locationState match "*${searchTerm}*" || locationCountry match "*${searchTerm}*")] {
+    locationCity,
+    locationState,
+    locationCountry
+  }`;
+
+  const params = { searchTerm }; // Dynamic searchTerm passed to query
+
+  // Execute the query
+  const results = await client.fetch(query, params);
+
+  // Remove duplicates based on the company name
+
+  const deduplicatedResults = results.filter((value:any, index:any, self:any) => {
+    return index === self.findIndex((t:any) => (
+      t.locationCity === value.locationCity ||
+      t.locationState === value.locationState ||
+      t.locationCountry === value.locationCountry
+    ));
+  });
+
+  return deduplicatedResults
 }
