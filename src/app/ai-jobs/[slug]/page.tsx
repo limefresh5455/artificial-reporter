@@ -31,6 +31,7 @@ const AICompany = ({
     return (
         <section className="py-12 ">
             <div className="container mx-auto px-4">
+                <span><BackButton /></span>
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
                     <div className="lg:col-span-8">
@@ -118,7 +119,7 @@ const AICompany = ({
                     </div>
 
                     <div className="lg:col-span-4">
-                        <div className="border  border-gray-200 p-6 rounded-lg bg-[#eff6f3]">
+                        <div className=" p-6 rounded-lg bg-[#eff6f3]">
                             <div className='text-center w-full flex justify-center mb-4'>
                                 {jobData?.company?.logo?.asset?.url ? (
                                     <img
