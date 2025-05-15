@@ -86,36 +86,41 @@ const LocationInput: React.FC<LocationInputProps> = ({
             const result = await getCompaniesLocations(query);
             console.log(result);
 
-            // Filter suggestions based on matching locationCity, locationState, or locationCountry
             const filteredSuggestions = result
                 .map((item: any) => {
-                    // Check if the query matches city, state, or country (case-insensitive)
-                    const cityMatch = item.locationCity.toLowerCase().includes(query.toLowerCase());
-                    const stateMatch = item.locationState.toLowerCase().includes(query.toLowerCase());
-                    const countryMatch = item.locationCountry.toLowerCase().includes(query.toLowerCase());
+                    const queryLower = query.toLowerCase();
 
-                    // Include only relevant fields (locationCity, locationState, or locationCountry)
-                    const suggestion = [];
+                    if (item.locationCity?.toLowerCase().includes(queryLower)) {
+                        return item.locationCity;
+                    }
 
-                    if (cityMatch) suggestion.push(item.locationCity);
-                    if (stateMatch) suggestion.push(item.locationState);
-                    if (countryMatch) suggestion.push(item.locationCountry);
+                    if (item.locationState?.toLowerCase().includes(queryLower)) {
+                        return item.locationState;
+                    }
 
-                    return suggestion.length > 0 ? suggestion.join(', ') : null;
+                    if (item.locationCountry?.toLowerCase().includes(queryLower)) {
+                        return item.locationCountry;
+                    }
+
+                    return null;
                 })
-                .filter(Boolean); // Remove any null or empty suggestions
+                .filter(Boolean); // Remove nulls
 
-            setSuggestions(filteredSuggestions); // Set filtered results
+            // Remove duplicates
+            const uniqueSuggestions = [...new Set(filteredSuggestions)];
+
+            setSuggestions(uniqueSuggestions);
         };
 
         const delayDebounce = setTimeout(fetchSuggestions, 300);
         return () => clearTimeout(delayDebounce);
     }, [query]);
 
+
     const handleSelect = (place: any) => {
-        setQuery(place.display);
+        setQuery(place);
         setSuggestions([]);
-        onSelect(place.display);
+        onSelect(place);
     };
 
     return (

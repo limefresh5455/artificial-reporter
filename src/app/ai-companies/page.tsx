@@ -49,7 +49,10 @@ const AIJobs: React.FC = () => {
 
     const selectOptionSort = (option: string) => {
         setSelectedOptionSort(option);
+        setSelectedOptions({ ...selectedOptions, sortBy: option });
         setIsOpen(false); // Close dropdown after selection
+        console.log(option)
+        // fetchData()
     };
 
     const toggleDropdown = (id: string) => {
@@ -60,7 +63,6 @@ const AIJobs: React.FC = () => {
     };
 
     const selectOption = (filterId: string, option: string) => {
-        console.log(option)
         if (filterId === "jobType" || filterId === "experience") {
             if (!option) return; // Ignore empty/invalid options
 
@@ -97,6 +99,7 @@ const AIJobs: React.FC = () => {
                     [filterId]: option,
                 }));
             }
+
         }
 
         // setSelectedOptions((prev) => ({
@@ -104,8 +107,6 @@ const AIJobs: React.FC = () => {
         //     [filterId]: option,
         // }));
         toggleDropdown(filterId); // Close dropdown after selection
-
-        console.log("selectedOptions", selectedOptions)
     };
 
     const filters: Filter[] = [
@@ -227,12 +228,13 @@ const AIJobs: React.FC = () => {
         console.log(data);
         setTotalCount(count);
         setIsLoading(false);
+
     };
     useEffect(() => {
 
 
         fetchData();
-    }, [currentPage]);
+    }, [currentPage, selectedOptionSort]);
 
 
     const getPaginationRange = (totalPages: number, currentPage: number, delta = 2) => {
@@ -259,8 +261,10 @@ const AIJobs: React.FC = () => {
 
 
     const handleLocationSelect = (location: string) => {
-        console.log("Selected location:", location);
-        // do something like setForm({ ...form, location });
+        // console.log("Selected location:", location);
+        selectOption("locationCountry", location);
+        selectOption("locationState", location);
+        selectOption("locationCity", location);
     };
 
 
@@ -423,7 +427,7 @@ const AIJobs: React.FC = () => {
                                         </button>
                                         <ul className={`absolute w-40 bg-white border border-gray-300 rounded-md mt-1 ${isOpen ? 'block' : 'hidden'
                                             }`}>
-                                            {['Latest', 'Job Title', 'Location'].map((option) => (
+                                            {['Latest', 'Company Type', 'Employees'].map((option) => (
                                                 <li key={option} className="p-2 hover:bg-gray-100 cursor-pointer" onClick={() => selectOptionSort(option)}>
                                                     {option}
                                                 </li>
@@ -454,7 +458,7 @@ const AIJobs: React.FC = () => {
                                             {/* Job Title */}
                                             <div className="sm:col-span-12">
                                                 <a
-                                                    href="#"
+                                                    href={ROUTES.COMPANIES+job.slug.current}
                                                     className="text-lg font-semibold text-gray-800 hover:text-blue-600"
                                                 >
                                                     {job.name}

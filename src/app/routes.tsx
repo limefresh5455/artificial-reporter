@@ -8,5 +8,6 @@ export const ROUTES = {
     NEWS: '/news/',
     INSIGHT: '/insight/',
     SPONSORS: '/sponsors/',
-    JOBS: '/ai-jobs/'
+    JOBS: '/ai-jobs/',
+    COMPANIES: '/ai-companies/'
 };
