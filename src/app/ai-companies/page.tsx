@@ -457,12 +457,12 @@ const AIJobs: React.FC = () => {
                                         >
                                             {/* Job Title */}
                                             <div className="sm:col-span-12">
-                                                <a
+                                                <Link
                                                     href={ROUTES.COMPANIES+job.slug.current}
                                                     className="text-lg font-semibold text-gray-800 hover:text-blue-600"
                                                 >
                                                     {job.name}
-                                                </a>
+                                                </Link>
                                             </div>
 
                                             {/* Company Info */}

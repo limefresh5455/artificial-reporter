@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { getCompanyData } from '@/lib/sanity';
 import { urlFor } from '@/lib/sanityImage';
-import { Linkedin, Building2 } from 'lucide-react';
+import { Linkedin, Building2, ArrowLeft } from 'lucide-react';
+import BackButton from '@/app/components/BackButton';
 
 
 const AICompany = ({
@@ -30,11 +31,12 @@ const AICompany = ({
     return (
         <section className="py-12 job-details">
             <div className="container mx-auto px-4">
+                <span><BackButton /></span>
                 <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
 
                     <div className="xl:col-span-8">
                         <div className="details-post-data">
-
+                            
                             <h2 className="text-3xl font-semibold text-gray-800 mb-4">{companyData.name}</h2>
 
                             <ul className="flex flex-wrap  items-center gap-4 mb-6">
@@ -67,7 +69,7 @@ const AICompany = ({
                                         className="w-12 h-12 rounded-md object-contain"
                                     />) :
                                     <Building2 size={66} />
-                                } 
+                                }
                             </div>
 
                             <div className="text-center font-semibold text-lg mb-4">{companyData.name}</div>
