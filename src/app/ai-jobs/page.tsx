@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { getJobs, getTotalJobsCount } from '@/lib/sanity';
 import { urlFor } from '@/lib/sanityImage';
-import { Search, MapPin, ChevronDown, Clock, Bookmark, ExternalLink, List, Grid, Plus, Minus, ChevronRight, ChevronLeft, Building2 } from 'lucide-react';
+import { Search, MapPin, ChevronDown, Clock, Bookmark, ExternalLink, LayoutList, LayoutGrid, Plus, Minus, ChevronRight, ChevronLeft, Building2 } from 'lucide-react';
 import { ROUTES } from '@/app/routes';
 import Link from 'next/link';
 import LocationInput from '../components/LocationInput';
@@ -473,15 +473,15 @@ const AIJobs: React.FC = () => {
                                         onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}
                                     >
                                         {viewMode === 'list' ? (
-                                            <List className="w-5 h-5" />
+                                            <LayoutList className="w-5 h-5" />
                                         ) : (
-                                            <Grid className="w-5 h-5" />
+                                            <LayoutGrid className="w-5 h-5" />
                                         )}
                                     </button>
                                 </div>
                             </div>
 
-                            {/* List View */}
+                            {/* LayoutList View */}
                             {viewMode === 'list' ? (
                                 <div className="space-y-4">
                                     {jobs.map((job, index) => (
@@ -569,7 +569,7 @@ const AIJobs: React.FC = () => {
                                 </div>
                             ) : ''}
 
-                            {/* Grid View */}
+                            {/* LayoutGrid View */}
                             {viewMode === 'grid' ? (
                                 <div className="grid grid-cols-2 gap-4">
                                     {jobs.map((job) => (
