@@ -22,10 +22,10 @@ const Podcast: React.FC = () => {
 
     return (
         <div className="bg-[#344252] p-6 mt-5">
-            <h2 className="text-xl font-bold mt-5 text-white">{podcast.title}</h2>
+            <h2 className="text-xl font-bold mt-5 text-white">{podcast?.title}</h2>
             <div className="lg:grid lg:grid-cols-12 gap-6 mt-8">
                 <div className="lg:col-span-4">
-                    <img src={podcast.image.asset.url} alt="Podcast" className="w-[100%] h-[215] object-cover" />
+                    <img src={podcast?.image?.asset.url} alt="Podcast" className="w-[100%] h-[215] object-cover" />
                 </div>
                 <div className="lg:col-span-8">
                     <p className="text-white">
