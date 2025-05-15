@@ -216,16 +216,16 @@ const AIJobs: React.FC = () => {
     const fetchData = async () => {
         setIsLoading(true);
 
-        const filters = {
-
-            // jobType: ['Full-time'],
-        };
+        
         const [data, count] = await Promise.all([
             getCompanies(currentPage, PAGE_SIZE, selectedOptions),
             getTotalCompaniesCount(selectedOptions),
         ]);
         setJobs(data);
-        console.log(data);
+        if( currentPage == 0){
+            setCurrentPage(1)
+            
+        }
         setTotalCount(count);
         setIsLoading(false);
 
@@ -267,6 +267,11 @@ const AIJobs: React.FC = () => {
         selectOption("locationCity", location);
     };
 
+    const resetFilter = () => {
+        setSelectedOptions({});
+        setCurrentPage(0);
+        setSelectedOptionSort('');
+    }
 
     return (
         <div className="job-listing">
@@ -417,10 +422,15 @@ const AIJobs: React.FC = () => {
                         <div className="col-span-3">
                             <div className="flex justify-between items-center mb-6">
                                 <div className="text-gray-600">
-                                    All <span className="text-gray-800 font-semibold">{totalCount}</span> jobs found
+                                    <span className="text-gray-800 font-semibold">{totalCount > 0 ? "All " + totalCount : 0}</span> jobs found
                                 </div>
                                 <div className="flex items-center gap-4">
+                                    <button className="py-2 px-4 border border-gray-300 rounded-md flex items-center gap-2" onClick={resetFilter}>
+                                        <span>Reset</span>
+
+                                    </button>
                                     <div className="relative">
+
                                         <button className="p-2 border border-gray-300 rounded-md flex items-center gap-2" onClick={toggleDropdownSort}>
                                             <span>Sort By</span>
                                             <ChevronDown className="w-5 h-5" />
@@ -458,7 +468,7 @@ const AIJobs: React.FC = () => {
                                             {/* Job Title */}
                                             <div className="sm:col-span-12">
                                                 <Link
-                                                    href={ROUTES.COMPANIES+job.slug.current}
+                                                    href={ROUTES.COMPANIES + job.slug.current}
                                                     className="text-lg font-semibold text-gray-800 hover:text-blue-600"
                                                 >
                                                     {job.name}

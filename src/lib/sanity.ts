@@ -1154,3 +1154,21 @@ export async function getCompaniesLocations(searchTerm: string): Promise<any> {
 
     return deduplicatedResults
 }
+
+export async function getPodcastData(): Promise<any> {
+  const query = `*[_type == "podcast" && slug.current == "podcasts"][0]{
+    _id,
+    title,
+    slug,
+    body,
+    image {
+      asset->{
+        _id,
+        url
+      }
+    }
+  }`;
+
+  const data = await client.fetch(query);
+  return data;
+}

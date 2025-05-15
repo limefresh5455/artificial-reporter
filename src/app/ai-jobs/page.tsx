@@ -6,6 +6,7 @@ import { urlFor } from '@/lib/sanityImage';
 import { Search, MapPin, ChevronDown, Clock, Bookmark, ExternalLink, List, Grid, Plus, Minus, ChevronRight, ChevronLeft, Building2 } from 'lucide-react';
 import { ROUTES } from '@/app/routes';
 import Link from 'next/link';
+import LocationInput from '../components/LocationInput';
 
 const PAGE_SIZE = 8;
 
@@ -251,7 +252,10 @@ const AIJobs: React.FC = () => {
             getTotalJobsCount(selectedOptions),
         ]);
         setJobs(data);
-        console.log(data);
+        if (currentPage == 0) {
+            setCurrentPage(1)
+
+        }
         setTotalCount(count);
         setIsLoading(false);
     };
@@ -283,8 +287,17 @@ const AIJobs: React.FC = () => {
     };
 
     const paginationRange = getPaginationRange(totalPages, currentPage);
-
-
+    const resetFilter = () => {
+        setSelectedOptions({});
+        setCurrentPage(0);
+        setSelectedOptionSort('');
+    }
+    const handleLocationSelect = (location: string) => {
+        // console.log("Selected location:", location);
+        selectOption("locationCountry", location);
+        selectOption("locationState", location);
+        selectOption("locationCity", location);
+    };
 
     return (
         <div className="job-listing">
@@ -301,6 +314,7 @@ const AIJobs: React.FC = () => {
                                             type="text"
                                             placeholder="Artificial Intelligence"
                                             className="w-full pl-8 pr-4 py-2 focus:outline-none"
+                                            
                                             onChange={(e) => selectOption(
                                                 "title",
                                                 e.target.value
@@ -308,19 +322,12 @@ const AIJobs: React.FC = () => {
                                         />
                                     </div>
 
-                                    <div className="input_box relative">
-                                        <MapPin size={20} />
-                                        <input
-                                            type="text"
-                                            placeholder="Location"
-                                            className="w-full pl-8 pr-4 py-2 focus:outline-none"
+                                    <LocationInput
+                                        onSelect={handleLocationSelect}
+                                        placeholder="Location"
+                                        className=" input_box"
+                                    />
 
-                                            onChange={(e) => selectOption(
-                                                "location",
-                                                e.target.value
-                                            )}
-                                        />
-                                    </div>
 
                                     <div className="flex justify-end">
                                         <button
@@ -440,9 +447,13 @@ const AIJobs: React.FC = () => {
                         <div className="col-span-3">
                             <div className="flex justify-between items-center mb-6">
                                 <div className="text-gray-600">
-                                    All <span className="text-gray-800 font-semibold">{totalCount}</span> jobs found
+                                    <span className="text-gray-800 font-semibold">{totalCount > 0 ? "All " + totalCount : 0}</span> jobs found
                                 </div>
                                 <div className="flex items-center gap-4">
+                                    <button className="py-2 px-4 border border-gray-300 rounded-md flex items-center gap-2" onClick={resetFilter}>
+                                        <span>Reset</span>
+
+                                    </button>
                                     <div className="relative">
                                         <button className="p-2 border border-gray-300 rounded-md flex items-center gap-2" onClick={toggleDropdownSort}>
                                             <span>Sort By</span>
@@ -508,13 +519,12 @@ const AIJobs: React.FC = () => {
 
 
                                                 <div>
-                                                    <a
-                                                        href="#"
-                                                        className={`text-sm capitalize px-2 py-1 rounded 
+                                                    <p
+                                                        className={`text-sm text-center inline-block capitalize px-2 py-1 rounded 
                               ${typeStyles[job.jobType as keyof typeof typeStyles]}`}
                                                     >
                                                         {job.jobType}
-                                                    </a>
+                                                    </p>
                                                     <span className="text-sm text-gray-500 flex items-center gap-1 mt-2">
                                                         <Clock className="w-4 h-4" />
                                                         <b> Posted {job.datePosted ? new Date(job.datePosted).toDateString() : ''}</b>

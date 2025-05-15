@@ -18,63 +18,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
     const [suggestions, setSuggestions] = useState<any>([]);
     const [isFocused, setIsFocused] = useState(false);
 
-    // useEffect(() => {
-    //     const fetchSuggestions = async () => {
-    //         if (!query) {
-    //             setSuggestions([]);
-    //             return;
-    //         }
-
-    //         const result = await getCompaniesLocations(query);
-    //         console.log(result)
-    //         // try {
-
-    //         //     const res = await axios.get("https://nominatim.openstreetmap.org/search", {
-    //         //         params: {
-    //         //             format: "json",
-    //         //             q: query,
-    //         //             addressdetails: 1,
-    //         //             limit: 5,
-    //         //         },
-    //         //     });
-
-    //         //     // Find the best matching result
-    //         //     const bestMatch = res.data.find((item: any) => {
-    //         //         const { address } = item;
-    //         //         const city = address.city || address.town || address.village || address.hamlet || "";
-    //         //         const state = address.state || "";
-    //         //         const country = address.country || "";
-    //         //         const queryLower = query.toLowerCase().trim();
-
-    //         //         // Check if query matches city, state, or country
-    //         //         return (
-    //         //             city.toLowerCase() === queryLower ||
-    //         //             state.toLowerCase() === queryLower ||
-    //         //             country.toLowerCase() === queryLower
-    //         //         );
-    //         //     });
-
-    //         //     // If a match is found, format it; otherwise, return an empty array or handle as needed
-    //         //     const results = bestMatch
-    //         //         ? [
-    //         //             {
-    //         //                 display: `${bestMatch.address.city || bestMatch.address.town || bestMatch.address.village || bestMatch.address.hamlet || ""}${bestMatch.address.state ? ", " + bestMatch.address.state : ""
-    //         //                     }${bestMatch.address.country ? ", " + bestMatch.address.country : ""}`,
-    //         //                 fullData: bestMatch,
-    //         //             },
-    //         //         ]
-    //         //         : [];
-
-    //         //     setSuggestions(results);
-    //         // } catch (error) {
-    //         //     console.error("Location API Error:", error);
-    //         //     setSuggestions([]); // Optional: clear suggestions on error
-    //         // }
-    //     };
-
-    //     const delayDebounce = setTimeout(fetchSuggestions, 300);
-    //     return () => clearTimeout(delayDebounce);
-    // }, [query]);
+   
 
     useEffect(() => {
         const fetchSuggestions = async () => {
