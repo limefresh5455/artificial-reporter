@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { getCompanyData } from '@/lib/sanity';
 import { urlFor } from '@/lib/sanityImage';
-import { Linkedin, Building2, ArrowLeft } from 'lucide-react';
+import { Linkedin, Building2 } from 'lucide-react';
 import BackButton from '@/app/components/BackButton';
 
 

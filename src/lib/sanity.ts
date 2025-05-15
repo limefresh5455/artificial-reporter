@@ -742,6 +742,7 @@ export async function getJobs(
         _id,
         title,
         jobTitle,
+        slug,
         jobType,
         location,
         payAmount,
@@ -1068,6 +1069,50 @@ export async function getCompanyData(params: string): Promise<any> {
     return client.fetch(query);
 }
 
+export async function getJobData(slug: string): Promise<any> {
+    const query = `*[_type == "jobListing" && slug.current == "${slug}"][0]{
+  _id,
+  title,
+  jobTitle,
+  slug,
+  jobType,
+  location,
+  payAmount,
+  remoteWork,
+  datePosted,
+  dateUpdated,
+  hourlyOrSalary,
+  experienceLevel,
+  education,
+  jobDescription,
+  hiringManagerName,
+  hiringManagerEmail,
+  hiringManagerPhone,
+  company->{
+    _id,
+    name,
+    description,
+    employeeCount,
+    isAICompany,
+    logo {
+      asset->{
+        _id,
+        url
+      }
+    },
+    linkedin,
+    website,
+    locationCity,
+    locationState,
+    locationCountry,
+    category->{ _id, title }
+  }
+}`;
+
+    return client.fetch(query);
+
+
+}
 
 export async function getSiteLogo(): Promise<any> {
     const query = `*[_type == "logo"][0]{

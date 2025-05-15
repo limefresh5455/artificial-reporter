@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { getJobs, getTotalJobsCount } from '@/lib/sanity';
 import { urlFor } from '@/lib/sanityImage';
-import { Search, MapPin, ChevronDown, Clock, Bookmark, ExternalLink, List, Grid, Plus, Minus, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Search, MapPin, ChevronDown, Clock, Bookmark, ExternalLink, List, Grid, Plus, Minus, ChevronRight, ChevronLeft, Building2 } from 'lucide-react';
 import { ROUTES } from '@/app/routes';
 import Link from 'next/link';
 
@@ -480,21 +480,33 @@ const AIJobs: React.FC = () => {
                                         >
                                             {/* Job Title */}
                                             <div className="sm:col-span-12">
-                                                <a
-                                                    href="#"
+                                                <Link
+                                                    href={ROUTES.JOBS + job.slug?.current}
                                                     className="text-lg font-semibold text-gray-800 hover:text-blue-600"
                                                 >
                                                     {job.title}
-                                                </a>
+                                                </Link>
                                             </div>
 
                                             {/* Company Info */}
                                             <div className="sm:col-span-5 flex items-start sm:items-center gap-4">
-                                                <img
+                                                {/* <img
                                                     src={job.company?.logo?.asset?.url}
                                                     alt="Company Logo"
                                                     className="w-12 h-12 rounded-md object-contain"
-                                                />
+                                                /> */}
+
+                                                {job?.company?.logo?.asset?.url ? (
+                                                    <img
+                                                        src={job?.company.logo.asset.url}
+                                                        alt={`${job?.company?.name || 'Company'} Logo`}
+                                                        className="w-12 h-12 rounded-md object-contain"
+                                                    />
+                                                ) : (
+                                                    <Building2 size={48} className="text-gray-400" />
+                                                )}
+
+
                                                 <div>
                                                     <a
                                                         href="#"
@@ -555,7 +567,16 @@ const AIJobs: React.FC = () => {
 
                                             {/* Company Logo */}
                                             <a href="#" className="company_logo">
-                                                <img src={job.company?.logo?.asset?.url} alt={`${job.company?.name} logo`} className="w-12 h-12 rounded-md mb-2 object-contain" />
+                                                {/* <img src={job.company?.logo?.asset?.url} alt={`${job.company?.name} logo`} className="w-12 h-12 rounded-md mb-2 object-contain" /> */}
+                                                {job?.company?.logo?.asset?.url ? (
+                                                    <img
+                                                        src={job?.company.logo.asset.url}
+                                                        alt={`${job?.company?.name || 'Company'} Logo`}
+                                                        className="w-12 h-12 rounded-md object-contain mb-2"
+                                                    />
+                                                ) : (
+                                                    <Building2 size={48} className="text-gray-400 mb-2" />
+                                                )}
                                             </a>
 
                                             {/* Save Button */}
