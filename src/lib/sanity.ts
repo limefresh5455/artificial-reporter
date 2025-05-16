@@ -647,7 +647,7 @@ interface Filters {
 export async function getJobs(
     page = 1,
     pageSize = 10,
-    filters: Filters = {}
+    filters: Record<string, any> = {}
 ): Promise<any[]> {
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
@@ -737,8 +737,18 @@ export async function getJobs(
         ? `*[ _type == "jobListing" && ${conditions.join(" && ")} ]`
         : `*[ _type == "jobListing" ]`;
 
+
+    const sortMap: Record<string, string> = {
+        Latest: "_createdAt desc",
+        "Job Title": "title asc",
+        Location: "location desc"
+    };
+    
+    const sortBy = sortMap[filters.sortBy] || "_createdAt desc"; // default to latest
+console.log(sortBy)
+
     const query = `
-      ${whereClause} | order(_createdAt desc) [${start}...${end}] {
+        ${whereClause} | order(${sortBy}) [${start}...${end}] {
         _id,
         title,
         jobTitle,
@@ -1179,7 +1189,7 @@ export async function getPodcast(platform?: string): Promise<any> {
 
     var platformFilter = platform ? `&& platform match "*${platform}*"` : '';
 
-    if(platform == "All"){
+    if (platform == "All") {
         platformFilter = '';
     }
 
@@ -1212,7 +1222,7 @@ export async function getPodcast(platform?: string): Promise<any> {
 export async function getPodcastCount(platform?: string): Promise<any> {
     var platformFilter = platform ? `&& platform match "*${platform}*"` : '';
 
-    if(platform == "All"){
+    if (platform == "All") {
         platformFilter = '';
     }
 

@@ -76,11 +76,11 @@ const AllPodcasts = () => {
                 </div>
             </section>
 
-            <section className="job-listing ai_directory py-10">
+            <section className="job-listing ai_directory ">
                 <div className="container mx-auto">
                     <div className="flex justify-between items-center mb-6">
                         <div className="text-gray-600">
-                            <span className="text-gray-800 font-semibold">{totalCount > 0 ? "All " + totalCount : 0}</span> jobs found
+                            <span className="text-gray-800 font-semibold">{totalCount > 0 ? "All " + totalCount : 0}</span> podcasts found
                         </div>
                         <div className="flex items-center gap-4">
 

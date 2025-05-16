@@ -48,7 +48,9 @@ const AIJobs: React.FC = () => {
 
     const selectOptionSort = (option: string) => {
         setSelectedOptionSort(option);
+        setSelectedOptions({ ...selectedOptions, sortBy: option });
         setIsOpen(false); // Close dropdown after selection
+        console.log("first",option)
     };
 
     const toggleDropdown = (id: string) => {
@@ -263,7 +265,7 @@ const AIJobs: React.FC = () => {
 
 
         fetchData();
-    }, [currentPage]);
+    }, [currentPage, selectedOptionSort]);
 
 
     const getPaginationRange = (totalPages: number, currentPage: number, delta = 2) => {
