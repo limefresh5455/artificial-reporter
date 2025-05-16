@@ -41,7 +41,7 @@ export default function SharePopup({ platformUrl }: SharePopupProps) {
             {showPopup && (
                 <div
                     ref={popupRef}
-                    className="absolute z-10 mt-2 right-0 w-48 bg-white shadow-md border border-gray-200 rounded-xl p-2"
+                    className="absolute z-1 mt-2 right-0 w-48 bg-white shadow-md border border-gray-200 rounded-xl p-2"
                 >
                     <a
                         href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}

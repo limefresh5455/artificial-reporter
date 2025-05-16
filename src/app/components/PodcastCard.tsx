@@ -15,7 +15,7 @@ const PodcastCard = ({ podcast }: any) => {
         <div key={podcast._id} className="podcast-card bg-white rounded-lg border border-gray-200 p-5 flex flex-col md:flex-row items-start gap-4">
             <img src={podcast?.coverImage?.asset.url} className="w-50 h-full object-cover rounded" alt="Podcast Cover" />
             <div className="flex-1">
-                <a href="#" className="text-xl font-semibold text-[#000] hover:text-[#31795a]">{podcast.title}</a>
+                <a href={podcast.platformUrl} target="_blank" className="text-xl font-semibold text-[#000] hover:text-[#31795a]">{podcast.title}</a>
 
                 <div className="  mt-2">
                     {podcast.audioFile ? (

@@ -1176,7 +1176,12 @@ export async function getPodcastData(): Promise<any> {
 
 
 export async function getPodcast(platform?: string): Promise<any> {
-    const platformFilter = platform ? `&& platform match "*${platform}*"` : '';
+
+    var platformFilter = platform ? `&& platform match "*${platform}*"` : '';
+
+    if(platform == "All"){
+        platformFilter = '';
+    }
 
     const query = `*[_type == "podcastEpisode" ${platformFilter}]{
     _id,
@@ -1205,7 +1210,11 @@ export async function getPodcast(platform?: string): Promise<any> {
 
 
 export async function getPodcastCount(platform?: string): Promise<any> {
-    const platformFilter = platform ? `&& platform match "*${platform}*"` : '';
+    var platformFilter = platform ? `&& platform match "*${platform}*"` : '';
+
+    if(platform == "All"){
+        platformFilter = '';
+    }
 
     const query = `count(*[_type == "podcastEpisode" ${platformFilter}])`;
 

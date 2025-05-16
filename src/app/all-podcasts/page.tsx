@@ -90,9 +90,9 @@ const AllPodcasts = () => {
                                     <span>Sort By</span>
                                     <ChevronDown className="w-5 h-5" />
                                 </button>
-                                <ul className={`absolute w-40 bg-white border border-gray-300 rounded-md mt-1 ${isOpen ? 'block' : 'hidden'
+                                <ul className={`absolute w-40 z-2 bg-white border border-gray-300 rounded-md mt-1 ${isOpen ? 'block' : 'hidden'
                                     }`}>
-                                    {['Spotify', 'Apple', 'Google'].map((option) => (
+                                    {['All', 'Spotify', 'Apple', 'Google'].map((option) => (
                                         <li key={option} className="p-2 hover:bg-gray-100 cursor-pointer" onClick={() => selectOptionSort(option)}>
                                             {option}
                                         </li>
