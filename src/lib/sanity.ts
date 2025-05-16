@@ -1172,3 +1172,37 @@ export async function getPodcastData(): Promise<any> {
   const data = await client.fetch(query);
   return data;
 }
+
+
+export async function getPodcast(): Promise<any> {
+  const query = `*[_type == "podcastEpisode"]{
+        _id,
+        title,
+        duration,
+        platform,
+        platformUrl,
+        audioFile{
+            asset->{
+            url
+            }
+        },
+        coverImage{
+            asset->{
+            url
+            }
+        },
+        body
+        }`;
+
+  const data = await client.fetch(query);
+  return data;
+}
+
+
+export async function getPodcastCount(): Promise<any> {
+  const query = `count(*[_type == "podcastEpisode"])`;
+
+
+  const data = await client.fetch(query);
+  return data;
+}

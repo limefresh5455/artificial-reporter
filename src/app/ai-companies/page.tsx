@@ -449,9 +449,9 @@ const AIJobs: React.FC = () => {
                                         onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}
                                     >
                                         {viewMode === 'list' ? (
-                                            <LayoutList className="w-5 h-5" />
+                                            <LayoutList  strokeWidth={1.5} className="w-5 h-5" />
                                         ) : (
-                                            <LayoutGrid className="w-5 h-5" />
+                                            <LayoutGrid strokeWidth={1.5} className="w-5 h-5" />
                                         )}
                                     </button>
                                 </div>

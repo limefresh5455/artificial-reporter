@@ -1213,7 +1213,8 @@ body {
 }
 
 .apply-btn {
-    width: 120px;
+    max-width: 200px;
+    width: 100%;
     line-height: 41px;
     font-weight: 500;
     font-size: 14px;
@@ -1595,26 +1596,56 @@ span.post_date {
 .content_wrap {
     padding-right: 30px;
 }
-.content_wrap h2{font-size: 50px !important;font-weight: 600 !important;margin-bottom: 10px;}
-.content_wrap h3{font-size: 25px !important;font-weight: 600 !important;margin-bottom: 10px;}
-.content_wrap h4{font-size: 22px !important;font-weight: 600 !important;margin-bottom: 10px;}
-.content_wrap h5{font-size: 20px !important;font-weight: 600 !important;margin-bottom: 10px;}
-.content_wrap h6{font-size: 18px !important;font-weight: 600 !important;margin-bottom: 10px;}
 
-.content_wrap ul{
+.content_wrap h2 {
+    font-size: 50px !important;
+    font-weight: 600 !important;
+    margin-bottom: 10px;
+}
+
+.content_wrap h3 {
+    font-size: 25px !important;
+    font-weight: 600 !important;
+    margin-bottom: 10px;
+}
+
+.content_wrap h4 {
+    font-size: 22px !important;
+    font-weight: 600 !important;
+    margin-bottom: 10px;
+}
+
+.content_wrap h5 {
+    font-size: 20px !important;
+    font-weight: 600 !important;
+    margin-bottom: 10px;
+}
+
+.content_wrap h6 {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    margin-bottom: 10px;
+}
+
+.content_wrap ul {
     list-style-type: disc;
     margin: 0 0 25px 18px;
 }
-.content_wrap ol{
+
+.content_wrap ol {
     list-style-type: auto;
     margin: 0 0 25px 18px;
 }
-.content_wrap ol li, .content_wrap ul li{
+
+.content_wrap ol li,
+.content_wrap ul li {
     margin-bottom: 15px;
 }
+
 section.about {
     margin-bottom: 40px;
 }
+
 .content_wrap h5 {
     font-size: 25px;
     margin: 15px 0 13px;
@@ -1641,7 +1672,66 @@ section.about {
 }
 
 @media (max-width: 767px) {
-    .popularWrap{
-      width: 100%;
- }
+    .popularWrap {
+        width: 100%;
+    }
 }
+
+
+
+
+
+a.apply-btn-play {
+    background: #005025;
+    display: flex;
+    width: 100px;
+    padding: 0;
+    border-radius: 5px;
+    color: #fff;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.bi-play::before,
+.bi-pause::before {
+    font-size: 32px;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+
+
+
