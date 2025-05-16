@@ -1156,7 +1156,7 @@ export async function getCompaniesLocations(searchTerm: string): Promise<any> {
 }
 
 export async function getPodcastData(): Promise<any> {
-    const query = `*[_type == "podcast" && slug.current == "podcasts"][0]{
+    const query = `*[_type == "podcast" ][0]{
     _id,
     title,
     slug,
@@ -1170,6 +1170,7 @@ export async function getPodcastData(): Promise<any> {
   }`;
 
     const data = await client.fetch(query);
+    console.log(data)
     return data;
 }
 

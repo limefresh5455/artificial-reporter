@@ -9,5 +9,6 @@ export const ROUTES = {
     INSIGHT: '/insight/',
     SPONSORS: '/sponsors/',
     JOBS: '/ai-jobs/',
-    COMPANIES: '/ai-companies/'
+    COMPANIES: '/ai-companies/',
+    ALLPODCASTS: '/all-podcasts/',
 };
