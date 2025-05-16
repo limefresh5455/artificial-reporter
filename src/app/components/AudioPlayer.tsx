@@ -8,7 +8,7 @@ const formatTime = (time: number) => {
     return [hrs, mins, secs].map(v => String(v).padStart(2, '0')).join(':');
 };
 
-const AudioPlayer = ({ audioUrl }: { audioUrl: string }) => {
+const AudioPlayer = ({ audioUrl, title }: { audioUrl: string, title: string }) => {
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -82,26 +82,26 @@ const AudioPlayer = ({ audioUrl }: { audioUrl: string }) => {
                 </button>
 
             </div>
-            {isPlaying ? (
-                <div className='grid-col-12 grid'>
-                    <span className="text-sm text-gray-700 font-mono col-span-6 text-left">
-                        {formatTime(currentTime)}
-                    </span>
-                    <span className="text-sm text-gray-700 font-mono col-span-6 text-right">
-                        {formatTime(duration)}
-                    </span>
-                    <input
-                        type="range"
-                        min={0}
-                        max={100}
-                        step={0.1}
-                        value={progress}
-                        onChange={handleSeek}
-                        
-                        className="w-full accent-[#005025] col-span-12 range-slider__range"
-                    />
-                </div>
-            ) : ''}
+            {/* {isPlaying ? ( */}
+            <div className='grid-col-12 grid bg-[#dbdbdb] text-[#000] pt-3 pb-4 px-4 rounded-[.75rem]'>
+                <span className="text-sm  font-mono col-span-6 text-left ">
+                    {formatTime(currentTime)}
+                </span>
+                <span className="text-sm  font-mono col-span-6 text-right ">
+                    {formatTime(duration)}
+                </span>
+                <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    step={0.1}
+                    value={progress}
+                    onChange={handleSeek}
+
+                    className="w-full accent-[#000] col-span-12 range-slider__range"
+                />
+            </div>
+            {/* ) : ''} */}
 
 
             <audio ref={audioRef} src={audioUrl} preload="metadata" />

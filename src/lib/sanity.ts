@@ -1156,7 +1156,7 @@ export async function getCompaniesLocations(searchTerm: string): Promise<any> {
 }
 
 export async function getPodcastData(): Promise<any> {
-  const query = `*[_type == "podcast" && slug.current == "podcasts"][0]{
+    const query = `*[_type == "podcast" && slug.current == "podcasts"][0]{
     _id,
     title,
     slug,
@@ -1169,40 +1169,46 @@ export async function getPodcastData(): Promise<any> {
     }
   }`;
 
-  const data = await client.fetch(query);
-  return data;
+    const data = await client.fetch(query);
+    return data;
 }
 
 
-export async function getPodcast(): Promise<any> {
-  const query = `*[_type == "podcastEpisode"]{
-        _id,
-        title,
-        duration,
-        platform,
-        platformUrl,
-        audioFile{
-            asset->{
-            url
-            }
-        },
-        coverImage{
-            asset->{
-            url
-            }
-        },
-        body
-        }`;
+export async function getPodcast(platform?: string): Promise<any> {
+    const platformFilter = platform ? `&& platform match "*${platform}*"` : '';
 
-  const data = await client.fetch(query);
-  return data;
+    const query = `*[_type == "podcastEpisode" ${platformFilter}]{
+    _id,
+    title,
+    duration,
+    platform,
+    platformUrl,
+    embedCode,
+    audioFile{
+      asset->{
+        url
+      }
+    },
+    coverImage{
+      asset->{
+        url
+      }
+    },
+    body
+  }`;
+
+    const data = await client.fetch(query);
+    return data;
 }
 
 
-export async function getPodcastCount(): Promise<any> {
-  const query = `count(*[_type == "podcastEpisode"])`;
+
+export async function getPodcastCount(platform?: string): Promise<any> {
+    const platformFilter = platform ? `&& platform match "*${platform}*"` : '';
+
+    const query = `count(*[_type == "podcastEpisode" ${platformFilter}])`;
 
 
-  const data = await client.fetch(query);
-  return data;
+    const data = await client.fetch(query);
+    return data;
 }

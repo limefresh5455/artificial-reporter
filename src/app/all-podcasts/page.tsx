@@ -12,14 +12,15 @@ const AllPodcasts = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [selectedPlatform, setselectedPlatform] = useState<string>('');
 
 
     const PAGE_SIZE = 8;
 
     const fetchData = async () => {
         const [data, count] = await Promise.all([
-            getPodcast(),
-            getPodcastCount(),
+            getPodcast(selectedPlatform),
+            getPodcastCount(selectedPlatform),
         ]);
         setPodcasts(data);
         setTotalCount(count);
@@ -29,15 +30,14 @@ const AllPodcasts = () => {
 
 
         fetchData();
-    }, []);
+    }, [selectedPlatform]);
 
-
-    const selectOptionSort = (option: string) => {
-
-        setIsOpen(false); // Close dropdown after selection
-        console.log(option)
-        // fetchData()
+    const selectOptionSort = async (Platform: string) => {
+        setselectedPlatform(Platform); // Assuming you have a state to store podcast data
+        setIsOpen(false);
     };
+
+
     const toggleDropdownSort = () => {
         setIsOpen((prev) => !prev);
     };
@@ -92,14 +92,14 @@ const AllPodcasts = () => {
                                 </button>
                                 <ul className={`absolute w-40 bg-white border border-gray-300 rounded-md mt-1 ${isOpen ? 'block' : 'hidden'
                                     }`}>
-                                    {['Latest', 'Company Type', 'Employees'].map((option) => (
+                                    {['Spotify', 'Apple', 'Google'].map((option) => (
                                         <li key={option} className="p-2 hover:bg-gray-100 cursor-pointer" onClick={() => selectOptionSort(option)}>
                                             {option}
                                         </li>
                                     ))}
                                 </ul>
                             </div>
-                            <button
+                            {/* <button
                                 className={`p-2 border rounded-md ${viewMode === 'list' ? 'bg-gray-100 border-gray-300' : 'border-gray-300'}`}
                                 onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}
                             >
@@ -108,14 +108,14 @@ const AllPodcasts = () => {
                                 ) : (
                                     <LayoutGrid strokeWidth={1.5} className="w-5 h-5" />
                                 )}
-                            </button>
+                            </button> */}
 
                         </div>
                     </div>
 
                     <div className="podcast-grid grid grid-cols-1  gap-6">
                         {podcasts.map((podcast: any) => (
-                            <PodcastCard  podcast={podcast} key={podcast._id} />
+                            <PodcastCard podcast={podcast} key={podcast._id} />
                         ))}
 
                     </div>
