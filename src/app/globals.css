@@ -1735,3 +1735,33 @@ a.apply-btn-play {
 
 
 
+
+
+.contrib-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.contrib-box img {
+    width: 80px;
+    height: 80px;
+    border-radius: 9999px;
+    object-fit: cover;
+}
+
+/* .single_article_inner {
+    margin: 0 auto;
+    background: #fff;
+    padding: 40px;
+    margin-top: -325px;
+    z-index: 99;
+    position: relative;
+} */
+
+.article_img img {
+    height: 500px;
+    object-fit: cover;
+    width: 100%;
+}

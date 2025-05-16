@@ -1236,6 +1236,27 @@ export async function getSearchResult(query: string): Promise<any[]> {
         { q: `*${query}*` }
     );
 
-    console.log(results)
+    return results;
+}
+
+export async function getContributorUser(slug: string): Promise<any[]> {
+    const query =
+        `*[
+            _type == "newsArticle" &&
+            editor->name == $slug 
+        ] {
+            _id,
+            title,
+            overview,
+            image,
+            newsCategory[0]->{
+            value},
+            slug,
+            _createdAt
+                    }`;
+
+    const params = { slug };
+
+    const results = await client.fetch(query, params);
     return results;
 }
