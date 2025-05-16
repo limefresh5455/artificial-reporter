@@ -70,7 +70,7 @@ const Popular: React.FC = () => {
                   </h4>
                   )}
                   <p className="text-gray-600 text-sm">                   
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+                    {story.overview.slice(0,80)}...
                   </p>
                 </div>
               </div>
