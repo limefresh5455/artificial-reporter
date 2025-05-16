@@ -46,11 +46,11 @@ export default function RootLayout({
                 }
             }
         };
-        const tailwindLink = document.createElement('link');
-        tailwindLink.rel = 'stylesheet';
-        tailwindLink.href = 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
-        document.head.appendChild(tailwindLink);
-        checkUser();
+        // const tailwindLink = document.createElement('link');
+        // tailwindLink.rel = 'stylesheet';
+        // tailwindLink.href = 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
+        // document.head.appendChild(tailwindLink);
+        // checkUser();
     }, []);
 
     return (
@@ -60,6 +60,9 @@ export default function RootLayout({
                     src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
                     strategy="afterInteractive"
                 />
+
+                <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"></link>
+
             </head>
             <body
                 className={`${poppins.variable} antialiased`}

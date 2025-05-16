@@ -607,22 +607,7 @@ export async function getSponsors(): Promise<any[]> {
 }
 
 
-export async function getSearchResult(query: string): Promise<any[]> {
-    const results = await client.fetch(
-        `*[(_type == "page" || _type == "newsArticle" || _type == "insight" || _type == "newsCategory" || _type == "jobListing") && (title match $q || body match $q)][0...10]{
-        _id,
-        title,
-        value,
-        newsCategory[0]->{
-        value},
-        _type,
-        slug,
-        image
-      }`,
-        { q: `*${query}*` }
-    );
-    return results;
-}
+
 
 
 function getDateFromLabel(label: string): string | null {
@@ -743,9 +728,8 @@ export async function getJobs(
         "Job Title": "title asc",
         Location: "location desc"
     };
-    
+
     const sortBy = sortMap[filters.sortBy] || "_createdAt desc"; // default to latest
-console.log(sortBy)
 
     const query = `
         ${whereClause} | order(${sortBy}) [${start}...${end}] {
@@ -1231,4 +1215,27 @@ export async function getPodcastCount(platform?: string): Promise<any> {
 
     const data = await client.fetch(query);
     return data;
+}
+
+
+export async function getSearchResult(query: string): Promise<any[]> {
+    const results = await client.fetch(
+        `*[(_type == "page" || _type == "newsArticle" || _type == "insight" || _type == "aiCompany" || _type == "podcastEpisode" || _type == "newsCategory" || _type == "jobListing") && (title match $q || body match $q || name match $q)][0...10]{
+        _id,
+        title,
+        name,
+        logo,
+        value,
+        coverImage,
+        newsCategory[0]->{
+        value},
+        _type,
+        slug,
+        image
+      }`,
+        { q: `*${query}*` }
+    );
+
+    console.log(results)
+    return results;
 }

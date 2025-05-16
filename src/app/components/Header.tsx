@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from "react";
-import { Search, CircleUserRound, Menu } from "lucide-react";
+import { Search, CircleUserRound, Menu, Building2 } from "lucide-react";
 import TrendingSlider from "./TrendingSlider";
 import { getNavigationData, NavigationData, MenuItem, getSearchResult } from "@/lib/sanity";
 import Link from 'next/link';
@@ -65,6 +65,8 @@ const Header: React.FC = () => {
         if (item._type === "insight") return `${ROUTES.INSIGHT}${item.slug.current}`;
         if (item._type === "newsCategory") return `${ROUTES.NEWS}${item?.value?.current}`;
         if (item._type === "jobListing") return `${ROUTES.JOBS}`;
+        if (item._type === "aiCompany") return `${ROUTES.COMPANIES}`;
+        if (item._type === "podcastEpisode") return `${ROUTES.ALLPODCASTS}`;
         return `/${item.slug.current}`;
     };
 
@@ -91,7 +93,7 @@ const Header: React.FC = () => {
                         />
                         {searchQuery && searchResults.length > 0 && (
                             <div className="absolute mt-1 w-full bg-white border border-gray-300 rounded shadow-md z-50 max-h-60 overflow-y-auto">
-                                {['page', 'newsArticle', 'insight', 'newsCategory', 'jobListing'].map(type => {
+                                {['page', 'newsArticle', 'insight', 'newsCategory', 'jobListing', 'aiCompany', 'podcastEpisode'].map(type => {
                                     const groupItems = searchResults.filter(i => i._type === type);
                                     if (!groupItems.length) return null;
                                     const groupTitle = {
@@ -99,20 +101,36 @@ const Header: React.FC = () => {
                                         newsArticle: 'News',
                                         insight: 'Insights',
                                         newsCategory: 'Category',
-                                        jobListing: 'Jobs'
+                                        jobListing: 'Jobs',
+                                        aiCompany: 'Companies',
+                                        podcastEpisode: 'Podcasts',
                                     }[type];
                                     return (
                                         <div key={type}>
-                                            <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50">{groupTitle}</div>
+                                            <div className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase bg-gray-50">{groupTitle}</div>
                                             {groupItems.map(item => (
                                                 <Link
                                                     key={item._id}
                                                     href={getHref(item)}
-                                                    className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 text-sm text-black"
+                                                    className="text-left flex items-center gap-3 px-3 py-2 hover:bg-gray-100 text-sm text-black"
                                                     onClick={() => setMobileMenuOpen(false)}
                                                 >
                                                     {item.image && <img src={urlFor(item.image).url()} alt={item.title} className="w-8 h-8 object-cover rounded" />}
-                                                    <span>{item.title}</span>
+
+                                                    {item.coverImage && <img src={urlFor(item.coverImage).url()} alt={item.title} className="w-8 h-8 object-cover rounded" />}
+
+
+                                                    {item._type == "aiCompany" ? item?.logo ?
+                                                        (<img
+                                                            src={item?.logo && urlFor(item?.logo.asset).url()}
+                                                            alt="Company Logo"
+                                                            className="w-12 h-12 rounded-md object-contain"
+                                                        />) :
+                                                        <Building2 size={20} /> : ''
+                                                    }
+
+                                                    <span>{item?.title}</span>
+                                                    <span>{item?.name}</span>
                                                 </Link>
                                             ))}
                                         </div>
@@ -122,7 +140,7 @@ const Header: React.FC = () => {
                         )}
                     </div>
                     <Link href={ROUTES.SPONSORS} className="text-gray-600 hover:underline">Sponsors</Link>
-                    
+
                     <span className="text-gray-400">|</span>
                     {user == null ? (
                         <>
