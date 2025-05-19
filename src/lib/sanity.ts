@@ -518,7 +518,8 @@ export async function getStoryData(params = '', type = ''): Promise<any[]> {
         sponsored,
         editor->{
         name,
-        image
+        image,
+        slug
         },
         image,
         tags[]->{
@@ -1243,12 +1244,19 @@ export async function getContributorUser(slug: string): Promise<any[]> {
     const query =
         `*[
             _type == "newsArticle" &&
-            editor->name == $slug 
+            editor->slug.current == $slug 
         ] {
             _id,
             title,
             overview,
+            eventType,
+            date,
             image,
+            editor->{
+            name,
+            image,
+            bio
+            },
             newsCategory[0]->{
             value},
             slug,

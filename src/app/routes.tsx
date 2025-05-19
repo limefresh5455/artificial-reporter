@@ -11,4 +11,5 @@ export const ROUTES = {
     JOBS: '/ai-jobs/',
     COMPANIES: '/ai-companies/',
     ALLPODCASTS: '/all-podcasts/',
+    CONTRIBUTOR: '/contributor/',
 };

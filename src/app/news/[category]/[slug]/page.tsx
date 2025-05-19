@@ -169,7 +169,7 @@ const Story = ({
                                             <div className="post_author_detail">
 
                                                 {story.editor ? (
-                                                    <a className="post_author" href="#">
+                                                    <a className="post_author" href={ROUTES.CONTRIBUTOR+ story.editor?.slug.current}>
                                                         <span className="post_author_img"><img alt="" src={story.editor?.image ? urlFor(story.editor.image).url() : ''} />{story.editor?.name}</span>
                                                     </a>
                                                 ) : <p></p>}
