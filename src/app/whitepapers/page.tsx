@@ -81,13 +81,13 @@ const Whitepapers = () => {
                     )}
 
                     {/* Categories */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
                         {categories?.length > 0 && (
                             <>
                                 <li key={1 * .2}>
                                     <button
                                         onClick={() => setSelectedCategory(null)}
-                                        className={`hover:underline`}
+                                        className={`hover:underline hover:text-[#af0e14] text-[#134c90]`}
                                     >
                                         All
                                     </button>
@@ -98,7 +98,7 @@ const Whitepapers = () => {
                                         <li key={cat._id}>
                                             <button
                                                 onClick={() => setSelectedCategory(cat._id)}
-                                                className={`hover:underline ${selectedCategory === cat._id ? "text-blue-600 font-bold" : ""}`}
+                                                className={`hover:underline hover:text-[#af0e14] text-[#134c90] ${selectedCategory === cat._id ? " font-bold" : ""}`}
                                             >
                                                 {cat.title}
                                             </button>
@@ -110,7 +110,7 @@ const Whitepapers = () => {
                                         <li key={cat._id}>
                                             <button
                                                 onClick={() => setSelectedCategory(cat._id)}
-                                                className={`hover:underline ${selectedCategory === cat._id ? "text-blue-600 font-bold" : ""}`}
+                                                className={`hover:underline hover:text-[#af0e14] text-[#134c90] ${selectedCategory === cat._id ? " font-bold" : ""}`}
                                             >
                                                 {cat.title}
                                             </button>
@@ -125,7 +125,7 @@ const Whitepapers = () => {
                     {paginatedPapers.length == 0 ? "No data found" :
 
                         paginatedPapers.map((item, i) => (
-                            <div className="whitepaper_box mt-0 flex flex-col md:flex-row items-center md:items-start p-6 gap-6" key={item._id}>
+                            <div className="whitepaper_box mt-0 flex flex-col md:flex-row items-center md:items-start  gap-6" key={item._id}>
                                 <div className="cont flex-1">
                                     <a className="h4 text-lg font-semibold flex items-center gap-2" href={ROUTES.WHITEPAPERS +item.slug?.current}>
                                         <FileText />
@@ -139,7 +139,7 @@ const Whitepapers = () => {
                                     </a>
                                 </div>
                                 <div className="img w-full md:w-1/3">
-                                    <a href={item.slug?.current}>
+                                    <a href={ROUTES.WHITEPAPERS +item.slug?.current}>
                                         <img
                                             src={urlFor(item.thumbnail).url()}
                                             alt={`Whitepaper ${i + 1}`}
