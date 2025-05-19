@@ -20,7 +20,7 @@ const PopupModal = () => {
     if (!showPopup) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 mt-0" style={{marginTop:0}}>
             <div className="relative w-full max-w-lg mx-auto rounded-lg shadow-lg p-6 text-white overflow-hidden animate-slide-up">
                 <style jsx>{`
                     @keyframes slideUp {
