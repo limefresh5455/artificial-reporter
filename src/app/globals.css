@@ -1765,3 +1765,115 @@ a.apply-btn-play {
     object-fit: cover;
     width: 100%;
 }
+
+
+
+
+
+.whitepaper {
+  padding: 50px 0;
+}
+.whitepaper .container {
+  padding: 40px;
+  padding-bottom: 40px;
+  background: #fff;
+}
+ul.whitepaper_list {
+  padding-left: 21px;
+  margin-bottom: 20px;
+}
+.whitepaper_box {
+  display: flex;
+  align-items: start;
+  padding-top: 30px;
+  margin-top: 30px;
+  gap: 60px;
+  border-top: 1px solid #c4c4c4;
+}
+
+.whitepaper_box .img {
+  width: 20%;
+  text-align: right;
+}
+
+.whitepaper_box .img img {
+  width: 155px;
+  object-fit: contain;
+}
+.whitepaper_box .cont {
+  width: 70%;
+}
+
+.whitepaper_box a i {
+  font-size: 22px;
+  color: #595959;
+}
+
+.whitepaper_box a.h4 {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.whitepaper_box .btn.btn-primary {
+  margin-top: 20px;
+}
+
+
+
+
+
+/* Whitepaper Download css */
+.whitepaper_download {
+  padding: 50px 0;
+}
+.whitepaper_download .container {
+  padding: 40px;
+  padding-bottom: 40px;
+  background: #fff;
+}
+.whitepaper .about {
+    padding: 0;
+    margin: 0;
+}
+.whitepaper_detail {
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+  border-top: 1px solid #00000038;
+  padding-top: 20px;
+}
+.whitepaper_detail span.value {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 15px;
+  margin: 1px 0;
+  margin-left: 100px;
+  display: block;
+}
+
+.whitepaper_detail span.title {
+  font-size: 13px;
+  float: left;
+  display: block;
+  font-weight: 600;
+  margin: 1px 0;
+  color: #5d5d5d;
+}
+.whitepaper_detail .company_logo img {
+  width: 150px;
+}
+.whitepaper_img {
+  border: 1px solid #00000038;
+  text-align: center;
+  padding: 50px;
+  margin-bottom: 20px;
+}
+
+.whitepaper_left .whitepaper_img img {
+  width: max-content;
+  border: 1px solid #00000038;
+}
+.whitepaper_download .step {
+  padding-left: 60px;
+}
+

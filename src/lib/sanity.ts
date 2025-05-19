@@ -1277,3 +1277,69 @@ export async function getPopup(): Promise<any[]> {
     console.log(data)
     return data;
 };
+
+
+export async function getWhitepaperCategories(): Promise<any[]> {
+    const query = `*[_type == "whitepaperCategory"]{
+    _id,
+    title,
+    slug
+  }`;
+
+    const categories = await client.fetch(query);
+    return categories;
+}
+
+// Get whitepapers by category ID (or all if not specified)
+export async function getAllWhitepapers(categoryId: string | null = null) {
+  const query = categoryId
+    ? `*[_type == "whitepaper" && references($categoryId)]{
+        _id,
+        title,
+        slug,
+        format,
+        publishDate,
+        description,
+        thumbnail{
+          asset->{
+            _id,
+            url
+          }
+        },
+        vendor->{
+          _id,
+          title
+        },
+        categories[]->{
+          _id,
+          title,
+          slug
+        }
+      }`
+    : `*[_type == "whitepaper"]{
+        _id,
+        title,
+        slug,
+        format,
+        publishDate,
+        description,
+        thumbnail{
+          asset->{
+            _id,
+            url
+          }
+        },
+        vendor->{
+          _id,
+          title
+        },
+        categories[]->{
+          _id,
+          title,
+          slug
+        }
+      }`;
+
+  const whitepapers = await client.fetch(query, { categoryId });
+  return whitepapers;
+}
