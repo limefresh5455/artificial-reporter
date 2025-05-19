@@ -29,7 +29,7 @@ const HeroSidebar: React.FC = () => {
           />
           <div className="absolute inset-0 flex items-center justify-center">
             <Link
-              href=""
+              href={item?.slug.current}
               className="overlay text-white font-semibold text-lg"
             >
               <span className="z-2 relative">{item.title}</span>

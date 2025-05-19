@@ -86,6 +86,7 @@ export interface ImageBlock {
     _id: string;
     title: string;
     alt: string;
+    slug:any;
     fullWidth: boolean;
     caption?: string;
     image: {
@@ -282,6 +283,7 @@ export async function getImageBlocks(): Promise<ImageBlock[]> {
     title,
     alt,
     fullWidth,
+    slug,
     caption,
     image {
       _type,

@@ -4,6 +4,7 @@ import HeroSidebar from "./components/HeroSidebar";
 import TopStories from "./components/TopStories";
 import Features from "./components/Features";
 import MidtwoColumn from "./components/MidtwoColumn";
+import PopupModal from './components/PopupModal';
 
 const Home: React.FC = () => {
     return (
@@ -21,7 +22,7 @@ const Home: React.FC = () => {
             <TopStories />
             <Features />
             <MidtwoColumn />
-
+            <PopupModal />
         </>
     );
 };
