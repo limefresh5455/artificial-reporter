@@ -32,7 +32,7 @@ const ContributorUser = ({
     return (
         contributor.length > 0 ? (
             <section className="single_article">
-                <div className="article_img mb-6">
+                {/* <div className="article_img mb-6">
                     {editor?.image?.asset && (
                         <img
                             src={urlFor(editor.image.asset).url()}
@@ -40,10 +40,10 @@ const ContributorUser = ({
                             className="w-full h-auto object-cover"
                         />
                     )}
-                </div>
+                </div> */}
 
                 <div className="container mx-auto px-4">
-                    <div className="single_article_inner">
+                    <div className="single_article_inner mt-0">
                         <div className="grid grid-cols-1">
                             <div className="grid grid-cols-12 gap-8">
                                 <div className="col-span-8">
