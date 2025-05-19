@@ -122,32 +122,34 @@ const Whitepapers = () => {
 
                     {/* Whitepaper List */}
 
+                    {paginatedPapers.length == 0 ? "No data found" :
 
-                    {paginatedPapers.map((item, i) => (
-                        <div className="whitepaper_box flex flex-col md:flex-row items-center md:items-start p-6 gap-6" key={item._id}>
-                            <div className="cont flex-1">
-                                <a className="h4 text-lg font-semibold flex items-center gap-2" href={item.slug?.current}>
-                                    <FileText />
-                                    {item.title}
-                                </a>
-                                <p className="m-0 text-gray-700 mt-2">
-                                    {item?.description?.slice(0, 200)}...
-                                </p>
-                                <a href={ROUTES.WHITEPAPERS+ item.slug?.current} className="mt-3 inline-block bg-[#134c90] text-white px-4 py-2 rounded hover:bg-[#d21118]">
-                                    Download Now
-                                </a>
+                        paginatedPapers.map((item, i) => (
+                            <div className="whitepaper_box flex flex-col md:flex-row items-center md:items-start p-6 gap-6" key={item._id}>
+                                <div className="cont flex-1">
+                                    <a className="h4 text-lg font-semibold flex items-center gap-2" href={item.slug?.current}>
+                                        <FileText />
+                                        {item.title}
+                                    </a>
+                                    <p className="m-0 text-gray-700 mt-2">
+                                        {item?.description?.slice(0, 200)}...
+                                    </p>
+                                    <a href={ROUTES.WHITEPAPERS + item.slug?.current} className="mt-3 inline-block bg-[#134c90] text-white px-4 py-2 rounded hover:bg-[#d21118]">
+                                        Download Now
+                                    </a>
+                                </div>
+                                <div className="img w-full md:w-1/3">
+                                    <a href={item.slug?.current}>
+                                        <img
+                                            src={urlFor(item.thumbnail).url()}
+                                            alt={`Whitepaper ${i + 1}`}
+                                            className="img-fluid max-w-full h-auto"
+                                        />
+                                    </a>
+                                </div>
                             </div>
-                            <div className="img w-full md:w-1/3">
-                                <a href={item.slug?.current}>
-                                    <img
-                                        src={urlFor(item.thumbnail).url()}
-                                        alt={`Whitepaper ${i + 1}`}
-                                        className="img-fluid max-w-full h-auto"
-                                    />
-                                </a>
-                            </div>
-                        </div>
-                    ))}
+                        ))
+                    }
 
                     {/* Pagination */}
                     <div className="pt-6 border-t border-gray-200">
