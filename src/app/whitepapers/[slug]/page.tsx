@@ -1,0 +1,117 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { getWhitepaperBySlug } from '@/lib/sanity';
+import { urlFor } from '@/lib/sanityImage';
+
+interface Category {
+    _id: string;
+    slug: { _type: string; current: string };
+    title: string;
+}
+
+interface Vendor {
+    _id: string;
+    title: string | null;
+}
+
+interface Whitepaper {
+    _id: string;
+    categories: Category[];
+    description: string;
+    format: string;
+    publishDate: string;
+    slug: { _type: string; current: string };
+    thumbnail: { asset: { _id: string; url: string } };
+    title: string;
+    vendor: Vendor;
+}
+
+export default function WhitepaperClientPage({
+    params,
+}: {
+    params: Promise<{ slug: string }>;
+}) {
+    const [whitepaper, setWhitepaper] = useState<Whitepaper | null>(null);
+
+    useEffect(() => {
+        async function fetchWhitepaper() {
+            const { slug } = await params;
+            const result = await getWhitepaperBySlug(slug);
+            setWhitepaper(result);
+            console.log(result);
+        }
+        fetchWhitepaper();
+    }, [params]);
+
+    if (!whitepaper) return <div>Loading...</div>;
+
+    // Format date like "May 19, 2025"
+    const formattedDate = new Date(whitepaper.publishDate).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
+
+    return (
+        <section className="whitepaper_download py-12">
+            <div className="container mx-auto px-4">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+                    <div className="md:col-span-12">
+                        <h2 className="mb-6 text-3xl font-semibold">{whitepaper.title}</h2>
+                    </div>
+
+                    <div className="md:col-span-5 whitepaper_left space-y-6">
+                        <div className="whitepaper_img">
+                            <img
+                                src="https://odeskthemes.com/10/news-portal/assets/img/Whitepaper_315X408.jpg"
+                                alt="Whitepaper Thumbnail"
+                                className="rounded-md shadow-md"
+                                style={{ maxHeight: '408px', width: '315px' }}
+                            />
+                        </div>
+
+                        <p className="text-gray-700 whitespace-pre-line">{whitepaper.description}</p>
+                        <hr />
+                        <div className="grid grid-cols-12 space-y-4 text-sm text-gray-600">
+                            <div className='col-span-7'>
+                                <div className='grid grid-cols-12'>
+                                    <span className="title col-span-6 font-bold mr-1">Vendor:</span>
+                                    <span className="value col-span-6 ">{whitepaper.vendor.title ?? 'N/A'}</span>
+                                </div>
+                                <div className='grid grid-cols-12'>
+                                    <span className="title col-span-6 font-bold mr-1">Posted:</span>
+                                    <span className="value col-span-6 ">{formattedDate}</span>
+                                </div>
+                                <div className='grid grid-cols-12'>
+                                    <span className="title col-span-6 font-bold mr-1">Published:</span>
+                                    <span className="value col-span-6 ">{formattedDate}</span>
+                                </div>
+                                <div className='grid grid-cols-12'>
+                                    <span className="title col-span-6 font-bold mr-1">Format:</span>
+                                    <span className="value col-span-6 ">{whitepaper.format}</span>
+                                </div>
+                                <div className='grid grid-cols-12'>
+                                    <span className="title col-span-6 font-bold mr-1">Category:</span>
+                                    <span className="value col-span-6 ">
+                                        {whitepaper.categories.map((cat) => cat.title).join(', ')}
+                                    </span>
+                                </div>
+                            </div>
+                            <img
+                                src={urlFor(whitepaper.thumbnail.asset).url()}
+                                alt="Whitepaper Thumbnail"
+                                className="col-span-5  "
+
+                            />
+                        </div>
+                    </div>
+
+                    <div className="md:col-span-7">
+                        {/* Your form or other dynamic content can go here */}
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}

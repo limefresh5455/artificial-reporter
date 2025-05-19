@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, FileText } from "lucide-react";
 import { getPageData, getWhitepaperCategories, getAllWhitepapers } from "@/lib/sanity";
 import ContentRenderer from "../components/ContentRenderer";
 import { urlFor } from "@/lib/sanityImage";
+import { ROUTES } from "../routes";
 
 const PAGE_SIZE = 8;
 
@@ -130,9 +131,9 @@ const Whitepapers = () => {
                                     {item.title}
                                 </a>
                                 <p className="m-0 text-gray-700 mt-2">
-                                    {item.description?.[0]?.children?.[0]?.text?.slice(0, 200)}...
+                                    {item?.description?.slice(0, 200)}...
                                 </p>
-                                <a href={item.slug?.current} className="mt-3 inline-block bg-[#134c90] text-white px-4 py-2 rounded hover:bg-[#d21118]">
+                                <a href={ROUTES.WHITEPAPERS+ item.slug?.current} className="mt-3 inline-block bg-[#134c90] text-white px-4 py-2 rounded hover:bg-[#d21118]">
                                     Download Now
                                 </a>
                             </div>

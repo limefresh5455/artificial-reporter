@@ -1292,8 +1292,8 @@ export async function getWhitepaperCategories(): Promise<any[]> {
 
 // Get whitepapers by category ID (or all if not specified)
 export async function getAllWhitepapers(categoryId: string | null = null) {
-  const query = categoryId
-    ? `*[_type == "whitepaper" && references($categoryId)]{
+    const query = categoryId
+        ? `*[_type == "whitepaper" && references($categoryId)]{
         _id,
         title,
         slug,
@@ -1316,7 +1316,7 @@ export async function getAllWhitepapers(categoryId: string | null = null) {
           slug
         }
       }`
-    : `*[_type == "whitepaper"]{
+        : `*[_type == "whitepaper"]{
         _id,
         title,
         slug,
@@ -1340,6 +1340,36 @@ export async function getAllWhitepapers(categoryId: string | null = null) {
         }
       }`;
 
-  const whitepapers = await client.fetch(query, { categoryId });
-  return whitepapers;
+    const whitepapers = await client.fetch(query, { categoryId });
+    return whitepapers;
+}
+
+export async function getWhitepaperBySlug(slug: string) {
+    console.log(slug)
+    const query = `*[_type == "whitepaper" && slug.current == "${slug}"][0]{
+    _id,
+    title,
+    slug,
+    format,
+    publishDate,
+    description,
+    thumbnail{
+      asset->{
+        _id,
+        url
+      }
+    },
+    vendor->{
+      _id,
+      title
+    },
+    categories[]->{
+      _id,
+      title,
+      slug
+    }
+  }`;
+
+    const whitepaper = await client.fetch(query);
+    return whitepaper;
 }

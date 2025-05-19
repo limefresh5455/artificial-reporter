@@ -12,4 +12,5 @@ export const ROUTES = {
     COMPANIES: '/ai-companies/',
     ALLPODCASTS: '/all-podcasts/',
     CONTRIBUTOR: '/contributor/',
+    WHITEPAPERS: '/whitepapers/',
 };
