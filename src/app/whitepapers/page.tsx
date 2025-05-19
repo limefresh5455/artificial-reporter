@@ -127,7 +127,7 @@ const Whitepapers = () => {
                         paginatedPapers.map((item, i) => (
                             <div className="whitepaper_box mt-0 flex flex-col md:flex-row items-center md:items-start p-6 gap-6" key={item._id}>
                                 <div className="cont flex-1">
-                                    <a className="h4 text-lg font-semibold flex items-center gap-2" href={item.slug?.current}>
+                                    <a className="h4 text-lg font-semibold flex items-center gap-2" href={ROUTES.WHITEPAPERS +item.slug?.current}>
                                         <FileText />
                                         {item.title}
                                     </a>

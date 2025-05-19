@@ -65,7 +65,7 @@ const Header: React.FC = () => {
         if (item._type === "insight") return `${ROUTES.INSIGHT}${item.slug.current}`;
         if (item._type === "newsCategory") return `${ROUTES.NEWS}${item?.value?.current}`;
         if (item._type === "jobListing") return `${ROUTES.JOBS}`;
-        if (item._type === "aiCompany") return `${ROUTES.COMPANIES}`;
+        if (item._type === "aiCompany") return `${ROUTES.COMPANIES}${item?.slug?.current}`;
         if (item._type === "podcastEpisode") return `${ROUTES.ALLPODCASTS}`;
         return `/${item.slug.current}`;
     };
