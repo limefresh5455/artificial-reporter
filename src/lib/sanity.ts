@@ -86,7 +86,7 @@ export interface ImageBlock {
     _id: string;
     title: string;
     alt: string;
-    slug:any;
+    slug: any;
     fullWidth: boolean;
     caption?: string;
     image: {
@@ -354,7 +354,6 @@ export async function getNewsData(param: string): Promise<any> {
 
 export async function getTopStories(): Promise<HomeNewsData> {
     const data = await getNewsData("Top Stories");
-    // console.log(data)
     return data;
 }
 
@@ -506,7 +505,6 @@ export async function getCategoryTitleByValue(value: string): Promise<string | n
 
 
 export async function getStoryData(params = '', type = ''): Promise<any[]> {
-    // console.log(params)
     const query = `*[_type == "${type}" && slug.current == "${params}"]  {  
         _id,
         _createdAt,
@@ -685,7 +683,6 @@ export async function getJobs(
         if (date) {
             conditions.push(`datePosted >= "${date}"`);
         }
-        console.log(conditions)
     }
 
 
@@ -707,7 +704,6 @@ export async function getJobs(
     }
 
     if (filters.education) {
-        console.log(filters.education)
         conditions.push(`education == "${filters.education}"`);
     }
 
@@ -800,7 +796,6 @@ export async function getTotalJobsCount(filters: Filters): Promise<number> {
         if (date) {
             conditions.push(`datePosted >= "${date}"`);
         }
-        console.log(conditions)
     }
 
     const payAmountMapping: Record<string, string> = {
@@ -1042,7 +1037,6 @@ export async function getTotalCompaniesCount(
         : `*[ _type == "aiCompany" ]`;
 
     const query = `count(${whereClause})`;
-    console.log(query)
     return await client.fetch(query);
 }
 
@@ -1167,7 +1161,6 @@ export async function getPodcastData(): Promise<any> {
   }`;
 
     const data = await client.fetch(query);
-    console.log(data)
     return data;
 }
 
@@ -1270,3 +1263,16 @@ export async function getContributorUser(slug: string): Promise<any[]> {
     const results = await client.fetch(query, params);
     return results;
 }
+
+export async function getPopup(): Promise<any[]> {
+    const query = `*[_type == "popup" && enabled == true]{
+    title,
+    slug,
+    type,
+    image
+  }`;
+
+    const data = await client.fetch(query);
+    console.log(data)
+    return data;
+};
