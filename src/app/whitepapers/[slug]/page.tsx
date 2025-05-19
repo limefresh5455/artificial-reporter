@@ -12,7 +12,7 @@ interface Category {
 
 interface Vendor {
     _id: string;
-    title: string | null;
+    name: string | null;
 }
 
 interface Whitepaper {
@@ -77,7 +77,7 @@ export default function WhitepaperClientPage({
                             <div className='col-span-7'>
                                 <div className='grid grid-cols-12'>
                                     <span className="title col-span-6 font-bold mr-1">Vendor:</span>
-                                    <span className="value col-span-6 ">{whitepaper.vendor.title ?? 'N/A'}</span>
+                                    <span className="value col-span-6 ">{whitepaper.vendor.name ?? 'N/A'}</span>
                                 </div>
                                 <div className='grid grid-cols-12'>
                                     <span className="title col-span-6 font-bold mr-1">Posted:</span>
@@ -99,7 +99,7 @@ export default function WhitepaperClientPage({
                                 </div>
                             </div>
                             <img
-                                src={urlFor(whitepaper.thumbnail.asset).url()}
+                                src={whitepaper.thumbnail.asset.url}
                                 alt="Whitepaper Thumbnail"
                                 className="col-span-5  "
 

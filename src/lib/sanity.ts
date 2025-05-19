@@ -1361,7 +1361,7 @@ export async function getWhitepaperBySlug(slug: string) {
     },
     vendor->{
       _id,
-      title
+      name
     },
     categories[]->{
       _id,
