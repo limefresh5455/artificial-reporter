@@ -38,7 +38,7 @@ const PopupModal = () => {
     if (!showPopup || !currentPopup) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 mt-0" style={{marginTop:0}}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 mt-0" style={{ marginTop: 0 }}>
             <div className="relative w-full max-w-lg mx-auto rounded-lg shadow-lg p-6  overflow-hidden animate-slide-up ">
                 <style jsx>{`
           @keyframes slideUp {
@@ -70,13 +70,13 @@ const PopupModal = () => {
                 <div className="flex flex-col md:flex-row items-center">
                     <div className="w-full flex justify-center">
                         {currentPopup.image && (
-                            <Link href={currentPopup.slug.current}>
-                            <img
-                                src={urlFor(currentPopup.image).url()}
-                                alt={currentPopup.title || "Popup"}
-                                className="w-full max-h-[500px] object-contain"
-                            />
-</Link>
+                            <Link href={currentPopup.slug.current} target={currentPopup.target}>
+                                <img
+                                    src={urlFor(currentPopup.image).url()}
+                                    alt={currentPopup.title || "Popup"}
+                                    className="w-full max-h-[500px] object-contain"
+                                />
+                            </Link>
                         )}
                     </div>
                 </div>

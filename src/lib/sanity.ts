@@ -1269,7 +1269,8 @@ export async function getPopup(): Promise<any[]> {
     title,
     slug,
     type,
-    image
+    image,
+    target
   }`;
 
     const data = await client.fetch(query);
