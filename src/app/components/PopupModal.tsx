@@ -14,7 +14,7 @@ const PopupModal = () => {
         const fetchData = async () => {
             const hasShown = sessionStorage.getItem("subscribePopupShown");
 
-            if (hasShown) {
+           
                 const data = await getPopup();
                 if (data && data.length > 0) {
                     setPopupList(data);
@@ -25,7 +25,7 @@ const PopupModal = () => {
                     setShowPopup(true);
                     sessionStorage.setItem("subscribePopupShown", "true");
                 }
-            }
+            
         };
 
         fetchData();
