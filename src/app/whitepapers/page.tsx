@@ -73,15 +73,15 @@ const Whitepapers = () => {
                 <div className="grid grid-cols-1 gap-6">
                     {pageData && (
                         <>
-                            <h2 className="text-2xl font-semibold mb-3">{pageData.title}</h2>
-                            <div className="mb-4 pb-4 border-b border-gray-300">
+                            <h2 className="text-3xl font-semibold mb-1">{pageData.title}</h2>
+                            <div className="mb-1  border-b border-gray-300">
                                 <ContentRenderer content={pageData.content} type="page" />
                             </div>
                         </>
                     )}
 
                     {/* Categories */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {categories?.length > 0 && (
                             <>
                                 <li key={1 * .2}>
@@ -125,7 +125,7 @@ const Whitepapers = () => {
                     {paginatedPapers.length == 0 ? "No data found" :
 
                         paginatedPapers.map((item, i) => (
-                            <div className="whitepaper_box flex flex-col md:flex-row items-center md:items-start p-6 gap-6" key={item._id}>
+                            <div className="whitepaper_box mt-0 flex flex-col md:flex-row items-center md:items-start p-6 gap-6" key={item._id}>
                                 <div className="cont flex-1">
                                     <a className="h4 text-lg font-semibold flex items-center gap-2" href={item.slug?.current}>
                                         <FileText />
