@@ -58,7 +58,7 @@ export default function WhitepaperClientPage({
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
                     <div className="md:col-span-12">
-                        <h2 className="mb-6 text-3xl font-semibold">{whitepaper.title}</h2>
+                        <h2 className="text-3xl font-semibold mb-3">{whitepaper.title}</h2>
                     </div>
 
                     <div className="md:col-span-5 whitepaper_left space-y-6">
