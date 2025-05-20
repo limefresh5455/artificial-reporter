@@ -21,7 +21,7 @@ const HeroSidebar: React.FC = () => {
   return (
     <div className="flex flex-col space-y-3.5 mt-6 lg:mt-0">
       {items.map((item) => (
-        <div key={item._id} className="relative h-31 overflow-hidden">
+        <div key={item._id} className="relative h-31 mt-0 mb-0 overflow-hidden" >
           <img
             src={urlFor(item.image.asset).url()}
             alt={item.alt || item.title}
