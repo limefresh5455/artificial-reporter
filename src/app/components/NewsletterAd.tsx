@@ -50,7 +50,7 @@ const NewsletterAd: React.FC = () => {
       <div className="bg-white py-5">
         <p className="p-4">Aliqu justo et labore at eirmod justo sea erat diam dolor diam vero kasd</p>
 
-        <form onSubmit={handleSubmit} className="flex p-4 pt-0">
+        <form onSubmit={handleSubmit} className="flex px-4 py-1 pt-0">
           <div className="input-group w-100 flex">
             <input
               type="email"
