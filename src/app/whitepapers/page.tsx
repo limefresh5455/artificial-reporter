@@ -136,7 +136,7 @@ const Whitepapers = () => {
                                         {item?.description?.slice(0, 200)}...
                                     </p>
                                     <Link href={ROUTES.WHITEPAPERS + item.slug?.current} className="mt-3 inline-block bg-[#134c90] text-white px-4 py-2 rounded hover:bg-[#d21118]">
-                                        Download Now
+                                        More Information
                                     </Link>
                                 </div>
                                 <div className="img w-full md:w-1/3">

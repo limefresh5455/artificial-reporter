@@ -75,8 +75,8 @@ export default function WhitepaperClientPage({
                         <h2 className="text-3xl font-semibold mb-3">{whitepaper.title}</h2>
                     </div>
 
-                    <div className="md:col-span-5 whitepaper_left space-y-6">
-                        <div className="whitepaper_img">
+                    <div className="grid grid-cols-12 col-span-12 whitepaper_left gap-6">
+                        <div className="whitepaper_img col-span-4">
                             <img
                                 src="https://odeskthemes.com/10/news-portal/assets/img/Whitepaper_315X408.jpg"
                                 alt="Whitepaper Thumbnail"
@@ -84,48 +84,50 @@ export default function WhitepaperClientPage({
                                 style={{ maxHeight: '408px', width: '315px' }}
                             />
                         </div>
+                        <div className='col-span-8'>
+                            <p className="text-gray-700 whitespace-pre-line">{whitepaper.description}</p>
+                            <hr />
+                            <div className="grid grid-cols-12 space-y-4 text-sm text-gray-600 pt-6">
+                                <div className='col-span-7'>
+                                    <div className='grid grid-cols-12'>
+                                        <span className="title col-span-6 font-bold mr-1">Vendor:</span>
+                                        <span className="value col-span-6 ">{whitepaper.vendor.name ?? 'N/A'}</span>
+                                    </div>
+                                    <div className='grid grid-cols-12'>
+                                        <span className="title col-span-6 font-bold mr-1">Posted:</span>
+                                        <span className="value col-span-6 ">{formattedDate}</span>
+                                    </div>
+                                    <div className='grid grid-cols-12'>
+                                        <span className="title col-span-6 font-bold mr-1">Published:</span>
+                                        <span className="value col-span-6 ">{formattedDate}</span>
+                                    </div>
+                                    <div className='grid grid-cols-12'>
+                                        <span className="title col-span-6 font-bold mr-1">Format:</span>
+                                        <span className="value col-span-6 ">{whitepaper.format}</span>
+                                    </div>
+                                    <div className='grid grid-cols-12'>
+                                        <span className="title col-span-6 font-bold mr-1">Category:</span>
+                                        <span className="value col-span-6 ">
+                                            {whitepaper.categories.map((cat) => cat.title).join(', ')}
+                                        </span>
+                                    </div>
+                                </div>
+                                <img
+                                    src={whitepaper.thumbnail.asset.url}
+                                    alt="Whitepaper Thumbnail"
+                                    className="col-span-5  "
 
-                        <p className="text-gray-700 whitespace-pre-line">{whitepaper.description}</p>
-                        <hr />
-                        <div className="grid grid-cols-12 space-y-4 text-sm text-gray-600">
-                            <div className='col-span-7'>
-                                <div className='grid grid-cols-12'>
-                                    <span className="title col-span-6 font-bold mr-1">Vendor:</span>
-                                    <span className="value col-span-6 ">{whitepaper.vendor.name ?? 'N/A'}</span>
-                                </div>
-                                <div className='grid grid-cols-12'>
-                                    <span className="title col-span-6 font-bold mr-1">Posted:</span>
-                                    <span className="value col-span-6 ">{formattedDate}</span>
-                                </div>
-                                <div className='grid grid-cols-12'>
-                                    <span className="title col-span-6 font-bold mr-1">Published:</span>
-                                    <span className="value col-span-6 ">{formattedDate}</span>
-                                </div>
-                                <div className='grid grid-cols-12'>
-                                    <span className="title col-span-6 font-bold mr-1">Format:</span>
-                                    <span className="value col-span-6 ">{whitepaper.format}</span>
-                                </div>
-                                <div className='grid grid-cols-12'>
-                                    <span className="title col-span-6 font-bold mr-1">Category:</span>
-                                    <span className="value col-span-6 ">
-                                        {whitepaper.categories.map((cat) => cat.title).join(', ')}
-                                    </span>
-                                </div>
+                                />
                             </div>
-                            <img
-                                src={whitepaper.thumbnail.asset.url}
-                                alt="Whitepaper Thumbnail"
-                                className="col-span-5  "
-
-                            />
+                            <div className="md:col-span-7">
+                                <button onClick={downloadWhitepaper} className="mt-3 inline-block bg-[#134c90] text-white px-4 py-2 rounded hover:bg-[#d21118]">
+                                    Download Now
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                    <div className="md:col-span-7">
-                        <button onClick={downloadWhitepaper} className="mt-3 inline-block bg-[#134c90] text-white px-4 py-2 rounded hover:bg-[#d21118]">
-                            Download Now
-                        </button>
-                    </div>
+
                 </div>
             </div>
         </section>
