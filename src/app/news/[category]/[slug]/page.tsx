@@ -10,6 +10,7 @@ import ContentRenderer from "@/app/components/ContentForPost";
 import { Facebook, Twitter, Linkedin, Mail, Printer, Share2 } from 'lucide-react';
 import SidebarAd from "../../../components/SidebarAd";
 import SidebarAdVerticle from '@/app/components/SidebarAdVerticle';
+import { useAuth } from "@/context/AuthContext";
 
 
 const Story = ({
@@ -20,6 +21,7 @@ const Story = ({
     const [story, setStory] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [relatedStories, setRelatedStoriesData] = useState<any[]>([]);
+    const { user, setUser } = useAuth();
 
     const tagClassMap: Record<string, string> = {
         h1: ' mb-4 section_heading',
@@ -169,7 +171,7 @@ const Story = ({
                                             <div className="post_author_detail">
 
                                                 {story.editor ? (
-                                                    <a className="post_author" href={ROUTES.CONTRIBUTOR+ story.editor?.slug.current}>
+                                                    <a className="post_author" href={ROUTES.CONTRIBUTOR + story.editor?.slug.current}>
                                                         <span className="post_author_img"><img alt="" src={story.editor?.image ? urlFor(story.editor.image).url() : ''} />{story.editor?.name}</span>
                                                     </a>
                                                 ) : <p></p>}
@@ -187,7 +189,14 @@ const Story = ({
                                     <div className="col-span-8">
                                         <div className="content_wrap">
                                             <div className="content">
-                                                <ContentRenderer content={story.content} />
+
+                                                {user ? (
+                                                    <ContentRenderer content={story.content} />
+                                                ) :
+                                                    story.overview}... 
+
+                                                {!user && (<Link href={ROUTES.LOGIN} className='ml-3 font-bold inline-block hover:text-[#af0e14] text-[#134c90]'>Read More</Link>)}
+
                                             </div>
                                         </div>
                                     </div>

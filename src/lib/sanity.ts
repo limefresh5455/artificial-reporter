@@ -515,6 +515,7 @@ export async function getStoryData(params = '', type = ''): Promise<any[]> {
         title,
         content,
         eventType,
+        overview,
         sponsored,
         editor->{
         name,
@@ -1345,7 +1346,6 @@ export async function getAllWhitepapers(categoryId: string | null = null) {
 }
 
 export async function getWhitepaperBySlug(slug: string) {
-    console.log(slug)
     const query = `*[_type == "whitepaper" && slug.current == "${slug}"][0]{
     _id,
     title,
@@ -1368,6 +1368,17 @@ export async function getWhitepaperBySlug(slug: string) {
       title,
       slug
     }
+  }`;
+
+    const whitepaper = await client.fetch(query);
+    return whitepaper;
+}
+
+export async function getNewsLetter() {
+    const query = `*[_type == "newsletter"][0]{
+    _id,
+    title,
+    description
   }`;
 
     const whitepaper = await client.fetch(query);

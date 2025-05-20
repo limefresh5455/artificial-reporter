@@ -56,7 +56,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <head>
-                <Script
+                {/* <Script
                     strategy="afterInteractive"
                     src="https://www.googletagmanager.com/gtag/js?id=G-9K8H9311HB"
                 />
@@ -73,7 +73,44 @@ export default function RootLayout({
                           });
                         `
                     }}
+                /> */}
+
+                <Script
+                    strategy="afterInteractive"
+                    src="https://www.googletagmanager.com/gtag/js?id=G-9K8H9311HB"
                 />
+                <Script
+                    id="google-analytics"
+                    strategy="afterInteractive"
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            window.dataLayer = window.dataLayer || [];
+                            function gtag(){dataLayer.push(arguments);}
+
+                            // 🚨 Consent must be granted first
+                            gtag('consent', 'default', {
+                                ad_storage: 'granted',
+                                analytics_storage: 'granted'
+                            });
+
+                            // Now initialize GA4
+                            gtag('js', new Date());
+                            gtag('config', 'G-9K8H9311HB', {
+                                page_path: window.location.pathname,
+                                allow_google_signals: true,
+                                allow_ad_personalization_signals: true,
+                                'debug_mode':true,
+                                user_id: '${Math.random() + ""}',
+                            });
+
+                            // Optional custom property
+                            gtag('set', 'user_properties', {
+                                audience_name: '${Math.random() + ""}'
+                            });
+                        `,
+                    }}
+                />
+
                 <Script
                     src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
                     strategy="afterInteractive"
