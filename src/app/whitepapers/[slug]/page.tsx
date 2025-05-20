@@ -76,7 +76,7 @@ export default function WhitepaperClientPage({
                     </div>
 
                     <div className="grid grid-cols-12 col-span-12 whitepaper_left gap-15">
-                        <div className="whitepaper_img col-span-5">
+                        <div className="whitepaper_img p-0 border-0 flex justify-center col-span-5">
                             <img
                                 src="https://odeskthemes.com/10/news-portal/assets/img/Whitepaper_315X408.jpg"
                                 alt="Whitepaper Thumbnail"
