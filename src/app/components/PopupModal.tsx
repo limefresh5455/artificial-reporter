@@ -65,7 +65,7 @@ const PopupModal = () => {
                     ×
                 </button>
 
-                <span className="absolute top-[-10px] left-50 m-2 text-xs text-white px-2 py-1 rounded capitalize">
+                <span className="absolute top-[-10px] left-[50%] -translate-x-1/2 m-2 text-xs text-white px-2 py-1 rounded capitalize">
                     {currentPopup.type || "Advertisement"}
                 </span>
 
