@@ -57,6 +57,24 @@ export default function RootLayout({
         <html lang="en">
             <head>
                 <Script
+                    strategy="afterInteractive"
+                    src="https://www.googletagmanager.com/gtag/js?id=G-9K8H9311HB"
+                />
+                <Script
+                    id="google-analytics"
+                    strategy="afterInteractive"
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                          window.dataLayer = window.dataLayer || [];
+                          function gtag(){dataLayer.push(arguments);}
+                          gtag('js', new Date());
+                          gtag('config', 'G-9K8H9311HB', {
+                            page_path: window.location.pathname,
+                          });
+                        `
+                    }}
+                />
+                <Script
                     src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
                     strategy="afterInteractive"
                 />
