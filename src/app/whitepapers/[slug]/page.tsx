@@ -71,12 +71,12 @@ export default function WhitepaperClientPage({
         <section className="whitepaper_download py-12">
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                    <div className="md:col-span-12">
-                        <h2 className="text-3xl font-semibold mb-3">{whitepaper.title}</h2>
+                    <div className="col-span-12">
+                        <h2 className="text-3xl font-semibold mb-1">{whitepaper.title}</h2>
                     </div>
 
-                    <div className="grid grid-cols-12 col-span-12 whitepaper_left gap-6">
-                        <div className="whitepaper_img col-span-4">
+                    <div className="grid grid-cols-12 col-span-12 whitepaper_left gap-15">
+                        <div className="whitepaper_img col-span-5">
                             <img
                                 src="https://odeskthemes.com/10/news-portal/assets/img/Whitepaper_315X408.jpg"
                                 alt="Whitepaper Thumbnail"
@@ -84,11 +84,11 @@ export default function WhitepaperClientPage({
                                 style={{ maxHeight: '408px', width: '315px' }}
                             />
                         </div>
-                        <div className='col-span-8'>
+                        <div className='col-span-7'>
                             <p className="text-gray-700 whitespace-pre-line">{whitepaper.description}</p>
                             <hr />
-                            <div className="grid grid-cols-12 space-y-4 text-sm text-gray-600 pt-6">
-                                <div className='col-span-7'>
+                            <div className="grid grid-cols-12 gap-2 text-sm text-gray-600 pt-6">
+                                <div className='col-span-5'>
                                     <div className='grid grid-cols-12'>
                                         <span className="title col-span-6 font-bold mr-1">Vendor:</span>
                                         <span className="value col-span-6 ">{whitepaper.vendor.name ?? 'N/A'}</span>
@@ -115,7 +115,7 @@ export default function WhitepaperClientPage({
                                 <img
                                     src={whitepaper.thumbnail.asset.url}
                                     alt="Whitepaper Thumbnail"
-                                    className="col-span-5  "
+                                    className="col-span-7  "
 
                                 />
                             </div>
