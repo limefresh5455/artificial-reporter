@@ -87,26 +87,26 @@ export default function WhitepaperClientPage({
                         <div className='col-span-7'>
                             <p className="text-gray-700 whitespace-pre-line">{whitepaper.description}</p>
                             <hr />
-                            <div className="grid grid-cols-12 gap-2 text-sm text-gray-600 pt-6">
-                                <div className='col-span-5'>
+                            <div className="grid grid-cols-12 gap-2 text-sm text-gray-600 pt-6 ">
+                                <div className='col-span-9'>
                                     <div className='grid grid-cols-12'>
-                                        <span className="title col-span-6 font-bold mr-1">Vendor:</span>
+                                        <span className="title col-span-4 font-bold mr-1">Vendor:</span>
                                         <span className="value col-span-6 ">{whitepaper.vendor.name ?? 'N/A'}</span>
                                     </div>
                                     <div className='grid grid-cols-12'>
-                                        <span className="title col-span-6 font-bold mr-1">Posted:</span>
+                                        <span className="title col-span-4 font-bold mr-1">Posted:</span>
                                         <span className="value col-span-6 ">{formattedDate}</span>
                                     </div>
                                     <div className='grid grid-cols-12'>
-                                        <span className="title col-span-6 font-bold mr-1">Published:</span>
+                                        <span className="title col-span-4 font-bold mr-1">Published:</span>
                                         <span className="value col-span-6 ">{formattedDate}</span>
                                     </div>
                                     <div className='grid grid-cols-12'>
-                                        <span className="title col-span-6 font-bold mr-1">Format:</span>
+                                        <span className="title col-span-4 font-bold mr-1">Format:</span>
                                         <span className="value col-span-6 ">{whitepaper.format}</span>
                                     </div>
                                     <div className='grid grid-cols-12'>
-                                        <span className="title col-span-6 font-bold mr-1">Category:</span>
+                                        <span className="title col-span-4 font-bold mr-1">Category:</span>
                                         <span className="value col-span-6 ">
                                             {whitepaper.categories.map((cat) => cat.title).join(', ')}
                                         </span>
@@ -115,12 +115,12 @@ export default function WhitepaperClientPage({
                                 <img
                                     src={whitepaper.thumbnail.asset.url}
                                     alt="Whitepaper Thumbnail"
-                                    className="col-span-7  "
+                                    className="col-span-3  "
 
                                 />
                             </div>
-                            <div className="md:col-span-7">
-                                <button onClick={downloadWhitepaper} className="mt-3 inline-block bg-[#134c90] text-white px-4 py-2 rounded hover:bg-[#d21118]">
+                            <div className="md:col-span-7 mt-10">
+                                <button onClick={downloadWhitepaper} className=" inline-block bg-[#134c90] text-white px-4 py-2 rounded hover:bg-[#d21118]">
                                     Download Now
                                 </button>
                             </div>
