@@ -3,6 +3,10 @@
 import { useEffect, useState } from 'react';
 import { getWhitepaperBySlug } from '@/lib/sanity';
 import { urlFor } from '@/lib/sanityImage';
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/app/routes';
+
 
 interface Category {
     _id: string;
@@ -33,6 +37,9 @@ export default function WhitepaperClientPage({
     params: Promise<{ slug: string }>;
 }) {
     const [whitepaper, setWhitepaper] = useState<Whitepaper | null>(null);
+    const { user, setUser } = useAuth();
+    const router = useRouter();
+
 
     useEffect(() => {
         async function fetchWhitepaper() {
@@ -53,6 +60,13 @@ export default function WhitepaperClientPage({
         day: 'numeric',
     });
 
+    function downloadWhitepaper() {
+        if (user) {
+            alert("downloaded")
+        } else {
+            router.replace(ROUTES.LOGIN);
+        }
+    }
     return (
         <section className="whitepaper_download py-12">
             <div className="container mx-auto px-4">
@@ -108,7 +122,9 @@ export default function WhitepaperClientPage({
                     </div>
 
                     <div className="md:col-span-7">
-                        {/* Your form or other dynamic content can go here */}
+                        <button onClick={downloadWhitepaper} className="mt-3 inline-block bg-[#134c90] text-white px-4 py-2 rounded hover:bg-[#d21118]">
+                            Download Now
+                        </button>
                     </div>
                 </div>
             </div>

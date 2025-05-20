@@ -6,6 +6,7 @@ import { getPageData, getWhitepaperCategories, getAllWhitepapers } from "@/lib/s
 import ContentRenderer from "../components/ContentRenderer";
 import { urlFor } from "@/lib/sanityImage";
 import { ROUTES } from "../routes";
+import Link from "next/link";
 
 const PAGE_SIZE = 8;
 
@@ -127,25 +128,25 @@ const Whitepapers = () => {
                         paginatedPapers.map((item, i) => (
                             <div className="whitepaper_box mt-0 flex flex-col md:flex-row items-center md:items-start  gap-6" key={item._id}>
                                 <div className="cont flex-1">
-                                    <a className="h4 text-lg font-semibold flex items-center gap-2" href={ROUTES.WHITEPAPERS +item.slug?.current}>
+                                    <Link className="h4 text-lg font-semibold flex items-center gap-2" href={ROUTES.WHITEPAPERS +item.slug?.current}>
                                         <FileText />
                                         {item.title}
-                                    </a>
+                                    </Link>
                                     <p className="m-0 text-gray-700 mt-2">
                                         {item?.description?.slice(0, 200)}...
                                     </p>
-                                    <a href={ROUTES.WHITEPAPERS + item.slug?.current} className="mt-3 inline-block bg-[#134c90] text-white px-4 py-2 rounded hover:bg-[#d21118]">
+                                    <Link href={ROUTES.WHITEPAPERS + item.slug?.current} className="mt-3 inline-block bg-[#134c90] text-white px-4 py-2 rounded hover:bg-[#d21118]">
                                         Download Now
-                                    </a>
+                                    </Link>
                                 </div>
                                 <div className="img w-full md:w-1/3">
-                                    <a href={ROUTES.WHITEPAPERS +item.slug?.current}>
+                                    <Link href={ROUTES.WHITEPAPERS +item.slug?.current}>
                                         <img
                                             src={urlFor(item.thumbnail).url()}
                                             alt={`Whitepaper ${i + 1}`}
                                             className="img-fluid max-w-full h-auto"
                                         />
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         ))
