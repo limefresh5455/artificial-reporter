@@ -307,6 +307,7 @@ export async function getNewsByCategory(categorySlug: string): Promise<any[]> {
             title,
             overview,
             image,
+            eventType,
             slug,
             _createdAt,
             newsCategory[0]->{
@@ -341,7 +342,6 @@ export async function getNewsData(param: string): Promise<any> {
     const response = await client.fetch(query);
 
 
-
     const data = response.find((item: any) => item.mainTitle === param);
     // const features = response.find((item: any) => item.mainTitle === "Features");
     // const popular = response.find((item: any) => item.mainTitle === "Popular");
@@ -369,6 +369,7 @@ export async function getPopular(): Promise<HomeNewsData> {
 
 export async function getLatest(): Promise<HomeNewsData> {
     const data = await getNewsData("Latest");
+    console.log(data)
     return data;
 }
 

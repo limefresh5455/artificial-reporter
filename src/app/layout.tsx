@@ -12,6 +12,7 @@ import React, { useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { ROUTES } from "./routes";
 import { AuthProvider } from "@/context/AuthContext"
+import { usePathname } from 'next/navigation';
 
 
 
@@ -34,6 +35,12 @@ export default function RootLayout({
 
     const router = useRouter();
     const supabase = createClient();
+    const pathname = usePathname();
+
+    useEffect(() => {
+        window.scrollTo({ top: 0 });
+    }, [pathname]);
+
 
     useEffect(() => {
         const checkUser = async () => {
@@ -57,7 +64,7 @@ export default function RootLayout({
         <html lang="en">
             <head>
                 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5403082360131543"
-                    ></script>
+                ></script>
 
                 {/* <Script
                     strategy="afterInteractive"
