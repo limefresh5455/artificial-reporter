@@ -115,11 +115,11 @@ const Story = ({
     );
 
     return (
-        <section className="stories news_inner py-12">
+        <section className="stories news_inner py-0 lg:py-12">
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-12 gap-8">
-                    <div className="lg:col-span-8 space-y-8">
-                        <h2 className="text-3xl font-semibold mb-3">{story.title}</h2>
+                    <div className="col-span-12 lg:col-span-8 space-y-8">
+                        <h2 className="text-2xl lg:text-3xl font-semibold mb-3">{story.title}</h2>
 
                         <div className="relative">
                             <img
@@ -277,7 +277,7 @@ const Story = ({
                     </div>
 
                     {/* Sidebar Area */}
-                    <div className="lg:col-span-4 space-y-10">
+                    <div className="col-span-12 lg:col-span-4 space-y-10">
                         {/* Ad 1 */}
                         <div>
                             <SidebarAd />

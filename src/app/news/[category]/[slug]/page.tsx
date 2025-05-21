@@ -132,7 +132,7 @@ const Story = ({
                     <div className="grid grid-cols-1">
                         <div className="col-span-1">
                             <div className="single_article_inner">
-                                <div className="grid grid-cols-12 gap-8">
+                                <div className="grid grid-cols-12 gap-0 lg:gap-8">
                                     <div className="col-span-12">
                                         <div className="post_header">
                                             <div className="flex items-center justify-between mb-4">
@@ -186,7 +186,7 @@ const Story = ({
                                         </div>
                                     </div>
 
-                                    <div className="col-span-8">
+                                    <div className="col-span-12 lg:col-span-8">
                                         <div className="content_wrap">
                                             <div className="content">
 
@@ -202,7 +202,7 @@ const Story = ({
                                     </div>
 
                                     {/* Sidebar Area */}
-                                    <div className="lg:col-span-4 space-y-10">
+                                    <div className="col-span-12 lg:col-span-4 space-y-10">
                                         {/* Ad 1 */}
                                         <div>
                                             <SidebarAd />
@@ -250,7 +250,7 @@ const Story = ({
 
             <section className="stories news_inner py-12 hidden">
                 <div className="container mx-auto px-4">
-                    <div className="grid grid-cols-12 gap-8">
+                    <div className="grid grid-cols-12 gap-0 lg:gap-8">
                         <div className="lg:col-span-8 space-y-8">
                             <h2 className="text-3xl font-semibold mb-3">{story.title}</h2>
 

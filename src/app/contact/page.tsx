@@ -4,12 +4,12 @@ import { Phone, Navigation, House } from 'lucide-react';
 
 export default function Contact() {
     return (
-        <section className="contact py-12">
-            <div className="container mx-auto px-4">
-                <div className="grid grid-cols-2 md:grid-cols-2 gap-8">
+        <section className="contact py-4 lg:py-12">
+            <div className="container mx-auto p-4 lg:p-8">
+                <div className="grid lg:grid-cols-2 md:grid-cols-2 gap-4 lg:gap-8">
 
                     <div className="contact_left">
-                        <h2 className="section_heading text-3xl font-semibold mb-3">Contact Us</h2>
+                        <h2 className="section_heading text-2x1 lg:text-3xl font-semibold mb-3">Contact Us</h2>
                         <div className="links mt-5">
                             <ul>
                                 <li>

@@ -32,15 +32,15 @@ const Sponsors = () => {
     if (isLoading) return <p className="text-center">Loading...</p>;
 
     return (
-        <section className="sponsors  py-12">
+        <section className="sponsors py-0 lg:py-12">
             <div className="container mx-auto px-4">
-                <div className="grid grid-cols-12 gap-8">
+                <div className="grid lg:grid-cols-12 gap-8">
                     <div className="lg:col-span-12 space-y-8">
                         <h2 className="text-3xl font-semibold mb-3">{data?.title}</h2>
                         <div style={{ paddingTop: "20px" }}>
                             <ContentRenderer content={data?.content} type="page" />
                         </div>
-                        <div className="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid lg:grid-cols-3 gap-6">
                             {data.collectionItem.sponsors.map((sponsor: any, index: number) => (
                                 <div className="sponsors_inner border border-gray-200 rounded-lg shadow p-4 flex flex-col justify-between h-full" key={sponsor._key || index}>
                                     <div>

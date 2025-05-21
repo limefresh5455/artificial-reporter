@@ -414,12 +414,10 @@ body {
 
 /* Contact css */
 .contact {
-    margin: 50px 0;
     position: relative;
 }
 
-.contact .container {
-    padding: 40px;
+.contact .container {   
     background: #ffffff
 }
 
@@ -1675,9 +1673,90 @@ section.about {
     .popularWrap {
         width: 100%;
     }
+    .single_article_inner {       
+        padding: 20px;  
+        margin-top: -225px;    
+    }
+    .post_author_detail {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    span.post_date {       
+        margin-left: 50px;
+    }
+    .post_header {        
+        margin-bottom: 0;
+    }
+    .single_article_inner .section_heading {      
+        line-height: 36px;
+        font-size: 22px;
+        font-weight: 400;
+    }
+    .content_wrap {
+        padding-right: 0;
+        padding-top: 20px;
+    }
+    .content_wrap h3{   
+        font-size: 18px !important;   
+    }
+    .article_img img{
+        height: auto !important;   
+    }
+    .sponsors .container {
+        padding: 20px;       
+    }
+    .sponsors_inner .middle {
+        margin-bottom: 0;
+    }
+    .sponsors_inner {   
+        margin-top: 0;   
+    }
+    .job_search-result .btn.btn_bg {       
+        padding: 10px 20px;
+    }
+    .login .login_inner {     
+        flex-direction: column;
+    }
+    .login {
+        padding: 20px 0;
+    }
+    .login .login-section {       
+        padding: 20px;      
+    }
+    .section_heading {
+        font-size: 22px;       
+        margin-bottom: 0px;
+        font-weight: 500;
+    }
+    .login .login-header {
+        margin-bottom: 20px;
+    }
+    section.about {
+        margin-bottom: 0px;
+    }
+    .whitepaper_box .cont {
+        width: 100% !important;
+    }
+    .whitepaper_box .img {
+        width: 100% !important;
+        text-align: left !important;
+    }
+    /* .whitepaper .container {
+        padding: 20px !important;       
+    } */
+      
 }
 
-
+.srchIcon {
+    background-color: #e9ecef;
+    width: 30px;
+    padding: 6px 0;
+    height: 28px;
+    top: 29px !important;
+    right: 1px !important;
+}
 
 
 
@@ -1774,7 +1853,7 @@ a.apply-btn-play {
   padding: 50px 0;
 }
 .whitepaper .container {
-  padding: 40px;
+ 
   padding-bottom: 40px;
   background: #fff;
 }
@@ -1826,8 +1905,7 @@ ul.whitepaper_list {
 .whitepaper_download {
   padding: 50px 0;
 }
-.whitepaper_download .container {
-  padding: 40px;
+.whitepaper_download .container {  
   padding-bottom: 40px;
   background: #fff;
 }

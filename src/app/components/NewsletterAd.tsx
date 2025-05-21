@@ -53,12 +53,12 @@ const NewsletterAd: React.FC = () => {
 
     return (
         <div>
-            <div className="flex items-center justify-between bg-light py-3 px-4 mb-3 bgh3">
+            <div className="flex items-center justify-between bg-light py-3 px-4 mb-0 bgh3">
                 <h3 className="text-2xl font-medium">{data?.title}</h3>
             </div>
 
             <div className="bg-white py-5">
-                <p className="p-4">{data?.description}</p>
+                <p className="p-4 pt-0">{data?.description}</p>
 
                 <form onSubmit={handleSubmit} className="flex px-4 py-1 pt-0">
                     <div className="input-group w-100 flex">

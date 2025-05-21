@@ -29,8 +29,8 @@ const AICompany = ({
 
 
     return (
-        <section className="py-12 ">
-            <div className="container mx-auto px-4">
+        <section className="py-2 lg:py-12 ">
+            <div className="container mx-auto px-0 lg:px-4">
                 <span><BackButton /></span>
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 

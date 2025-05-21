@@ -44,7 +44,7 @@ export default function Login() {
 
     return (
         <section className="login">
-            <div className="max-w-6xl mx-auto px-4">
+            <div className="max-w-6xl mx-auto px-0 lg:px-4">
                 <div className="grid grid-cols-1">
                     <div className="login_inner grid grid-cols-2 md:grid-cols-2 bg-gray-100">
                         <div className="image-section">
@@ -54,7 +54,7 @@ export default function Login() {
                                 className="w-full"
                             />
                         </div>
-                        <div className="login-section p-6">
+                        <div className="login-section p-2 lg:p-6">
                             <div className="login-header mb-6">
                                 <h2 className="section_heading">Log In</h2>
                             </div>

@@ -73,17 +73,17 @@ const TrendingSlider: React.FC = () => {
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      <span className="font-semibold text-gray-700">Trending</span>
+      <span className="text-base font-semibold font-semibold text-gray-500">Trending</span>
       <div className="flex gap-3">
         <button
-          className="bg-[#134c90] text-white px-2 py-2 rounded hover:bg-[#0d3a6d] transition-colors"
+          className="bg-[#134c90] text-white px-1.5 py-1.5 hover:bg-[#0d3a6d] transition-colors"
           onClick={handlePrev}
           aria-label="Previous trending item"
         >
           <ChevronLeft size={16} />
         </button>
         <button
-          className="bg-[#134c90] text-white px-2 py-2 rounded hover:bg-[#0d3a6d] transition-colors"
+          className="bg-[#134c90] text-white px-1.5 py-1.5 hover:bg-[#0d3a6d] transition-colors"
           onClick={handleNext}
           aria-label="Next trending item"
         >

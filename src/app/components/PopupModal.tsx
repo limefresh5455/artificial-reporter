@@ -39,7 +39,7 @@ const PopupModal = () => {
     if (!showPopup || !currentPopup) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 mt-0" style={{ marginTop: 0 }}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex lg:items-center justify-center z-50 mt-0 top-20 lg:top-0" style={{ marginTop: 0 }}>
             <div className={"relative w-full mx-auto rounded-lg shadow-lg p-6 overflow-hidden animate-slide-up " + (currentPopup.type === "newsletter" ? 'max-w-3xl' : 'max-w-lg')}>
 
                 <style jsx>{`
@@ -81,7 +81,7 @@ const PopupModal = () => {
                                 />
                             </Link>
                         ) : (
-                            <div className="bg-white grid grid-cols-12">
+                            <div className="bg-white grid grid-cols-1 lg:grid-cols-12">
                                 {currentPopup.image && (
                                     <img
                                         src={urlFor(currentPopup.image).url()}

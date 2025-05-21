@@ -49,10 +49,10 @@ const CategroyNews = ({
     }, [currentPage]); // <- Also add params as dependency
 
     return (
-        <section className="stories news_inner py-12">
+        <section className="stories news_inner py-0 lg:py-12">
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-12 gap-8">
-                    <div className="lg:col-span-8 space-y-8">
+                    <div className="col-span-12 lg:col-span-8 space-y-8 pr-4 lg:pr-4">
                         <h2 className="text-3xl font-semibold mb-3">{CategoryTitle}</h2>
 
                         {isLoading ? (
@@ -67,7 +67,7 @@ const CategroyNews = ({
                                             alt="Story Image"
                                             style={{ aspectRatio: "3/2" }}
                                         />
-                                        <div className="bg-white bg-opacity-90 p-4 flex flex-col justify-end">
+                                        <div className="bg-white bg-opacity-90 p-0 pt-4 lg:p-4 flex flex-col justify-end">
                                             <div className="text-sm text-gray-600 mb-1">
                                                 {story.eventType || "Category"}
                                                 <span className="px-1">/</span>
@@ -128,7 +128,7 @@ const CategroyNews = ({
 
                     </div>
 
-                    <div className="lg:col-span-4 space-y-10">
+                    <div className="col-span-12 lg:col-span-4 space-y-10 pr-4 lg:pr-0">
                         <div>
                            <SidebarAdVerticle />
                         </div>

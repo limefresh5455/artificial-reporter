@@ -44,10 +44,10 @@ const TopStories = () => {
   }, [currentPage]); // <- Also add params as dependency
 
   return (
-    <section className="stories news_inner py-12">
+    <section className="stories news_inner py-0 lg:py-12">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-12 gap-8">
-          <div className="lg:col-span-8 space-y-8">
+          <div className="col-span-12 lg:col-span-8 space-y-8">
             <h2 className="text-3xl font-semibold mb-3">News</h2>
 
             {isLoading ? (
@@ -123,7 +123,7 @@ const TopStories = () => {
 
           </div>
 
-          <div className="lg:col-span-4 space-y-10">
+          <div className="col-span-12 lg:col-span-4 space-y-10 pr-4 lg:pr-0">
             <div>
              <SidebarAdVerticle />
             </div>

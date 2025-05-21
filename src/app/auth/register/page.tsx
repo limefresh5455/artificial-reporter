@@ -445,12 +445,12 @@ export default function Register() {
     };
 
     return (
-        <section className="register py-5 bg-gray-100 min-h-screen flex items-center">
+        <section className="register py-5 bg-gray-100 min-h-0 lg:min-h-screen flex items-center">
             <div className="container mx-auto px-4">
                 <div className="row">
                     <div className="col-12">
                         <div className="register_inner max-w-2xl mx-auto">
-                            <h2 className="section_heading text-2xl font-bold text-center mb-6">Register</h2>
+                            <h2 className="section_heading text-center mb-6">Register</h2>
 
                             {currentStep === 1 && (
                                 <form className="step" id="step1" onSubmit={handleSubmitEmail}>

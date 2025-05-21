@@ -25,7 +25,7 @@ const HeaderAd: React.FC = () => {
 
 
     return (
-        <div className="flex">
+        <div className="flex justify-end">
             {headerAd?.adType == "image" ? (
                 <a href={headerAd.link} target="_blank" rel="noopener noreferrer">
                     <img src={headerAd.imageUrl} alt={headerAd.alt} className="float-right" />

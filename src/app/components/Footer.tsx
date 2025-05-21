@@ -58,7 +58,7 @@ const Footer: React.FC = () => {
 
                 <div className="lg:col-span-6 md:col-span-6 mt-6 lg:mt-0">
                     <h3 className="text-xl font-semibold mb-3">Categories</h3>
-                    <div className="flex flex-wrap">
+                    <div className="flex flex-wrap py-5 lg:py-0">
                         {footerData.categories.map((cat: Category, i: number) => (
                             <Link
                                 key={i}

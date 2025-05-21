@@ -303,8 +303,8 @@ const AIJobs: React.FC = () => {
 
     return (
         <div className="job-listing">
-            <section className="job_search-result py-12">
-                <div className="container mx-auto px-4">
+            <section className="job_search-result py-0 lg:py-12">
+                <div className="container mx-auto px-0 lg:px-4">
                     <div className="row">
                         <div className="col-12">
                             <h2 className="section_heading text-3xl font-bold text-center mb-8">Find AI Jobs</h2>
@@ -335,7 +335,7 @@ const AIJobs: React.FC = () => {
                                         <button
                                             type="submit"
                                             onClick={fetchData}
-                                            className="btn btn_bg w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-md"
+                                            className="btn btn_bg w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-2 lg:px-6 rounded-md"
                                         >
                                             Search
                                         </button>
@@ -347,13 +347,13 @@ const AIJobs: React.FC = () => {
                 </div>
             </section>
 
-            <section className="py-12 ">
-                <div className="container mx-auto px-4">
-                    <div className="grid grid-cols-4 gap-8">
+            <section className="py-6 lg:py-12 ">
+                <div className="container mx-auto px-0 lg:px-4">
+                    <div className="grid lg:grid-cols-4 gap-8">
                         {/* Filter Sidebar */}
-                        <div className="col-span-1">
+                        <div className="col-span-12 lg:col-span-1">
                             <h1 className="text-lg font-semibold mb-4">Filter By</h1>
-                            <div className="bg-white p-6 rounded-3xl border border-gray-300">
+                            <div className="bg-white p-4 lg:p-6 rounded-3xl border border-gray-300">
 
 
                                 {/* Filter Blocks */}
@@ -446,12 +446,12 @@ const AIJobs: React.FC = () => {
                         </div>
 
                         {/* Job Listings */}
-                        <div className="col-span-3">
+                        <div className="col-span-12 lg:col-span-3">
                             <div className="flex justify-between items-center mb-6">
                                 <div className="text-gray-600">
                                     <span className="text-gray-800 font-semibold">{totalCount > 0 ? "All " + totalCount : 0}</span> jobs found
                                 </div>
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-2 lg:gap-4">
                                     <button className="py-2 px-4 border border-gray-300 rounded-md flex items-center gap-2" onClick={resetFilter}>
                                         <span>Reset</span>
 
@@ -471,7 +471,7 @@ const AIJobs: React.FC = () => {
                                         </ul>
                                     </div>
                                     <button
-                                        className={`p-2 border rounded-md ${viewMode === 'list' ? 'bg-gray-100 border-gray-300' : 'border-gray-300'}`}
+                                        className={`hidden lg:block p-2 border rounded-md ${viewMode === 'list' ? 'bg-gray-100 border-gray-300' : 'border-gray-300'}`}
                                         onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}
                                     >
                                         {viewMode === 'list' ? (
@@ -502,7 +502,7 @@ const AIJobs: React.FC = () => {
                                             </div>
 
                                             {/* Company Info */}
-                                            <div className="sm:col-span-5 flex items-start sm:items-center gap-4">
+                                            <div className="sm:col-span-5 flex flex-col lg:flex-row items-start sm:items-center gap-4">
                                                 {/* <img
                                                     src={job.company?.logo?.asset?.url}
                                                     alt="Company Logo"

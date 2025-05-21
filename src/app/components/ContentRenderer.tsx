@@ -89,7 +89,7 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ content, type }) => {
                         layoutType === "2column"
                             ? "grid-cols-2"
                             : layoutType === "3column"
-                                ? "grid-cols-3"
+                                ? "lg:grid-cols-3 mt-10 lg:mt-0"
                                 : "grid-cols-1";
 
                     return (

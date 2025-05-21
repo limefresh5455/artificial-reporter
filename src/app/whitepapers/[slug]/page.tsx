@@ -69,23 +69,23 @@ export default function WhitepaperClientPage({
         }
     }
     return (
-        <section className="whitepaper_download py-12">
-            <div className="container mx-auto px-4">
+        <section className="whitepaper_download py-4 lg:py-12">
+            <div className="container mx-auto p-5 lg:p-10">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
                     <div className="col-span-12">
                         <h2 className="text-3xl font-semibold mb-1">{whitepaper.title}</h2>
                     </div>
 
-                    <div className="grid grid-cols-12 col-span-12 whitepaper_left gap-15">
-                        <div className="whitepaper_img p-0 border-0 flex justify-center col-span-5">
+                    <div className="grid lg:grid-cols-12 col-span-12 whitepaper_left lg:gap-8">
+                        <div className="whitepaper_img p-0 border-0 flex justify-center col-span-4">
                             <img
                                 src="/whitepapers.jpg"
-                                alt="Whitepaper Thumbnail"
+                                alt="Whitepaper"
                                 className="rounded-md shadow-md"
-                                style={{ maxHeight: '408px', width: '315px' }}
+                                style={{ maxHeight: '408px', width: '100%' }}
                             />
                         </div>
-                        <div className='col-span-7'>
+                        <div className='col-span-8'>
                             <p className="text-gray-700 whitespace-pre-line">{whitepaper.description}</p>
                             <hr />
                             <div className="grid grid-cols-12 gap-2 text-sm text-gray-600 pt-6 ">

@@ -87,7 +87,7 @@ const Header: React.FC = () => {
                             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                         />
                         <Search
-                            className="absolute right-2 top-6 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+                            className="srchIcon absolute right-0 transform -translate-y-1/2 text-gray-500 cursor-pointer"
                             size={16}
                             onClick={handleSearch}
                         />
@@ -167,7 +167,7 @@ const Header: React.FC = () => {
             <div className="block lg:hidden mx-auto w-96">
                 <HeaderAd />
             </div>
-            <div className="h-15 block lg:hidden"></div>
+            <div className="h-4 block lg:hidden"></div>
 
             <div className={`flex lg:hidden flex-wrap items-center justify-between px-4 md:px-20 py-4 bg-[${navigation?.bannerBgColor?.value?.hex}]`}>
                 <div className="lg:col-span-4 text-white font-bold text-4xl">
@@ -256,7 +256,7 @@ const Header: React.FC = () => {
 
             {/* Desktop header */}
             <div className={`hidden lg:grid lg:grid-cols-12 gap-6 px-2 lg:px-20 py-2 bg-[${navigation?.bannerBgColor?.value?.hex}]`}>
-                <div className="lg:col-span-4 text-white font-bold text-4xl pt-4">
+                <div className="lg:col-span-4 text-white font-bold text-4xl pt-2">
                     <Link href={ROUTES.HOME}>
                         {navigation?.logo?.image?.crop && navigation?.logo?.imageUrl ? (
                             <img src={buildCroppedImageUrl(navigation.logo.imageUrl, navigation.logo.image.crop)} alt={navigation.logo.alt || 'Logo'} width="130px" />

@@ -69,9 +69,9 @@ const Whitepapers = () => {
 
     console.log(selectedCategory)
     return (
-        <section className="whitepaper py-10">
-            <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 gap-6">
+        <section className="whitepaper py-0 lg:py-10">
+            <div className="container mx-auto px-0 lg:px-4">
+                <div className="grid grid-cols-1 gap-6 p-4 lg:p-8">
                     {pageData && (
                         <>
                             <h2 className="text-3xl font-semibold mb-1">{pageData.title}</h2>
