@@ -16,7 +16,7 @@ const NewsletterAd: React.FC = () => {
         }
         fetchData();
 
-    })
+    },[])
     const isValidEmail = (email: string) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
