@@ -63,8 +63,8 @@ export default function RootLayout({
     return (
         <html lang="en">
             <head>
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5403082360131543"
-                ></script>
+                {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5403082360131543"
+                ></script> */}
 
                 {/* <Script
                     strategy="afterInteractive"
@@ -85,7 +85,7 @@ export default function RootLayout({
                     }}
                 /> */}
 
-                <Script
+                {/* <Script
                     strategy="afterInteractive"
                     src="https://www.googletagmanager.com/gtag/js?id=G-9K8H9311HB"
                 />
@@ -119,7 +119,7 @@ export default function RootLayout({
                             });
                         `,
                     }}
-                />
+                /> */}
 
                 <Script
                     src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
