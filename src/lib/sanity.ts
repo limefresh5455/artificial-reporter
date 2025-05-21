@@ -712,14 +712,38 @@ export async function getJobs(
         conditions.push(`company->name == "${filters.company}"`);
     }
 
-    if (filters.location) {
-        conditions.push(`location == "${filters.location}"`);
+    let locationConditions = [];
+
+    if (filters.locationCountry) {
+        locationConditions.push(`company->locationCountry == "${filters.locationCountry}"`);
+    }
+
+    if (filters.locationState) {
+        locationConditions.push(`company->locationState == "${filters.locationState}"`);
+    }
+
+    if (filters.locationCity) {
+        locationConditions.push(`company->locationCity == "${filters.locationCity}"`);
     }
 
     // More filters can be added as needed...
 
-    const whereClause = conditions.length > 0
-        ? `*[ _type == "jobListing" && ${conditions.join(" && ")} ]`
+    let finalCondition = "";
+
+    if (locationConditions.length) {
+        finalCondition += `(${locationConditions.join(" || ")})`;
+    }
+
+    if (conditions.length) {
+        if (finalCondition) {
+            finalCondition += " && ";
+        }
+        finalCondition += conditions.join(" && ");
+    }
+    
+
+    const whereClause = finalCondition.length > 0
+        ? `*[ _type == "jobListing" && ${finalCondition} ]`
         : `*[ _type == "jobListing" ]`;
 
 
@@ -857,14 +881,38 @@ export async function getTotalJobsCount(filters: Filters): Promise<number> {
         conditions.push(`company->name == "${filters.company}"`);
     }
 
-    if (filters.location) {
-        conditions.push(`location == "${filters.location}"`);
+    let locationConditions = [];
+
+    if (filters.locationCountry) {
+        locationConditions.push(`company->locationCountry == "${filters.locationCountry}"`);
+    }
+
+    if (filters.locationState) {
+        locationConditions.push(`company->locationState == "${filters.locationState}"`);
+    }
+
+    if (filters.locationCity) {
+        locationConditions.push(`company->locationCity == "${filters.locationCity}"`);
     }
 
     // same filter conditions as above...
 
-    const whereClause = conditions.length > 0
-        ? `*[ _type == "jobListing" && ${conditions.join(" && ")} ]`
+    let finalCondition = "";
+
+    if (locationConditions.length) {
+        finalCondition += `(${locationConditions.join(" || ")})`;
+    }
+
+    if (conditions.length) {
+        if (finalCondition) {
+            finalCondition += " && ";
+        }
+        finalCondition += conditions.join(" && ");
+    }
+    
+
+    const whereClause = finalCondition.length > 0
+        ? `*[ _type == "jobListing" && ${finalCondition} ]`
         : `*[ _type == "jobListing" ]`;
 
     const query = `count(${whereClause})`;

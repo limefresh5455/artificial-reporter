@@ -64,7 +64,7 @@ const TopStories = () => {
                     />
                     <div className="bg-white bg-opacity-90 p-4 flex flex-col justify-end">
                       <div className="text-sm text-gray-600 mb-1">
-                        <Link href="#" className="text-blue-600">{story.eventType || "Category"}</Link>
+                        {story.eventType || "Category"}
                         <span className="px-1">/</span>
                         <span>{new Date(story.date).toLocaleDateString("en-US", {
                           year: "numeric",

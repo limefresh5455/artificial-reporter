@@ -136,7 +136,7 @@ const Story = ({
                                     <div className="col-span-12">
                                         <div className="post_header">
                                             <div className="flex items-center justify-between mb-4">
-                                                <div className="post_categories"><a href="#">{story.eventType || "Category"}</a></div>
+                                                <div className="post_categories"><a >{story.eventType || "Category"}</a></div>
                                                 <div className="post_share">
                                                     <div className="share-container">
                                                         <div className="share-icon">

@@ -66,7 +66,7 @@ const AllPodcasts = () => {
 
     return (
         <>
-            <section className="job-search-result py-10">
+            <section className="job-search-result py-10 " style={{marginBottom:0}}>
                 <div className="container mx-auto px-4 text-center">
                     <div className="grid grid-cols-1">
                         <div>
@@ -76,7 +76,7 @@ const AllPodcasts = () => {
                 </div>
             </section>
 
-            <section className="job-listing ai_directory ">
+            <section className="job-listing ai_directory " style={{marginTop:0}}>
                 <div className="container mx-auto">
                     <div className="flex justify-between items-center mb-6">
                         <div className="text-gray-600">

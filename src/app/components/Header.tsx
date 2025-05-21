@@ -113,7 +113,7 @@ const Header: React.FC = () => {
                                                     key={item._id}
                                                     href={getHref(item)}
                                                     className="text-left flex items-center gap-3 px-3 py-2 hover:bg-gray-100 text-sm text-black"
-                                                    onClick={() => setMobileMenuOpen(false)}
+                                                    onClick={() => {setMobileMenuOpen(false); setSearchQuery('')}}
                                                 >
                                                     {item.image && <img src={urlFor(item.image).url()} alt={item.title} className="w-8 h-8 object-cover rounded" />}
 
