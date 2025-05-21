@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/app/routes';
 
 
+
 interface Category {
     _id: string;
     slug: { _type: string; current: string };
@@ -78,7 +79,7 @@ export default function WhitepaperClientPage({
                     <div className="grid grid-cols-12 col-span-12 whitepaper_left gap-15">
                         <div className="whitepaper_img p-0 border-0 flex justify-center col-span-5">
                             <img
-                                src="https://odeskthemes.com/10/news-portal/assets/img/Whitepaper_315X408.jpg"
+                                src="/whitepapers.jpg"
                                 alt="Whitepaper Thumbnail"
                                 className="rounded-md shadow-md"
                                 style={{ maxHeight: '408px', width: '315px' }}

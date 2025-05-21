@@ -49,7 +49,7 @@ export default function Login() {
                     <div className="login_inner grid grid-cols-2 md:grid-cols-2 bg-gray-100">
                         <div className="image-section">
                             <img
-                                src="https://odeskthemes.com/10/news-portal/assets/img/img-7.jpg"
+                                src="/login.jpg"
                                 alt="Login Illustration"
                                 className="w-full"
                             />

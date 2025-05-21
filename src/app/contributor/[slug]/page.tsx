@@ -79,13 +79,7 @@ const ContributorUser = ({
                                 <div className="col-span-4">
                                     <div className="post-sidebar">
                                         <div className="mb-6 pb-3">
-                                            {/* <a href="#">
-                                                <img
-                                                    className="w-full h-auto object-cover"
-                                                    src="https://odeskthemes.com/10/news-portal/assets/img/img-7.jpg"
-                                                    alt="Ad"
-                                                />
-                                            </a> */}
+                                            
                                             <SidebarAd />
                                         </div>
                                     </div>
