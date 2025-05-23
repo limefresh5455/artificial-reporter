@@ -27,7 +27,11 @@ const AICompany = ({
         fetchData();
     }, []);
 
-
+const handleReviewSubmitted = () => {
+    console.log('Review was successfully submitted!');
+    fetchData();
+    // You can also refresh reviews or show a custom message here
+  };
 
 
     return (<>
@@ -91,7 +95,7 @@ const AICompany = ({
                                             ))}
                                         </div>
 
-                                        <SubmitReviewForm />
+                                        <SubmitReviewForm productId={productData._id} onSubmitSuccess={handleReviewSubmitted} />
                                     </div>
                                 </div>
 

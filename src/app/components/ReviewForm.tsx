@@ -2,21 +2,54 @@
 
 import { useState } from 'react';
 
-const SubmitReviewForm = () => {
+const SubmitReviewForm = ({ productId, onSubmitSuccess }: { productId: any, onSubmitSuccess?: () => void }) => {
     const [formData, setFormData] = useState({
         user_name: '',
+        user_email: '',
         stars: '5',
         details: '',
     });
+    const [message, setMessage] = useState<string>('');
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    ) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Submitted Review:', formData);
-        // You can replace this with actual API submission
+
+        try {
+            const response = await fetch('/api/reviews', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: formData.user_name,
+                    email: formData.user_email,
+                    stars: formData.stars,
+                    details: formData.details,
+                    productId: productId, // Replace with actual product ID dynamically
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setMessage('Review submitted successfully!');
+                setFormData({ user_name: '', user_email: '', stars: '5', details: '' });
+                if (onSubmitSuccess) {
+                    onSubmitSuccess();  // call the function if passed
+                }
+            } else {
+                setMessage('Failed to submit review: ' + (data.error || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('Error submitting review:', error);
+            setMessage('Error submitting review');
+        }
     };
 
     return (
@@ -25,20 +58,37 @@ const SubmitReviewForm = () => {
                 <h4 className="text-2xl font-semibold">Submit Your Review</h4>
             </div>
 
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white  rounded-lg ">
+            <form
+                onSubmit={handleSubmit}
+                className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white rounded-lg p-6"
+            >
                 <div className="col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Your Name (optional)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                     <input
                         type="text"
                         name="user_name"
                         value={formData.user_name}
                         onChange={handleChange}
-                        placeholder="Name or leave blank"
+                        placeholder="Full Name"
                         className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
                     />
                 </div>
 
-                <div className='col-span-2'>
+                <div className="col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Your Email</label>
+                    <input
+                        type="email"
+                        name="user_email"
+                        value={formData.user_email}
+                        onChange={handleChange}
+                        placeholder="Your Email"
+                        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                    />
+                </div>
+
+                <div className="col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">Star Rating</label>
                     <select
                         name="stars"
@@ -76,6 +126,7 @@ const SubmitReviewForm = () => {
                         Submit Review
                     </button>
                 </div>
+                {message}
             </form>
         </div>
     );

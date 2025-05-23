@@ -1592,7 +1592,7 @@ export async function getProduct(slug: string): Promise<any[]> {
         date_of_review,
         stars,
         details,
-        reviewer->{name, email} 
+        name, email
     },
 
     company->{
