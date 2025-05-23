@@ -9,6 +9,7 @@ export const ROUTES = {
     INSIGHT: '/insight/',
     SPONSORS: '/sponsors/',
     JOBS: '/ai-jobs/',
+    PRODUCTS: '/ai-products/',
     COMPANIES: '/ai-companies/',
     ALLPODCASTS: '/all-podcasts/',
     CONTRIBUTOR: '/contributor/',
