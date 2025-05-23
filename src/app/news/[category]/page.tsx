@@ -9,6 +9,7 @@ import { ROUTES } from '@/app/routes';
 import Link from 'next/link';
 import SidebarAd from "@/app/components/SidebarAd";
 import SidebarAdVerticle from '@/app/components/SidebarAdVerticle';
+import Pagination from '@/app/components/Pagination';
 
 const PAGE_SIZE = 8;
 
@@ -91,7 +92,7 @@ const CategroyNews = ({
                         )}
 
                         {/* Dynamic Pagination */}
-                        <div className="pt-6 border-t border-gray-200">
+                        {/* <div className="pt-6 border-t border-gray-200">
                             <ul className="flex flex-wrap gap-2 justify-center sm:justify-start text-sm">
                                 <li>
                                     <button
@@ -124,13 +125,21 @@ const CategroyNews = ({
                                     </button>
                                 </li>
                             </ul>
-                        </div>
+                        </div> */}
+
+                        {totalPages > 1 && (
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={(page) => setCurrentPage(page)}
+                            />
+                        )}
 
                     </div>
 
                     <div className="col-span-12 lg:col-span-4 space-y-10 pr-4 lg:pr-0">
                         <div>
-                           <SidebarAdVerticle />
+                            <SidebarAdVerticle />
                         </div>
                         <div>
                             <SidebarAd />

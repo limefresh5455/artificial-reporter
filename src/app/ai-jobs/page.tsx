@@ -7,6 +7,7 @@ import { Search, MapPin, ChevronDown, Clock, Bookmark, ExternalLink, LayoutList,
 import { ROUTES } from '@/app/routes';
 import Link from 'next/link';
 import LocationInput from '../components/LocationInput';
+import Pagination from '../components/Pagination';
 
 const PAGE_SIZE = 8;
 
@@ -633,7 +634,7 @@ const AIJobs: React.FC = () => {
                             ) : ''}
 
                             {/* Dynamic Pagination */}
-                            <div className="pt-6 border-t border-gray-200">
+                            {/* <div className="pt-6 border-t border-gray-200">
                                 <ul className="flex flex-wrap gap-2 justify-center sm:justify-start text-sm">
                                     <li>
                                         <button
@@ -670,7 +671,14 @@ const AIJobs: React.FC = () => {
                                         </button>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> */}
+                            {totalPages > 1 && (
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={(page) => setCurrentPage(page)}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

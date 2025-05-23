@@ -5,6 +5,7 @@ import { getPodcast, getPodcastCount } from '@/lib/sanity';
 import { ChevronDown, LayoutGrid, LayoutList, ExternalLink, Download, CirclePlay, CirclePause, ChevronRight, ChevronLeft } from 'lucide-react';
 import { PortableText, toPlainText } from '@portabletext/react';
 import PodcastCard from "@/app/components/PodcastCard";
+import Pagination from '../components/Pagination';
 
 const AllPodcasts = () => {
     const [podcasts, setPodcasts] = useState<any>([]);
@@ -66,7 +67,7 @@ const AllPodcasts = () => {
 
     return (
         <>
-            <section className="job-search-result py-10 " style={{marginBottom:0}}>
+            <section className="job-search-result py-10 " style={{ marginBottom: 0 }}>
                 <div className="container mx-auto px-4 text-center">
                     <div className="grid grid-cols-1">
                         <div>
@@ -76,7 +77,7 @@ const AllPodcasts = () => {
                 </div>
             </section>
 
-            <section className="job-listing ai_directory " style={{marginTop:0}}>
+            <section className="job-listing ai_directory " style={{ marginTop: 0 }}>
                 <div className="container mx-auto">
                     <div className="flex justify-between items-center mb-6">
                         <div className="text-gray-600">
@@ -134,7 +135,7 @@ const AllPodcasts = () => {
             </section>
 
             {/* Dynamic Pagination */}
-            <div className="pt-6 border-t border-gray-200">
+            {/* <div className="pt-6 border-t border-gray-200">
                 <ul className="flex flex-wrap gap-2 justify-center sm:justify-start text-sm">
                     <li>
                         <button
@@ -171,7 +172,15 @@ const AllPodcasts = () => {
                         </button>
                     </li>
                 </ul>
-            </div>
+            </div> */}
+
+            {totalPages > 1 && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={(page) => setCurrentPage(page)}
+                />
+            )}
 
 
         </>

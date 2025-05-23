@@ -7,6 +7,7 @@ import { Facebook, Building2, Twitter, Link, ChevronLeft, ChevronRight } from 'l
 import BackButton from '@/app/components/BackButton';
 import RatingStars from '@/app/components/Rating';
 import SubmitReviewForm from '@/app/components/ReviewForm';
+import Pagination from '@/app/components/Pagination';
 
 const PAGE_SIZE = 4;
 
@@ -124,7 +125,7 @@ const AICompany = ({
                                                     </div>
                                                 </div>
                                             ))}
-                                            {productData.totalReviews > PAGE_SIZE ? (
+                                            {/* {productData.totalReviews > PAGE_SIZE ? (
                                                 <div className="pt-6 border-t border-gray-200">
                                                     <ul className="flex flex-wrap gap-2 justify-center sm:justify-start text-sm">
                                                         <li>
@@ -163,7 +164,15 @@ const AICompany = ({
                                                         </li>
                                                     </ul>
                                                 </div>
-                                            ) : ''}
+                                            ) : ''} */}
+
+                                            {totalPages > 1 && (
+                                                <Pagination
+                                                    currentPage={currentPage}
+                                                    totalPages={totalPages}
+                                                    onPageChange={(page) => setCurrentPage(page)}
+                                                />
+                                            )}
 
 
                                         </div>

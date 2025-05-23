@@ -7,6 +7,7 @@ import ContentRenderer from "../components/ContentRenderer";
 import { urlFor } from "@/lib/sanityImage";
 import { ROUTES } from "../routes";
 import Link from "next/link";
+import Pagination from "../components/Pagination";
 
 const PAGE_SIZE = 8;
 
@@ -128,7 +129,7 @@ const Whitepapers = () => {
                         paginatedPapers.map((item, i) => (
                             <div className="whitepaper_box mt-0 flex flex-col md:flex-row items-center md:items-start  gap-6" key={item._id}>
                                 <div className="cont flex-1">
-                                    <Link className="h4 text-lg font-semibold flex items-center gap-2" href={ROUTES.WHITEPAPERS +item.slug?.current}>
+                                    <Link className="h4 text-lg font-semibold flex items-center gap-2" href={ROUTES.WHITEPAPERS + item.slug?.current}>
                                         <FileText />
                                         {item.title}
                                     </Link>
@@ -140,7 +141,7 @@ const Whitepapers = () => {
                                     </Link>
                                 </div>
                                 <div className="img w-full md:w-1/3">
-                                    <Link href={ROUTES.WHITEPAPERS +item.slug?.current}>
+                                    <Link href={ROUTES.WHITEPAPERS + item.slug?.current}>
                                         <img
                                             src={urlFor(item.thumbnail).url()}
                                             alt={`Whitepaper ${i + 1}`}
@@ -153,7 +154,7 @@ const Whitepapers = () => {
                     }
 
                     {/* Pagination */}
-                    <div className="pt-6 border-t border-gray-200">
+                    {/* <div className="pt-6 border-t border-gray-200">
                         <ul className="flex flex-wrap gap-2 justify-center sm:justify-start text-sm">
                             <li>
                                 <button
@@ -190,7 +191,15 @@ const Whitepapers = () => {
                                 </button>
                             </li>
                         </ul>
-                    </div>
+                    </div> */}
+
+                    {totalPages > 1 && (
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={(page) => setCurrentPage(page)}
+                        />
+                    )}
                 </div>
             </div>
         </section>

@@ -8,6 +8,7 @@ import { ROUTES } from '@/app/routes';
 import Link from 'next/link';
 import LocationInput from "@/app/components/LocationInput";
 import { formatWebsiteUrl } from '@/lib/slugify';
+import Pagination from '../components/Pagination';
 
 const PAGE_SIZE = 8;
 
@@ -216,15 +217,15 @@ const AIJobs: React.FC = () => {
     const fetchData = async () => {
         setIsLoading(true);
 
-        
+
         const [data, count] = await Promise.all([
             getCompanies(currentPage, PAGE_SIZE, selectedOptions),
             getTotalCompaniesCount(selectedOptions),
         ]);
         setJobs(data);
-        if( currentPage == 0){
+        if (currentPage == 0) {
             setCurrentPage(1)
-            
+
         }
         setTotalCount(count);
         setIsLoading(false);
@@ -449,7 +450,7 @@ const AIJobs: React.FC = () => {
                                         onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}
                                     >
                                         {viewMode === 'list' ? (
-                                            <LayoutList  strokeWidth={1.5} className="w-5 h-5" />
+                                            <LayoutList strokeWidth={1.5} className="w-5 h-5" />
                                         ) : (
                                             <LayoutGrid strokeWidth={1.5} className="w-5 h-5" />
                                         )}
@@ -584,7 +585,7 @@ const AIJobs: React.FC = () => {
                             ) : ''}
 
                             {/* Dynamic Pagination */}
-                            <div className="pt-6 border-t border-gray-200">
+                            {/* <div className="pt-6 border-t border-gray-200">
                                 <ul className="flex flex-wrap gap-2 justify-center sm:justify-start text-sm">
                                     <li>
                                         <button
@@ -621,7 +622,14 @@ const AIJobs: React.FC = () => {
                                         </button>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> */}
+                            {totalPages > 1 && (
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={(page) => setCurrentPage(page)}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

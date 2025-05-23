@@ -9,83 +9,84 @@ import { ROUTES } from '@/app/routes';
 import Link from 'next/link';
 import SidebarAd from '../components/SidebarAd';
 import SidebarAdVerticle from '../components/SidebarAdVerticle';
+import Pagination from '../components/Pagination';
 
 const PAGE_SIZE = 8;
 
 const TopStories = () => {
-  const [stories, setStories] = useState<any[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalCount, setTotalCount] = useState<number>(0);
-  const [slug, setSlug] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [stories, setStories] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalCount, setTotalCount] = useState<number>(0);
+    const [slug, setSlug] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+    const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
+    useEffect(() => {
+        const fetchData = async () => {
+            setIsLoading(true);
 
-    //   const { category } = await params;  // resolve params first
-    //   setSlug(category);
+            //   const { category } = await params;  // resolve params first
+            //   setSlug(category);
 
-      const [data, count] = await Promise.all([
-        getTopStoriesData(currentPage, PAGE_SIZE, 'insight'),
-        getTotalTopStoriesCount('insight')
-        
-      ]);
-    //   console.log(data)
-      setStories(data);
-      setTotalCount(count);
-      setIsLoading(false);
-    };
+            const [data, count] = await Promise.all([
+                getTopStoriesData(currentPage, PAGE_SIZE, 'insight'),
+                getTotalTopStoriesCount('insight')
 
-    fetchData();
-  }, [currentPage]); // <- Also add params as dependency
+            ]);
+            //   console.log(data)
+            setStories(data);
+            setTotalCount(count);
+            setIsLoading(false);
+        };
 
-  return (
-    <section className="stories news_inner py-12">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-12 gap-8">
-          <div className="lg:col-span-8 space-y-8">
-            <h2 className="text-3xl font-semibold mb-3">Insights</h2>
+        fetchData();
+    }, [currentPage]); // <- Also add params as dependency
 
-            {isLoading ? (
-              ''
-            ) : (
-              <div className="grid sm:grid-cols-2 gap-6">
-                {stories.map((story: any, index: number) => (
-                  <div key={index} className="relative">
-                    <img
-                      src={urlFor(story.image.asset).url()}
-                      className="w-full object-cover"
-                      alt="Story Image"
-                      style={{ aspectRatio: "3/2" }}
-                    />
-                    <div className="bg-white bg-opacity-90 p-4 flex flex-col justify-end">
-                      <div className="text-sm text-gray-600 mb-1">
-                        <Link href="#" className="text-blue-600">{story.eventType || "Category"}</Link>
-                        <span className="px-1">/</span>
-                        <span>{new Date(story.publishedAt).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "2-digit",
-                        })}</span>
-                      </div>
-                      <Link href={`${ROUTES.INSIGHT}${story.slug.current}`} className="text-lg font-semibold hover:underline">
-                        {story.title}
-                      </Link>
-                      <p className="text-sm mt-1">
-                        {story.overview?.slice(0, 100)}
-                        {story.overview?.length > 100 && '...'}
-                      </p> 
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+    return (
+        <section className="stories news_inner py-12">
+            <div className="container mx-auto px-4">
+                <div className="grid grid-cols-12 gap-8">
+                    <div className="lg:col-span-8 space-y-8">
+                        <h2 className="text-3xl font-semibold mb-3">Insights</h2>
 
-            {/* Dynamic Pagination */}
-            <div className="pt-6 border-t border-gray-200">
+                        {isLoading ? (
+                            ''
+                        ) : (
+                            <div className="grid sm:grid-cols-2 gap-6">
+                                {stories.map((story: any, index: number) => (
+                                    <div key={index} className="relative">
+                                        <img
+                                            src={urlFor(story.image.asset).url()}
+                                            className="w-full object-cover"
+                                            alt="Story Image"
+                                            style={{ aspectRatio: "3/2" }}
+                                        />
+                                        <div className="bg-white bg-opacity-90 p-4 flex flex-col justify-end">
+                                            <div className="text-sm text-gray-600 mb-1">
+                                                <Link href="#" className="text-blue-600">{story.eventType || "Category"}</Link>
+                                                <span className="px-1">/</span>
+                                                <span>{new Date(story.publishedAt).toLocaleDateString("en-US", {
+                                                    year: "numeric",
+                                                    month: "long",
+                                                    day: "2-digit",
+                                                })}</span>
+                                            </div>
+                                            <Link href={`${ROUTES.INSIGHT}${story.slug.current}`} className="text-lg font-semibold hover:underline">
+                                                {story.title}
+                                            </Link>
+                                            <p className="text-sm mt-1">
+                                                {story.overview?.slice(0, 100)}
+                                                {story.overview?.length > 100 && '...'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Dynamic Pagination */}
+                        {/* <div className="pt-6 border-t border-gray-200">
               <ul className="flex flex-wrap gap-2 justify-center sm:justify-start text-sm">
                 <li>
                   <button
@@ -118,22 +119,30 @@ const TopStories = () => {
                   </button>
                 </li>
               </ul>
-            </div>
+            </div> */}
 
-          </div>
+                        {totalPages > 1 && (
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={(page) => setCurrentPage(page)}
+                            />
+                        )}
 
-          <div className="lg:col-span-4 space-y-10">
-            <div>
-             <SidebarAd />
+                    </div>
+
+                    <div className="lg:col-span-4 space-y-10">
+                        <div>
+                            <SidebarAd />
+                        </div>
+                        <div>
+                            <SidebarAdVerticle />
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div>
-             <SidebarAdVerticle />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+        </section>
+    );
 };
 
 export default TopStories;

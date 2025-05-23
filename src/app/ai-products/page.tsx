@@ -8,6 +8,8 @@ import { ROUTES } from '@/app/routes';
 import Link from 'next/link';
 import LocationInput from '../components/LocationInput';
 import RatingStars from '../components/Rating';
+import Pagination from '../components/Pagination';
+
 
 
 const PAGE_SIZE = 8;
@@ -357,48 +359,56 @@ const AIProducts: React.FC = () => {
 
                             {/* LayoutList View */}
                             {/* {viewMode === 'list' ? ( */}
-                                <div className="space-y-4">
-                                    {products.map((product, index) => (
-                                        <div
-                                            key={index}
-                                            className="grid grid-cols-1 sm:grid-cols-12 bg-white p-6 rounded-lg border border-gray-300 gap-4 items-start sm:items-center hover:border-[#31795a]"
-                                        >
-                                            {/* Job Title */}
-                                            <div className="sm:col-span-12">
-                                                <Link
-                                                    href={ROUTES.PRODUCTS + product.slug?.current}
-                                                    className="text-lg font-semibold text-gray-800 hover:text-blue-600"
-                                                >
-                                                    {product.productName}
-                                                </Link>
-                                            </div>
-
-
-                                            <div className="sm:col-span-12 flex justify-between">
-                                                <div className="text-sm">
-                                                    <RatingStars averageRating={product.averageRating} ratingCount={product.productReview.length} />
-                                                </div>
-                                                <div className="text-md font-semibold">
-                                                    {product.productType}
-                                                </div>
-                                            </div>
-
-                                            <div className="sm:col-span-10">
-                                                <div className="text-md">
-                                                    {product.overview.slice(0, 100)}...
-                                                </div>
-                                            </div>
-
-
+                            <div className="space-y-4">
+                                {products.map((product, index) => (
+                                    <div
+                                        key={index}
+                                        className="grid grid-cols-1 sm:grid-cols-12 bg-white p-6 rounded-lg border border-gray-300 gap-4 items-start sm:items-center hover:border-[#31795a]"
+                                    >
+                                        {/* Job Title */}
+                                        <div className="sm:col-span-12">
+                                            <Link
+                                                href={ROUTES.PRODUCTS + product.slug?.current}
+                                                className="text-lg font-semibold text-gray-800 hover:text-blue-600"
+                                            >
+                                                {product.productName}
+                                            </Link>
                                         </div>
-                                    ))}
-                                </div>
+
+
+                                        <div className="sm:col-span-12 flex justify-between">
+                                            <div className="text-sm">
+                                                <RatingStars averageRating={product.averageRating} ratingCount={product.productReview.length} />
+                                            </div>
+                                            <div className="text-md font-semibold">
+                                                {product.productType}
+                                            </div>
+                                        </div>
+
+                                        <div className="sm:col-span-10">
+                                            <div className="text-md">
+                                                {product.overview.slice(0, 100)}...
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                ))}
+                            </div>
                             {/* ) : ''} */}
 
-                        
+
 
                             {/* Dynamic Pagination */}
-                            <div className="pt-6 border-t border-gray-200">
+                            {totalPages > 1 && (
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={(page) => setCurrentPage(page)}
+                                />
+                            )}
+
+                            {/* <div className="pt-6 border-t border-gray-200">
                                 <ul className="flex flex-wrap gap-2 justify-center sm:justify-start text-sm">
                                     <li>
                                         <button
@@ -435,7 +445,7 @@ const AIProducts: React.FC = () => {
                                         </button>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
