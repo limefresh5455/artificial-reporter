@@ -1437,191 +1437,255 @@ export async function getNewsLetter() {
 
 
 export async function getProducts(
-    page = 1,
-    pageSize = 10,
-    filters: Record<string, any> = {}
+  page = 1,
+  pageSize = 10,
+  filters: Record<string, any> = {}
 ): Promise<any[]> {
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize;
 
-    const conditions: string[] = [];
+  const conditions: string[] = [];
 
-    if (filters.productName && typeof filters.productName === "string") {
-        conditions.push(`productName match "*${filters.productName}*"`);
-    }
+  // Your existing filters for productName, productType, etc.
+  if (filters.productName && typeof filters.productName === "string") {
+    conditions.push(`productName match "*${filters.productName}*"`);
+  }
 
-    if (filters.productType && typeof filters.productType === "string") {
-        conditions.push(`productType == "${filters.productType}"`);
-    }
+  if (filters.productType && typeof filters.productType === "string") {
+    conditions.push(`productType == "${filters.productType}"`);
+  }
 
-    if (filters.company && typeof filters.company === "string") {
-        conditions.push(`company._ref == "${filters.company}"`);
-    }
+  // Combine conditions
+  const whereClause = conditions.length
+    ? `*[ _type == "product" && ${conditions.join(" && ")} ]`
+    : `*[ _type == "product" ]`;
 
-    if (filters.assetId && typeof filters.assetId === "string") {
-        conditions.push(`assetId == "${filters.assetId}"`);
-    }
 
-    if (filters.productId && typeof filters.productId === "string") {
-        conditions.push(`productId == "${filters.productId}"`);
-    }
-
-    if (filters.dateAdded && typeof filters.dateAdded === "string") {
-        conditions.push(`dateAdded >= "${filters.dateAdded}"`);
-    }
-
-    // Combine all conditions into a GROQ filter
-    const whereClause = conditions.length
-        ? `*[ _type == "product" && ${conditions.join(" && ")} ]`
-        : `*[ _type == "product" ]`;
-
-    // Sorting (optional)
     const sortMap: Record<string, string> = {
-        Latest: "_createdAt desc",
-        "Product Name": "productName asc",
-        "Date Added": "dateAdded desc"
+        "Products Type": "productType asc",
+        "Products Name": "productName asc",
+        
     };
+
     const sortBy = sortMap[filters.sortBy] || "_createdAt desc";
 
-    // Final GROQ query
-    const query = `
-        *[_type == "product"] | order(${sortBy}) [${start}...${end}] {
-  _id,
-  _createdAt,
-  _updatedAt,
-  productId,
-  productName,
-  productType,
-  assetId,
-  dateAdded,
-  overview,
-  slug,
 
-  "productReview": *[_type == "productReview" && references(^._id)] {
-    stars
-  },
-
-  company->{
-    _id,
-    name,
-    locationCountry,
-    locationState,
-    locationCity,
-    industry,
-    logo {
-      asset->{
-        _id,
-        url
-      }
-    }
-  }
-}
-
-`;
-
-
-    const data = await client.fetch(query);
-
-    const productsWithAverage = data.map((product: any) => {
-        const ratings = product.productReview?.map((review: any) => review.stars) || [];
-        const total = ratings.reduce((sum: any, val: any) => sum + val, 0);
-        const averageRating = ratings.length > 0 ? Math.round((total / ratings.length) * 10) / 10 : 0;
-
-        return {
-            ...product,
-            averageRating
-        };
-    });
-    return productsWithAverage;
-}
-
-
-export async function getProductsCount(filters: Record<string, any> = {}): Promise<number> {
-    const conditions: string[] = [];
-
-    if (filters.productName && typeof filters.productName === "string") {
-        conditions.push(`productName match "*${filters.productName}*"`);
-    }
-
-    if (filters.productType && typeof filters.productType === "string") {
-        conditions.push(`productType == "${filters.productType}"`);
-    }
-
-    if (filters.company && typeof filters.company === "string") {
-        conditions.push(`company._ref == "${filters.company}"`);
-    }
-
-    if (filters.assetId && typeof filters.assetId === "string") {
-        conditions.push(`assetId == "${filters.assetId}"`);
-    }
-
-    if (filters.productId && typeof filters.productId === "string") {
-        conditions.push(`productId == "${filters.productId}"`);
-    }
-
-    if (filters.dateAdded && typeof filters.dateAdded === "string") {
-        conditions.push(`dateAdded >= "${filters.dateAdded}"`);
-    }
-
-    const whereClause = conditions.length
-        ? `*[ _type == "product" && ${conditions.join(" && ")} ]`
-        : `*[ _type == "product" ]`;
-
-    const query = `count(${whereClause})`;
-
-    return await client.fetch(query);
-}
-
-
-export async function getProduct(slug: string): Promise<any[]> {
-    const query = `
-  *[_type == "product" && slug.current == $slug] {
-    _id,
-    _createdAt,
-    _updatedAt,
-    productId,
-    productName,
-    productType,
-    assetId,
-    dateAdded,
-    overview,
-    slug,
-
-    "productReview": *[_type == "productReview" && references(^._id)] {
-        stars,
-        date_of_review,
-        stars,
-        details,
-        name, email
-    },
-
-    company->{
+  // Query all products matching filters (without pagination)
+  const query = `
+    ${whereClause} | order(${sortBy}) {
       _id,
-      name,
-      locationCountry,
-      locationState,
-      locationCity,
-      industry,
-      logo {
-        asset->{
-          _id,
-          url
+      _createdAt,
+      _updatedAt,
+      productId,
+      productName,
+      productType,
+      assetId,
+      dateAdded,
+      overview,
+      slug,
+      "productReview": *[_type == "productReview" && references(^._id)] {
+        stars
+      },
+      company->{
+        _id,
+        name,
+        locationCountry,
+        locationState,
+        locationCity,
+        industry,
+        logo {
+          asset->{
+            _id,
+            url
+          }
         }
       }
     }
+  `;
+
+  const allProducts = await client.fetch(query);
+
+  // Compute average rating per product
+  const productsWithAverage = allProducts.map((product: any) => {
+    const ratings = product.productReview?.map((review: any) => review.stars) || [];
+    const total = ratings.reduce((sum: number, val: number) => sum + val, 0);
+    const averageRating = ratings.length > 0 ? total / ratings.length : 0;
+
+    return {
+      ...product,
+      averageRating,
+    };
+  });
+
+  // Filter by average rating if rating filter exists
+  let filteredProducts = productsWithAverage;
+  if (filters.rating) {
+    const ratingString = filters.rating;
+    const matches = ratingString.match(/\((\d)\)/);
+    const ratingNumber = matches ? parseInt(matches[1], 10) : null;
+
+    if (ratingNumber !== null) {
+      filteredProducts = productsWithAverage.filter((p:any) => p.averageRating >= ratingNumber);
+    }
   }
-`;
-    const product = await client.fetch(query, { slug: slug });
 
-    const productsWithAverage = product.map((product: any) => {
-        const ratings = product.productReview?.map((review: any) => review.stars) || [];
-        const total = ratings.reduce((sum: any, val: any) => sum + val, 0);
-        const averageRating = ratings.length > 0 ? Math.round((total / ratings.length) * 10) / 10 : 0;
+  // Apply pagination on filtered results
+  const paginatedProducts = filteredProducts.slice(start, end);
 
-        return {
-            ...product,
-            averageRating
-        };
-    });
-    return productsWithAverage[0];
+  return paginatedProducts;
+}
+
+
+
+export async function getProductsCount(filters: Record<string, any> = {}): Promise<number> {
+  const conditions: string[] = [];
+
+  if (filters.productName && typeof filters.productName === "string") {
+    conditions.push(`productName match "*${filters.productName}*"`);
+  }
+
+  if (filters.productType && typeof filters.productType === "string") {
+    conditions.push(`productType == "${filters.productType}"`);
+  }
+
+  if (filters.company && typeof filters.company === "string") {
+    conditions.push(`company._ref == "${filters.company}"`);
+  }
+
+  if (filters.assetId && typeof filters.assetId === "string") {
+    conditions.push(`assetId == "${filters.assetId}"`);
+  }
+
+  if (filters.productId && typeof filters.productId === "string") {
+    conditions.push(`productId == "${filters.productId}"`);
+  }
+
+  if (filters.dateAdded && typeof filters.dateAdded === "string") {
+    conditions.push(`dateAdded >= "${filters.dateAdded}"`);
+  }
+
+  // Compose filter GROQ clause (without rating filter)
+  const whereClause = conditions.length
+    ? `*[ _type == "product" && ${conditions.join(" && ")} ]`
+    : `*[ _type == "product" ]`;
+
+  // Fetch all filtered products with reviews
+  const query = `
+    ${whereClause} {
+      _id,
+      "productReview": *[_type == "productReview" && references(^._id)] {
+        stars
+      }
+    }
+  `;
+
+  const products = await client.fetch(query);
+
+  // Calculate average rating for each product
+  const productsWithAverage = products.map((product: any) => {
+    const ratings = product.productReview?.map((r: any) => r.stars) || [];
+    const total = ratings.reduce((sum: number, val: number) => sum + val, 0);
+    const averageRating = ratings.length > 0 ? total / ratings.length : 0;
+    return {
+      ...product,
+      averageRating,
+    };
+  });
+
+  // Filter by rating if specified
+  let filteredProducts = productsWithAverage;
+  if (filters.rating) {
+    const ratingString = filters.rating;
+    const matches = ratingString.match(/\((\d)\)/);
+    const ratingNumber = matches ? parseInt(matches[1], 10) : null;
+    if (ratingNumber !== null) {
+      filteredProducts = productsWithAverage.filter((p:any) => p.averageRating >= ratingNumber);
+    }
+  }
+
+  // Return count of filtered products
+  return filteredProducts.length;
+}
+
+
+
+
+export async function getProduct(
+    slug: string,
+    reviewPage = 1,
+    reviewsPerPage = 5
+) {
+    const offset = (reviewPage - 1) * reviewsPerPage;
+
+    // Query for paginated reviews + product info
+    const reviewsQuery = `
+    *[_type == "product" && slug.current == $slug] {
+      _id,
+      _createdAt,
+      _updatedAt,
+      productId,
+      productName,
+      productType,
+      assetId,
+      dateAdded,
+      overview,
+      slug,
+
+      "productReview": *[_type == "productReview" && references(^._id)] | order(date_of_review desc) [${offset}...${offset + reviewsPerPage}] {
+        stars,
+        date_of_review,
+        details,
+        name,
+        email
+      },
+
+      company->{
+        _id,
+        name,
+        locationCountry,
+        locationState,
+        locationCity,
+        industry,
+        logo {
+          asset->{
+            _id,
+            url
+          }
+        }
+      }
+    }
+  `;
+
+    // Count total reviews
+    const countQuery = `
+    count(*[_type == "productReview" && references(*[_type == "product" && slug.current == $slug][0]._id)])
+  `;
+
+    // Get all stars to calculate averageRating correctly
+    const starsQuery = `
+    *[_type == "productReview" && references(*[_type == "product" && slug.current == $slug][0]._id)]{
+      stars
+    }
+  `;
+
+    // Fetch in parallel
+    const [productArr, totalReviews, allStars] = await Promise.all([
+        client.fetch(reviewsQuery, { slug }),
+        client.fetch(countQuery, { slug }),
+        client.fetch(starsQuery, { slug }),
+    ]);
+
+    if (!productArr.length) return null;
+    const product = productArr[0];
+
+    // Calculate average rating using all stars
+    const ratings = allStars.map((r: any) => r.stars);
+    const total = ratings.reduce((sum: number, val: number) => sum + val, 0);
+    const averageRating = ratings.length > 0 ? Math.round((total / ratings.length) * 10) / 10 : 0;
+
+    return {
+        ...product,
+        averageRating,
+        totalReviews,
+    };
 }

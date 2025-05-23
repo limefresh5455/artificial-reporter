@@ -3,10 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { getProduct } from '@/lib/sanity';
 import { urlFor } from '@/lib/sanityImage';
-import { Facebook, Building2, Twitter, Link } from 'lucide-react';
+import { Facebook, Building2, Twitter, Link, ChevronLeft, ChevronRight } from 'lucide-react';
 import BackButton from '@/app/components/BackButton';
 import RatingStars from '@/app/components/Rating';
 import SubmitReviewForm from '@/app/components/ReviewForm';
+
+const PAGE_SIZE = 4;
 
 
 const AICompany = ({
@@ -15,24 +17,53 @@ const AICompany = ({
     params: Promise<{ slug: string }>;
 }) => {
     const [productData, setProductData] = useState<any>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalCount, setTotalCount] = useState<number>(0);
+
+
     const fetchData = async () => {
         const { slug } = await params;
-        const data = await getProduct(slug);
+        const data = await getProduct(slug, currentPage, PAGE_SIZE);
+
+        console.log(data.totalReviews)
         setProductData(data);
+        setTotalCount(data.totalReviews ? data.totalReviews : 0);
         console.log(data);
     };
     useEffect(() => {
 
 
         fetchData();
-    }, []);
+    }, [currentPage]);
+    const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
-const handleReviewSubmitted = () => {
-    console.log('Review was successfully submitted!');
-    fetchData();
-    // You can also refresh reviews or show a custom message here
-  };
 
+    const handleReviewSubmitted = () => {
+        console.log('Review was successfully submitted!');
+        fetchData();
+        // You can also refresh reviews or show a custom message here
+    };
+    const getPaginationRange = (totalPages: number, currentPage: number, delta = 2) => {
+        const range: (number | string)[] = [];
+        const left = Math.max(2, currentPage - delta);
+        const right = Math.min(totalPages - 1, currentPage + delta);
+
+        range.push(1); // Always show first page
+
+        if (left > 2) range.push('...');
+
+        for (let i = left; i <= right; i++) {
+            range.push(i);
+        }
+
+        if (right < totalPages - 1) range.push('...');
+
+        if (totalPages > 1) range.push(totalPages); // Always show last page
+
+        return range;
+    };
+
+    const paginationRange = getPaginationRange(totalPages, currentPage);
 
     return (<>
         {productData ? (
@@ -67,7 +98,7 @@ const handleReviewSubmitted = () => {
                                     <div className="mt-12">
                                         <div className="flex items-center mb-6">
                                             <h4 className="text-xl font-semibold">{
-                                                productData.productReview?.length > 0 ? `${productData.productReview?.length} Reviews` : "No Reviews Yet"
+                                                productData?.totalReviews > 0 ? `${productData.totalReviews} Reviews` : "No Reviews Yet"
                                             }</h4>
                                         </div>
                                         <div className="grid gap-6">
@@ -93,6 +124,48 @@ const handleReviewSubmitted = () => {
                                                     </div>
                                                 </div>
                                             ))}
+                                            {productData.productReview?.length >= PAGE_SIZE ? (
+                                                <div className="pt-6 border-t border-gray-200">
+                                                    <ul className="flex flex-wrap gap-2 justify-center sm:justify-start text-sm">
+                                                        <li>
+                                                            <button
+                                                                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                                                disabled={currentPage === 1}
+                                                                className={`px-3 py-1 rounded ${currentPage === 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+                                                            >
+                                                                <ChevronLeft size={20} />
+                                                            </button>
+                                                        </li>
+
+                                                        {paginationRange.map((page, index) =>
+                                                            page === '...' ? (
+                                                                <li key={`ellipsis-${index}`} className="px-3 py-1 text-gray-400">...</li>
+                                                            ) : (
+                                                                <li key={page}>
+                                                                    <button
+                                                                        onClick={() => setCurrentPage(Number(page))}
+                                                                        className={`px-3 py-1 rounded ${currentPage === page ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}
+                                                                    >
+                                                                        {page}
+                                                                    </button>
+                                                                </li>
+                                                            )
+                                                        )}
+
+                                                        <li>
+                                                            <button
+                                                                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                                                                disabled={currentPage === totalPages}
+                                                                className={`px-3 py-1 rounded ${currentPage === totalPages ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+                                                            >
+                                                                <ChevronRight size={20} />
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            ) : ''}
+
+
                                         </div>
 
                                         <SubmitReviewForm productId={productData._id} onSubmitSuccess={handleReviewSubmitted} />
@@ -118,7 +191,7 @@ const handleReviewSubmitted = () => {
                                         <span className="block text-sm font-medium text-gray-600">Rating</span>
                                         <div className="flex items-center gap-1 text-yellow-500">
 
-                                            <RatingStars averageRating={productData?.averageRating} ratingCount={productData.productReview?.length} />
+                                            <RatingStars averageRating={productData?.averageRating} ratingCount={productData.totalReviews} />
                                         </div>
                                     </li>
                                 </ul>

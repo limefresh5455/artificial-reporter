@@ -325,6 +325,9 @@ const AIProducts: React.FC = () => {
                                 </div>
                                 <div className="flex items-center gap-2 lg:gap-4">
 
+                                    <button className="py-2 px-4 border border-gray-300 rounded-md flex items-center gap-2" onClick={resetFilter}>
+                                        <span>Reset</span>
+                                    </button>
                                     <div className="relative">
                                         <button className="p-2 border border-gray-300 rounded-md flex items-center gap-2" onClick={toggleDropdownSort}>
                                             <span>Sort By</span>
@@ -339,7 +342,7 @@ const AIProducts: React.FC = () => {
                                             ))}
                                         </ul>
                                     </div>
-                                    <button
+                                    {/* <button
                                         className={`hidden lg:block p-2 border rounded-md ${viewMode === 'list' ? 'bg-gray-100 border-gray-300' : 'border-gray-300'}`}
                                         onClick={() => setViewMode(viewMode === 'list' ? 'grid' : 'list')}
                                     >
@@ -348,12 +351,12 @@ const AIProducts: React.FC = () => {
                                         ) : (
                                             <LayoutGrid strokeWidth={1.5} className="w-5 h-5" />
                                         )}
-                                    </button>
+                                    </button> */}
                                 </div>
                             </div>
 
                             {/* LayoutList View */}
-                            {viewMode === 'list' ? (
+                            {/* {viewMode === 'list' ? ( */}
                                 <div className="space-y-4">
                                     {products.map((product, index) => (
                                         <div
@@ -382,7 +385,7 @@ const AIProducts: React.FC = () => {
 
                                             <div className="sm:col-span-10">
                                                 <div className="text-md">
-                                                    {product.overview.slice(0,100)}...
+                                                    {product.overview.slice(0, 100)}...
                                                 </div>
                                             </div>
 
@@ -390,68 +393,9 @@ const AIProducts: React.FC = () => {
                                         </div>
                                     ))}
                                 </div>
-                            ) : ''}
+                            {/* ) : ''} */}
 
-                            {/* LayoutGrid View */}
-                            {viewMode === 'grid' ? (
-                                <div className="grid grid-cols-2 gap-4">
-                                    {products.map((job) => (
-                                        <div key={job._id} className="col-sm-6 bg-white p-6 rounded-lg flex flex-col transition-transform border border-gray-300 hover:border-[#31795a] position-relative">
-
-                                            {/* Company Logo */}
-                                            <a href="#" className="company_logo">
-                                                {/* <img src={job.company?.logo?.asset?.url} alt={`${job.company?.name} logo`} className="w-12 h-12 rounded-md mb-2 object-contain" /> */}
-                                                {job?.company?.logo?.asset?.url ? (
-                                                    <img
-                                                        src={job?.company.logo.asset.url}
-                                                        alt={`${job?.company?.name || 'Company'} Logo`}
-                                                        className="w-12 h-12 rounded-md object-contain mb-2"
-                                                    />
-                                                ) : (
-                                                    <Building2 size={48} className="text-gray-400 mb-2" />
-                                                )}
-                                            </a>
-
-                                            {/* Save Button */}
-                                            <a href="#" className="save-btn absolute top-4 right-4">
-                                                <Bookmark className="w-5 h-5 text-gray-600" />
-                                            </a>
-
-                                            {/* Job Type */}
-                                            <span className={`text-xs px-2 py-1 text-center rounded font-medium inline-block job-duration ${typeStyles[job.jobType as keyof typeof typeStyles]}`}>
-                                                {job.jobType}
-                                            </span>
-
-                                            {/* Job Title */}
-                                            <a href={`/products/${job.id}`} className="title text-lg font-semibold text-gray-800 hover:text-blue-600 mt-2">
-                                                {job.title}
-                                            </a>
-
-                                            {/* Posted Date */}
-                                            <span className="post_time text-sm text-gray-500 flex items-center gap-1 mt-2">
-                                                <Clock className="w-4 h-4" />
-                                                Posted {job.datePosted ? new Date(job.datePosted).toDateString() : ''}
-                                            </span>
-
-                                            {/* Job Salary */}
-                                            <div className="job-salary text-sm mt-2">
-                                                From <span className="text-gray-800 font-semibold">{job.payAmount}</span> per {job.hourlyOrSalary?.toLowerCase()}
-                                            </div>
-
-                                            {/* Job Location and Apply Button */}
-                                            <div className="d-flex align-items-center justify-content-between mt-auto flex justify-between items-center">
-                                                <div className="job-location text-sm">
-                                                    <a href="#" className="text-gray-600 hover:text-blue-600">{job.location}</a>
-                                                </div>
-                                                <a href="#" className="apply-btn py-2 px-4 bg-[#005025] text-white rounded-md flex items-center gap-2 hover:bg-blue-700">
-                                                    Apply
-                                                    <ExternalLink className="w-4 h-4" />
-                                                </a>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : ''}
+                        
 
                             {/* Dynamic Pagination */}
                             <div className="pt-6 border-t border-gray-200">
