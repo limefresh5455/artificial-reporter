@@ -265,6 +265,10 @@ export default function Register() {
                 response.data.user.identities[0].identity_data.email_verified
             ) {
                 router.push(ROUTES.LOGIN);
+            } else if (response.data.user &&
+                response.data.user.identities &&
+                response.data.user.identities.length == 0) {
+                setErrors({ email: "Email already exixts!" });
             } else {
                 setErrors({ email: "A confirmation email has been sent to your address. Please verify your email to continue." });
                 if (response.data.session) {
@@ -307,12 +311,14 @@ export default function Register() {
                 country: formData.country,
                 state: formData.state,
             }];
-
             const [metaResponse, passResponse] = await Promise.all([
                 userMetaInsert(userMeta),
                 updateUserPassword(password),
             ]);
-
+            console.log(metaResponse, passResponse)
+            if(metaResponse.status == 201){
+                router.push(ROUTES.HOME);
+            }
             if (metaResponse.error) {
                 setErrors({ email: metaResponse.error.message });
                 return;
@@ -344,6 +350,7 @@ export default function Register() {
             setErrors({ email: "An error occurred during submission" });
         } finally {
             setIsSubmitting(false);
+            console.log("metaResponse, passResponse")
         }
     };
 

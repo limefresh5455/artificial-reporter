@@ -26,20 +26,33 @@ export async function login(formData: FormData) {
 
 export async function signInWithEmail(email: string) {
     const supabase = await createClient()
-    
+
     const response = await supabase.auth.signUp({
         email: email,
         password: Math.random + "",
         options: {
             // set this to false if you do not want the user to be automatically signed up
-
-            emailRedirectTo: "https://jazzy-platypus-aa6485.netlify.app/auth/register",
+            emailRedirectTo: process.env.NEXT_PUBLIC_BASE_URL + ROUTES.REGISTER,
         },
     })
 
     return response;
 }
 
+
+export async function resetPassword(email: any) {
+    const supabase = await createClient()
+    const response = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: process.env.NEXT_PUBLIC_BASE_URL + ROUTES.UPDATE_PASSWORD,
+    })
+    return response;
+}
+export async function updatePassword(new_password: any) {
+    const supabase = await createClient()
+
+    const response = await supabase.auth.updateUser({ password: new_password })
+    return response;
+}
 
 export async function signOut() {
     const supabase = await createClient()
@@ -55,13 +68,28 @@ export async function newsLetterSignUp(array: any) {
 }
 
 
-export async function userMetaInsert(array: any) {
+export async function userMetaInsertold(array: any) {
     const supabase = await createClient()
     const response = await supabase.from('user_meta').insert(
         array
     );
     return response;
 }
+
+export async function userMetaInsert(array: any) {
+    const supabase = await createClient();
+
+    const response = await supabase
+        .from('user_meta')
+        .upsert(array, {
+            onConflict: 'user_id', // Ensure 'user_id' is set as UNIQUE or PRIMARY in DB
+        });
+
+    return response;
+}
+
+
+
 export async function updateUserPassword(password: string) {
     const supabase = await createClient()
     const response = await supabase.auth.updateUser({

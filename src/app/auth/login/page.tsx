@@ -97,9 +97,9 @@ export default function Login() {
                                         {loading ? 'Logging in...' : 'SUBMIT'}
                                     </button>
                                     <div className="forgot-password ml-4">
-                                        <a href="#" className="text-[#134c90] hover:underline">
+                                        <Link href={ROUTES.FORGET_PASSWORD} className="text-[#134c90] hover:underline">
                                             Forgot your password?
-                                        </a>
+                                        </Link>
                                     </div>
                                 </div>
                             </form>

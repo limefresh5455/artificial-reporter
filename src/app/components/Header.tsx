@@ -6,6 +6,7 @@ import TrendingSlider from "./TrendingSlider";
 import { getNavigationData, NavigationData, MenuItem, getSearchResult } from "@/lib/sanity";
 import Link from 'next/link';
 import { ROUTES } from '../routes';
+import { useRouter } from 'next/navigation';
 import { signOut } from '@/lib/supabase/action';
 import { useAuth } from "@/context/AuthContext";
 import { buildCroppedImageUrl, urlFor } from "@/lib/sanityImage";
@@ -18,6 +19,8 @@ const Header: React.FC = () => {
     const { user, setUser } = useAuth();
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<any[]>([]);
+    const router = useRouter();
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -36,6 +39,7 @@ const Header: React.FC = () => {
         await signOut();
         setUser(null);
         setIsOpen(false);
+        router.replace(ROUTES.HOME);
     };
 
     const handleSearch = async () => {
@@ -113,7 +117,7 @@ const Header: React.FC = () => {
                                                     key={item._id}
                                                     href={getHref(item)}
                                                     className="text-left flex items-center gap-3 px-3 py-2 hover:bg-gray-100 text-sm text-black"
-                                                    onClick={() => {setMobileMenuOpen(false); setSearchQuery('')}}
+                                                    onClick={() => { setMobileMenuOpen(false); setSearchQuery('') }}
                                                 >
                                                     {item.image && <img src={urlFor(item.image).url()} alt={item.title} className="w-8 h-8 object-cover rounded" />}
 
